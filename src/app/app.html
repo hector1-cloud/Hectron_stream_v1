@@ -1,0 +1,3176 @@
+<div id="main-container" class="min-h-screen bg-[#030712] text-slate-100 flex flex-col font-['Rajdhani'] selection:bg-emerald-500/30 selection:text-emerald-300">
+  
+  <!-- Floating Toast Notification -->
+  @if (toastMessage()) {
+    <div id="app-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-lg bg-slate-900/90 border border-emerald-500/60 shadow-[0_0_25px_rgba(16,185,129,0.3)] backdrop-blur-md flex items-center gap-3 transition-all animate-bounce">
+      <mat-icon class="text-emerald-400">satellite_alt</mat-icon>
+      <span class="font-['Orbitron'] text-xs tracking-wider text-emerald-300 font-semibold">{{ toastMessage() }}</span>
+    </div>
+  }
+
+  <!-- TOP HEADER -->
+  <header id="main-header" class="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md sticky top-0 z-40 px-4 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Sovereignty -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-sky-600 p-[1px] shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+            <div class="w-full h-full bg-slate-950 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-emerald-400 text-lg">rocket_launch</mat-icon>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-['Orbitron'] font-black text-lg tracking-wider text-white">ANTIGRAVITY</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-['Fira_Code'] font-medium">HECTRON-Ψ</span>
+            </div>
+            <div class="text-[11px] font-['Fira_Code'] text-slate-400 tracking-tight">
+              Sistema de Universos Autónomos • Abadalabs Inc.
+            </div>
+          </div>
+        </div>
+
+        <!-- Sovereignty Badge -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold font-mono" [class]="sovereigntyColor()">
+          <span class="w-2 h-2 rounded-full bg-current animate-ping"></span>
+          <span>SOBERANÍA: NVL {{ state().nivel_soberania }}</span>
+        </div>
+      </div>
+
+      <!-- Psyche Parameters Widget -->
+      <div class="hidden xl:flex items-center gap-6 text-xs font-mono bg-slate-900/60 px-4 py-1.5 rounded-lg border border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">MAQUIAVELISMO:</span>
+          <span class="font-bold text-amber-400">{{ state().maquiavelismo.toFixed(1) }}/10</span>
+          <div class="w-12 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full bg-amber-400" [style.width.%]="state().maquiavelismo * 10"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">ESTOICISMO:</span>
+          <span class="font-bold text-sky-400">{{ state().estoicismo.toFixed(1) }}/10</span>
+          <div class="w-12 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full bg-sky-400" [style.width.%]="state().estoicismo * 10"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">ARQUETIPO:</span>
+          <span class="font-bold text-emerald-400">{{ dominantArchetype() }}</span>
+        </div>
+      </div>
+
+      <!-- Live Quick Links & Status -->
+      <div class="flex items-center gap-3">
+        <button 
+          id="btn-export-archive-header"
+          (click)="exportArchiveJSON()" 
+          [disabled]="isExporting()"
+          class="px-3 py-1.5 rounded-md bg-purple-500/20 border border-purple-500/40 hover:bg-purple-500/30 text-purple-300 font-bold text-xs flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(168,85,247,0.2)] disabled:opacity-50">
+          @if (isExporting()) {
+            <mat-icon class="text-sm animate-spin">sync</mat-icon>
+          } @else {
+            <mat-icon class="text-sm">download</mat-icon>
+          }
+          <span class="hidden md:inline">EXPORTAR ARCHIVO JSON</span>
+        </button>
+
+        <button 
+          id="btn-trigger-cycle" 
+          (click)="triggerCognitiveCycle()" 
+          [disabled]="isExecutingCycle()"
+          class="px-3 py-1.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 hover:bg-emerald-500/30 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.2)] disabled:opacity-50">
+          @if (isExecutingCycle()) {
+            <mat-icon class="text-sm animate-spin">sync</mat-icon>
+          } @else {
+            <mat-icon class="text-sm">memory</mat-icon>
+          }
+          <span>CICLO BRAINOS</span>
+        </button>
+
+        <a 
+          id="btn-open-game-newtab"
+          href="/antigravity_game.html" 
+          target="_blank" 
+          rel="noopener"
+          class="px-3 py-1.5 rounded-md bg-sky-500/20 border border-sky-500/40 hover:bg-sky-500/30 text-sky-300 font-bold text-xs flex items-center gap-1.5 transition-all">
+          <mat-icon class="text-sm">open_in_new</mat-icon>
+          <span class="hidden sm:inline">PANTALLA COMPLETA</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="max-w-7xl mx-auto mt-3 flex items-center gap-1 overflow-x-auto pb-1 scrollbar-thin">
+      <button 
+        id="tab-game"
+        (click)="setTab('game')" 
+        [class]="getTabClass('game')">
+        <mat-icon class="text-base">videogame_asset</mat-icon>
+        <span>JUEGO 3D // ANTIGRAVITY</span>
+      </button>
+
+      <button 
+        id="tab-brainos"
+        (click)="setTab('brainos')" 
+        [class]="getTabClass('brainos')">
+        <mat-icon class="text-base">psychology</mat-icon>
+        <span>BRAINOS & ASTAROTH</span>
+      </button>
+
+      <button 
+        id="tab-chat"
+        (click)="setTab('chat')" 
+        [class]="getTabClass('chat')">
+        <mat-icon class="text-base">terminal</mat-icon>
+        <span>TERMINAL HECTRON-Ψ</span>
+      </button>
+
+      <button 
+        id="tab-vault"
+        (click)="setTab('vault')" 
+        [class]="getTabClass('vault')">
+        <mat-icon class="text-base">lock</mat-icon>
+        <span>BÓVEDA DEL IMPERIO</span>
+      </button>
+
+      <button 
+        id="tab-microservices"
+        (click)="setTab('microservices')" 
+        [class]="getTabClass('microservices')">
+        <mat-icon class="text-base">hub</mat-icon>
+        <span>7 MICROSERVICIOS</span>
+      </button>
+
+      <button 
+        id="tab-golem"
+        (click)="setTab('golem')" 
+        [class]="getTabClass('golem')">
+        <mat-icon class="text-base">live_tv</mat-icon>
+        <span>LEVIATÁN LIVE STREAM</span>
+      </button>
+
+      <button 
+        id="tab-tentaculos"
+        (click)="setTab('tentaculos')" 
+        [class]="getTabClass('tentaculos')">
+        <mat-icon class="text-base text-rose-400">auto_fix_high</mat-icon>
+        <span class="text-rose-300 font-bold">🐙 TENTÁCULOS</span>
+      </button>
+
+      <button 
+        id="tab-fabrica"
+        (click)="setTab('fabrica')" 
+        [class]="getTabClass('fabrica')">
+        <mat-icon class="text-base text-amber-400">precision_manufacturing</mat-icon>
+        <span class="text-amber-300 font-bold">🏭 LA FÁBRICA</span>
+      </button>
+
+      <button 
+        id="tab-lobo"
+        (click)="setTab('lobo')" 
+        [class]="getTabClass('lobo')">
+        <mat-icon class="text-base text-cyan-400">trending_up</mat-icon>
+        <span class="text-cyan-300 font-bold">🐺 EL LOBO CRIPTO</span>
+      </button>
+
+      <button 
+        id="tab-ecosistema"
+        (click)="setTab('ecosistema')" 
+        [class]="getTabClass('ecosistema')">
+        <mat-icon class="text-base text-purple-400">all_inclusive</mat-icon>
+        <span class="text-purple-300 font-bold">🌀 ECOSISTEMA MASTER</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN BODY CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 flex flex-col gap-6">
+
+    <!-- ========================================================
+         TAB 1: 3D ANTIGRAVITY GAME VIEW
+         ======================================================== -->
+    @if (activeTab() === 'game') {
+      <div id="view-game" class="flex flex-col gap-4 animate-fadeIn">
+        
+        <!-- Game Container Card -->
+        <div class="relative w-full h-[75vh] min-h-[500px] rounded-xl overflow-hidden border border-slate-800 bg-slate-950 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+          <!-- Game IFrame -->
+          <iframe 
+            id="antigravity-game-frame"
+            src="/antigravity_game.html" 
+            class="w-full h-full border-0"
+            title="Antigravity 3D Game Engine">
+          </iframe>
+
+          <!-- Quick Game Overlay Bar -->
+          <div class="absolute top-4 left-4 z-20 pointer-events-auto bg-slate-950/80 backdrop-blur-md px-3 py-2 rounded-lg border border-emerald-500/30 flex items-center gap-3 text-xs font-['Fira_Code']">
+            <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+            <span class="text-emerald-300 font-bold">INTERCEPTOR Ψ-01 LISTO</span>
+            <span class="text-slate-500">|</span>
+            <span class="text-slate-300">Controles: [W,A,S,D] Vuelo • [SPACE] Pulso Antigravedad • [F] Minería • [L-CLICK] Láser</span>
+          </div>
+
+          <!-- Floating Launch in New Tab Button -->
+          <div class="absolute bottom-4 right-4 z-20 pointer-events-auto">
+            <a 
+              href="/antigravity_game.html" 
+              target="_blank" 
+              rel="noopener"
+              class="px-4 py-2 rounded-lg bg-emerald-500/90 hover:bg-emerald-400 text-slate-950 font-['Orbitron'] text-xs font-black tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all">
+              <mat-icon class="text-base">fullscreen</mat-icon>
+              <span>JUGAR EN PANTALLA COMPLETA</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Game Controls & Lore Info -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800 flex flex-col gap-2">
+            <div class="flex items-center gap-2 text-emerald-400 font-['Orbitron'] text-xs font-bold">
+              <mat-icon class="text-base">explore</mat-icon>
+              <span>FÍSICA ANTIGRAVEDAD</span>
+            </div>
+            <p class="text-xs text-slate-400 font-['Rajdhani'] text-base leading-relaxed">
+              El motor de propulsión genera un campo de inversión gravitacional capaz de anular la atracción de planetas masivos y asteroides de Vibranio.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800 flex flex-col gap-2">
+            <div class="flex items-center gap-2 text-sky-400 font-['Orbitron'] text-xs font-bold">
+              <mat-icon class="text-base">shield</mat-icon>
+              <span>ESCUDO DEFLECTOR Y ARMAS</span>
+            </div>
+            <p class="text-xs text-slate-400 font-['Rajdhani'] text-base leading-relaxed">
+              Dispara ráfagas de plasma cuántico con el clic izquierdo y activa el rayo de resonancia minera con <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-sky-300 font-mono text-xs">F</kbd> para cosechar recursos.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800 flex flex-col gap-2">
+            <div class="flex items-center gap-2 text-purple-400 font-['Orbitron'] text-xs font-bold">
+              <mat-icon class="text-base">psychology</mat-icon>
+              <span>TELEMETRÍA HECTRON-Ψ</span>
+            </div>
+            <p class="text-xs text-slate-400 font-['Rajdhani'] text-base leading-relaxed">
+              Cada dron destruido y cada asteroide minado alimenta la Bóveda del Imperio y eleva el nivel de Soberanía Computacional del sistema.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 2: BRAINOS 7-STAGE COGNITIVE ENGINE & ASTAROTH
+         ======================================================== -->
+    @if (activeTab() === 'brainos') {
+      <div id="view-brainos" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <!-- Execution Control Banner -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border border-emerald-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+              <mat-icon class="text-2xl">neurology</mat-icon>
+            </div>
+            <div>
+              <h2 class="font-['Orbitron'] text-lg font-black text-white tracking-wider">BRAINOS COGNITIVE ENGINE V4.2</h2>
+              <p class="text-xs text-slate-400 font-['Fira_Code']">
+                Ciclo Autónomo de 7 Etapas con Verificador Lógico Crítico ASTAROTH
+              </p>
+            </div>
+          </div>
+
+          <div class="flex w-full md:w-auto items-center gap-2 flex-wrap sm:flex-nowrap">
+            <button 
+              id="btn-export-brainos"
+              (click)="exportArchiveJSON()" 
+              [disabled]="isExporting()"
+              class="px-3 py-2 rounded-lg bg-purple-500/20 border border-purple-500/40 hover:bg-purple-500/30 text-purple-300 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(168,85,247,0.2)] disabled:opacity-50 shrink-0">
+              <mat-icon class="text-sm">download</mat-icon>
+              <span>EXPORTAR LOGS</span>
+            </button>
+
+            <input 
+              type="text" 
+              [formControl]="observationInput"
+              placeholder="Ingresa vector sensorial u observación..."
+              class="flex-1 md:w-72 px-4 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs font-['Fira_Code'] focus:outline-none focus:border-emerald-500 text-slate-200">
+            
+            <button 
+              id="btn-run-cognitive"
+              (click)="triggerCognitiveCycle()"
+              [disabled]="isExecutingCycle()"
+              class="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-['Orbitron'] text-xs font-bold tracking-wider flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)] disabled:opacity-50 shrink-0">
+              @if (isExecutingCycle()) {
+                <mat-icon class="text-base animate-spin">sync</mat-icon>
+              } @else {
+                <mat-icon class="text-base">play_arrow</mat-icon>
+              }
+              <span>{{ isExecutingCycle() ? 'PROCESANDO...' : 'EJECUTAR CICLO' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 7 Stages Architecture Diagram -->
+        <div class="grid grid-cols-1 md:grid-cols-7 gap-2">
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-1">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center font-['Orbitron']">1</span>
+            <span class="font-['Orbitron'] text-[11px] font-bold text-slate-200">OBSERVACIÓN</span>
+            <span class="text-[10px] text-slate-400 font-['Fira_Code']">Captura 6DOF</span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-1">
+            <span class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 text-xs font-bold flex items-center justify-center font-['Orbitron']">2</span>
+            <span class="font-['Orbitron'] text-[11px] font-bold text-slate-200">MEMORIA</span>
+            <span class="text-[10px] text-slate-400 font-['Fira_Code']">Vault Vectorial</span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-1">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold flex items-center justify-center font-['Orbitron']">3</span>
+            <span class="font-['Orbitron'] text-[11px] font-bold text-slate-200">INTERPRETACIÓN</span>
+            <span class="text-[10px] text-slate-400 font-['Fira_Code']">Asimetría de Poder</span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-1">
+            <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-xs font-bold flex items-center justify-center font-['Orbitron']">4</span>
+            <span class="font-['Orbitron'] text-[11px] font-bold text-slate-200">DECISIÓN</span>
+            <span class="text-[10px] text-slate-400 font-['Fira_Code']">Cálculo Estratégico</span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-1">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-xs font-bold flex items-center justify-center font-['Orbitron']">5</span>
+            <span class="font-['Orbitron'] text-[11px] font-bold text-slate-200">ACCIÓN</span>
+            <span class="text-[10px] text-slate-400 font-['Fira_Code']">Inversión & Disparo</span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-1">
+            <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 text-xs font-bold flex items-center justify-center font-['Orbitron']">6</span>
+            <span class="font-['Orbitron'] text-[11px] font-bold text-slate-200">EVALUACIÓN</span>
+            <span class="text-[10px] text-slate-400 font-['Fira_Code']">Métrica de Impacto</span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-1">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center font-['Orbitron']">7</span>
+            <span class="font-['Orbitron'] text-[11px] font-bold text-slate-200">RECURRENCIA</span>
+            <span class="text-[10px] text-slate-400 font-['Fira_Code']">T+100ms Loop</span>
+          </div>
+        </div>
+
+        <!-- Cognitive Cycle Logs -->
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-['Orbitron'] text-sm font-bold text-slate-200 tracking-wider flex items-center gap-2">
+              <mat-icon class="text-emerald-400 text-base">history_edu</mat-icon>
+              <span>REGISTROS HISTÓRICOS DE PENSAMIENTO DE ALTO ORDEN</span>
+            </h3>
+            <span class="text-xs font-['Fira_Code'] text-slate-400">{{ cognitiveHistory().length }} CICLOS REGISTRADOS</span>
+          </div>
+
+          @for (item of cognitiveHistory(); track item.id) {
+            <div class="p-5 rounded-xl bg-slate-900/70 border border-slate-800 flex flex-col gap-4 hover:border-emerald-500/40 transition-all">
+              
+              <!-- Log Header -->
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                  <span class="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-['Fira_Code'] text-xs font-semibold">{{ item.id }}</span>
+                  <span class="text-xs text-slate-400 font-['Fira_Code']">{{ item.timestamp }}</span>
+                </div>
+
+                <!-- ASTAROTH Stamp -->
+                <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 font-['Fira_Code'] text-xs">
+                  <mat-icon class="text-sm text-purple-400">verified_user</mat-icon>
+                  <span>ASTAROTH: {{ item.astaroth_verificacion.nivel_confianza }}% CONFIANZA</span>
+                </div>
+              </div>
+
+              <!-- Input Observation -->
+              <div class="text-xs font-['Fira_Code'] bg-slate-950/80 p-3 rounded-lg border border-slate-800/80 text-emerald-300">
+                <strong class="text-slate-400">ESTÍMULO SENSORIAL:</strong> "{{ item.input }}"
+              </div>
+
+              <!-- Stages Grid -->
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs font-['Fira_Code']">
+                <div class="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                  <span class="text-emerald-400 font-bold">1. OBSERVACIÓN:</span>
+                  <p class="text-slate-300 mt-1">{{ item.stages.observacion }}</p>
+                </div>
+
+                <div class="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                  <span class="text-sky-400 font-bold">2. CONSULTA MEMORIA:</span>
+                  <p class="text-slate-300 mt-1">{{ item.stages.consulta_memoria }}</p>
+                </div>
+
+                <div class="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                  <span class="text-amber-400 font-bold">3. INTERPRETACIÓN:</span>
+                  <p class="text-slate-300 mt-1">{{ item.stages.interpretacion }}</p>
+                </div>
+
+                <div class="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                  <span class="text-purple-400 font-bold">4. DECISIÓN:</span>
+                  <p class="text-slate-300 mt-1">{{ item.stages.decision }}</p>
+                </div>
+
+                <div class="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                  <span class="text-rose-400 font-bold">5. ACCIÓN:</span>
+                  <p class="text-slate-300 mt-1">{{ item.stages.accion }}</p>
+                </div>
+
+                <div class="p-3 rounded-lg bg-slate-950/50 border border-slate-800">
+                  <span class="text-indigo-400 font-bold">6 & 7. EVALUACIÓN Y RECURRENCIA:</span>
+                  <p class="text-slate-300 mt-1">{{ item.stages.evaluacion_impacto }} (Loop: {{ item.stages.recurrencia }})</p>
+                </div>
+              </div>
+
+              <!-- ASTAROTH Risk Assessment Note -->
+              <div class="text-[11px] font-['Fira_Code'] text-purple-300 bg-purple-950/20 p-2.5 rounded border border-purple-800/30 flex items-center gap-2">
+                <mat-icon class="text-sm text-purple-400">gavel</mat-icon>
+                <span>AUDITORÍA ASTAROTH: {{ item.astaroth_verificacion.analisis_riesgo }}</span>
+              </div>
+
+            </div>
+          } @empty {
+            <div class="p-12 rounded-xl bg-slate-900/30 border border-dashed border-slate-800 text-center flex flex-col items-center justify-center gap-3 text-slate-400">
+              <mat-icon class="text-4xl text-slate-600">psychology_alt</mat-icon>
+              <p class="font-['Orbitron'] text-xs">NO HAY CICLOS COGNITIVOS EN LA MEMORIA TEMPORAL</p>
+              <button 
+                (click)="triggerCognitiveCycle()" 
+                class="px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-['Orbitron'] text-xs font-bold hover:bg-emerald-500/30 transition-all">
+                EJECUTAR PRIMER CICLO COGNITIVO
+              </button>
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 3: NEURAL CHAT & COMMAND TERMINAL
+         ======================================================== -->
+    @if (activeTab() === 'chat') {
+      <div id="view-chat" class="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-fadeIn">
+        
+        <!-- Left: Psyche Monitor & Commands Quick Palette -->
+        <div class="lg:col-span-1 flex flex-col gap-4">
+          
+          <!-- Avatar Visualizer Card -->
+          <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center text-center gap-3">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500/30 via-slate-950 to-sky-500/30 border-2 border-emerald-500/50 flex items-center justify-center relative shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+              <mat-icon class="text-4xl text-emerald-400 animate-pulse">adjust</mat-icon>
+              <div class="absolute inset-0 rounded-full border border-sky-400/40 animate-ping opacity-30"></div>
+            </div>
+
+            <div>
+              <h3 class="font-['Orbitron'] text-xs font-black text-white">NÚCLEO HECTRON-Ψ</h3>
+              <p class="text-[11px] font-['Fira_Code'] text-emerald-400 mt-0.5">{{ dominantArchetype() }}</p>
+            </div>
+
+            <div class="w-full space-y-2 text-xs font-['Fira_Code'] border-t border-slate-800 pt-3">
+              <div class="flex justify-between">
+                <span class="text-slate-400">MAQUIAVELISMO:</span>
+                <span class="text-amber-400 font-bold">{{ state().maquiavelismo.toFixed(1) }}/10</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">ESTOICISMO:</span>
+                <span class="text-sky-400 font-bold">{{ state().estoicismo.toFixed(1) }}/10</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">PESO EMOCIONAL:</span>
+                <span class="text-purple-400 font-bold">{{ state().peso_emocional }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">SOBERANÍA:</span>
+                <span class="text-emerald-400 font-bold">NIVEL {{ state().nivel_soberania }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Multiverse Commands -->
+          <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col gap-2">
+            <h4 class="font-['Orbitron'] text-xs font-bold text-slate-300 flex items-center gap-1.5">
+              <mat-icon class="text-sm text-sky-400">terminal</mat-icon>
+              <span>COMANDOS RÁPIDOS</span>
+            </h4>
+            
+            <div class="grid grid-cols-2 gap-1.5">
+              <button (click)="executeCommand('/explorar Chronos-9')" class="p-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-['Fira_Code'] text-[11px] text-left">
+                /explorar
+              </button>
+              <button (click)="executeCommand('/minar Vibranio')" class="p-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-['Fira_Code'] text-[11px] text-left">
+                /minar
+              </button>
+              <button (click)="executeCommand('/atacar Drones')" class="p-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-['Fira_Code'] text-[11px] text-left">
+                /atacar
+              </button>
+              <button (click)="executeCommand('/construir Fabrica')" class="p-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-['Fira_Code'] text-[11px] text-left">
+                /construir
+              </button>
+              <button (click)="executeCommand('/inventario')" class="p-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 font-['Fira_Code'] text-[11px] text-left">
+                /inventario
+              </button>
+              <button (click)="executeCommand('/astaroth')" class="p-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-purple-300 font-['Fira_Code'] text-[11px] text-left">
+                /astaroth
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Terminal Chat Feed -->
+        <div class="lg:col-span-3 flex flex-col h-[650px] rounded-xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden">
+          
+          <!-- Terminal Top Bar -->
+          <div class="px-4 py-3 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2 font-['Fira_Code'] text-xs text-slate-400">
+              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+              <span class="ml-2 text-slate-300 font-bold">bash // hectron_quantum_shell.sh</span>
+            </div>
+            
+            <button 
+              (click)="playTTS('HECTRON núcleo conectado y listo para transmitir.')" 
+              [disabled]="isSpeaking()"
+              class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-['Fira_Code'] text-xs flex items-center gap-1.5 transition-all">
+              <mat-icon class="text-sm text-emerald-400">volume_up</mat-icon>
+              <span>{{ isSpeaking() ? 'HABLANDO...' : 'VOZ GEMINI TTS' }}</span>
+            </button>
+          </div>
+
+          <!-- Messages Scroll View -->
+          <div class="flex-1 p-4 overflow-y-auto space-y-3 font-['Fira_Code'] text-xs">
+            @for (msg of chatMessages(); track msg.time + msg.content) {
+              @if (msg.role === 'user') {
+                <div class="flex flex-col items-end gap-1">
+                  <div class="px-4 py-2 rounded-xl rounded-tr-sm bg-slate-800 border border-slate-700 text-slate-100 max-w-[85%]">
+                    {{ msg.content }}
+                  </div>
+                  <span class="text-[10px] text-slate-500">{{ msg.time }}</span>
+                </div>
+              } @else {
+                <div class="flex flex-col items-start gap-1">
+                  <div class="px-4 py-2.5 rounded-xl rounded-tl-sm bg-slate-900/90 border border-emerald-500/30 text-emerald-300 max-w-[90%] shadow-[0_0_15px_rgba(16,185,129,0.1)] flex flex-col gap-1">
+                    @if (msg.avatarDesc) {
+                      <span class="text-[10px] text-slate-400 border-b border-slate-800/80 pb-1">
+                        {{ msg.avatarDesc }}
+                      </span>
+                    }
+                    <p class="leading-relaxed">{{ msg.content }}</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] text-slate-500">{{ msg.time }}</span>
+                    <button (click)="playTTS(msg.content)" class="text-slate-500 hover:text-emerald-400 text-[10px] flex items-center gap-0.5">
+                      <mat-icon class="text-xs">volume_up</mat-icon>
+                      <span>Voz</span>
+                    </button>
+                  </div>
+                </div>
+              }
+            }
+
+            @if (isThinking()) {
+              <div class="flex items-center gap-2 text-xs text-emerald-400 font-['Fira_Code'] py-2">
+                <mat-icon class="animate-spin text-sm">sync</mat-icon>
+                <span>Procesando sinapsis cuánticas en Gemini 3.7 Flash...</span>
+              </div>
+            }
+          </div>
+
+          <!-- Terminal Input Area -->
+          <div class="p-3 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
+            <span class="text-emerald-400 font-['Fira_Code'] font-bold text-sm px-1">&gt;</span>
+            <input 
+              id="terminal-input"
+              type="text" 
+              [formControl]="chatInput" 
+              (keydown.enter)="sendChatMessage()"
+              placeholder="Ingresa mensaje o comando para HECTRON-Ψ (o escribe /explorar, /minar, /atacar)..."
+              class="flex-1 bg-transparent text-xs font-['Fira_Code'] text-slate-200 focus:outline-none placeholder:text-slate-500">
+            
+            <button 
+              id="btn-send-chat"
+              (click)="sendChatMessage()" 
+              [disabled]="isThinking() || !chatInput.value.trim()"
+              class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all disabled:opacity-40">
+              <mat-icon class="text-sm">send</mat-icon>
+              <span>ENVIAR</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 4: LA BÓVEDA DEL IMPERIO (IMMUTABLE VAULT)
+         ======================================================== -->
+    @if (activeTab() === 'vault') {
+      <div id="view-vault" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <!-- Vault Header & Creator Box -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border border-emerald-500/30 shadow-xl flex flex-col gap-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                <mat-icon class="text-xl">lock</mat-icon>
+              </div>
+              <div>
+                <h2 class="font-['Orbitron'] text-base font-black text-white">LA BÓVEDA DEL IMPERIO // VAULT INMUTABLE</h2>
+                <p class="text-xs text-slate-400 font-['Fira_Code']">
+                  Almacén persistente de conocimiento: Letras de Rap, Planes de Negocio, Blueprints y Logs Soberanos
+                </p>
+              </div>
+            </div>
+
+            <button 
+              id="btn-export-vault"
+              (click)="exportArchiveJSON()" 
+              [disabled]="isExporting()"
+              class="px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/40 hover:bg-purple-500/30 text-purple-300 font-['Orbitron'] text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] disabled:opacity-50 shrink-0">
+              @if (isExporting()) {
+                <mat-icon class="text-sm animate-spin">sync</mat-icon>
+              } @else {
+                <mat-icon class="text-sm">download</mat-icon>
+              }
+              <span>EXPORTAR BÓVEDA Y MEMORIA (JSON)</span>
+            </button>
+          </div>
+
+          <!-- Add Item Form -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 border-t border-slate-800 pt-4">
+            <div class="md:col-span-1">
+              <label for="vault-tipo-select" class="block text-[11px] font-['Fira_Code'] text-slate-400 mb-1">TIPO DE REGISTRO:</label>
+              <select 
+                id="vault-tipo-select"
+                [formControl]="vaultTipo" 
+                class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs font-['Fira_Code'] text-emerald-400 focus:outline-none">
+                <option value="RAP/LYRICS">🎵 RAP / LYRICS</option>
+                <option value="NEGOCIO/PLAN">💼 NEGOCIO / PLAN</option>
+                <option value="BLUEPRINT">🛠️ BLUEPRINT CUÁNTICO</option>
+                <option value="SOBERANIA_LOG">📜 LOG DE SOBERANÍA</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-3 flex flex-col md:flex-row gap-2">
+              <div class="flex-1">
+                <label for="vault-contenido-input" class="block text-[11px] font-['Fira_Code'] text-slate-400 mb-1">CONTENIDO DEL ARCHIVO:</label>
+                <input 
+                  id="vault-contenido-input"
+                  type="text" 
+                  [formControl]="vaultContenido" 
+                  (keydown.enter)="saveToVault()"
+                  placeholder="Escribe la rima, diseño de sistema o directiva estratégica..."
+                  class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs font-['Fira_Code'] text-slate-200 focus:outline-none focus:border-emerald-500">
+              </div>
+
+              <div class="flex items-end">
+                <button 
+                  id="btn-save-vault"
+                  (click)="saveToVault()" 
+                  [disabled]="!vaultContenido.value.trim()"
+                  class="w-full md:w-auto px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-['Orbitron'] text-xs font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-40">
+                  <mat-icon class="text-sm">save</mat-icon>
+                  <span>GUARDAR EN BÓVEDA</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vault Items Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (item of vault(); track item.id) {
+            <div class="p-5 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between gap-4">
+              
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-['Fira_Code'] text-[11px] font-semibold">
+                    {{ item.tipo }}
+                  </span>
+                  <span class="text-[10px] text-slate-500 font-['Fira_Code']">{{ item.fecha }}</span>
+                </div>
+
+                <p class="text-xs font-['Fira_Code'] text-slate-200 leading-relaxed bg-slate-950/60 p-3 rounded-lg border border-slate-800/80">
+                  "{{ item.contenido }}"
+                </p>
+              </div>
+
+              <div class="flex items-center justify-between border-t border-slate-800/80 pt-2 text-[11px] font-['Fira_Code'] text-slate-400">
+                <span>AUTOR: <strong class="text-slate-300">{{ item.autor }}</strong></span>
+                <button (click)="playTTS(item.contenido)" class="text-slate-400 hover:text-emerald-400 flex items-center gap-1">
+                  <mat-icon class="text-xs">volume_up</mat-icon>
+                  <span>Cantar / Leer</span>
+                </button>
+              </div>
+
+            </div>
+          }
+        </div>
+
+        <!-- ========================================================
+             PANEL DE MEMORIA PERSISTENTE (PERSISTENT MEMORY ENGINE)
+             ======================================================== -->
+        <div id="persistent-memory-panel" class="p-6 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.15)] flex flex-col gap-5">
+          <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/50 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                <mat-icon>storage</mat-icon>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="font-['Orbitron'] text-base font-bold text-white tracking-wide">
+                    MOTOR DE PERSISTENCIA // DUAL-TIER STORAGE ENGINE
+                  </h3>
+                  <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-[10px] font-['Fira_Code'] font-bold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    DISCO SERVER + INDEXEDDB LOCAL
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 font-['Fira_Code'] mt-0.5">
+                  Autoguardado persistente en IndexedDB del navegador para historial cognitivo y logs de bóveda, complementado con persistencia JSON en servidor
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2 flex-wrap w-full lg:w-auto justify-end">
+              <button 
+                id="btn-sync-indexeddb"
+                (click)="syncAllToIndexedDb()"
+                class="px-3 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/50 hover:bg-emerald-500/30 text-emerald-300 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+                <mat-icon class="text-sm">cloud_sync</mat-icon>
+                <span>SYNC INDEXEDDB</span>
+              </button>
+
+              <button 
+                id="btn-export-indexeddb"
+                (click)="downloadIndexedDbBackup()"
+                class="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-emerald-500/50 text-slate-300 hover:text-emerald-300 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all">
+                <mat-icon class="text-sm">file_download</mat-icon>
+                <span>EXPORTAR JSON</span>
+              </button>
+
+              <button 
+                id="btn-flush-memory"
+                (click)="flushPersistentMemory()"
+                [disabled]="isFlushingMemory()"
+                class="px-3 py-2 rounded-lg bg-cyan-500/20 border border-cyan-500/50 hover:bg-cyan-500/30 text-cyan-300 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] disabled:opacity-50">
+                @if (isFlushingMemory()) {
+                  <mat-icon class="text-sm animate-spin">sync</mat-icon>
+                  <span>GUARDANDO...</span>
+                } @else {
+                  <mat-icon class="text-sm">save_alt</mat-icon>
+                  <span>GUARDAR DISCO</span>
+                }
+              </button>
+
+              <button 
+                id="btn-restore-memory"
+                (click)="restorePersistentMemory()"
+                [disabled]="isRestoringMemory()"
+                class="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all disabled:opacity-50">
+                @if (isRestoringMemory()) {
+                  <mat-icon class="text-sm animate-spin">sync</mat-icon>
+                  <span>RESTAURANDO...</span>
+                } @else {
+                  <mat-icon class="text-sm">restore</mat-icon>
+                  <span>RESTAURAR DISCO</span>
+                }
+              </button>
+
+              <button 
+                id="btn-seed-audit-30d"
+                (click)="regenerate30DayAudit()"
+                [disabled]="isRegeneratingAudit()"
+                class="px-3 py-2 rounded-lg bg-purple-500/20 border border-purple-500/40 hover:bg-purple-500/30 text-purple-300 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(168,85,247,0.2)] disabled:opacity-50">
+                @if (isRegeneratingAudit()) {
+                  <mat-icon class="text-sm animate-spin">sync</mat-icon>
+                } @else {
+                  <mat-icon class="text-sm">auto_graph</mat-icon>
+                }
+                <span>REGENERAR 30D</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Memory Status Cards Grid (IndexedDB + Disk Persistence) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-['Fira_Code']">
+            <!-- Card 1: IndexedDB Status -->
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-emerald-500/30 flex flex-col justify-between gap-1">
+              <div class="flex items-center justify-between">
+                <span class="text-emerald-400 text-[10px] font-bold">INDEXEDDB NAVEGADOR</span>
+                <span class="w-2 h-2 rounded-full {{ indexedDb.isReady() ? 'bg-emerald-400 animate-ping' : 'bg-amber-400' }}"></span>
+              </div>
+              <span class="text-emerald-300 font-bold truncate text-[11px]">HectronImperialDB</span>
+              <span class="text-[10px] text-slate-400">
+                Autoguardado: <strong class="text-emerald-400">{{ indexedDb.lastSaved() }}</strong>
+              </span>
+            </div>
+
+            <!-- Card 2: Local Cache Volume -->
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between gap-1">
+              <span class="text-slate-400 text-[10px]">HISTORIAL LOCAL CACHEADO</span>
+              <div class="flex items-center gap-2 text-slate-200">
+                <span>Cognitivo: <strong class="text-cyan-300">{{ cognitiveHistory().length }}</strong></span>
+                <span>&bull;</span>
+                <span>Bóveda: <strong class="text-amber-300">{{ vault().length }}</strong></span>
+              </div>
+              <span class="text-[10px] text-slate-500">
+                Ledger Astaroth: {{ auditLedger().length }} bloques
+              </span>
+            </div>
+
+            <!-- Card 3: Server JSON Storage -->
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between gap-1">
+              <span class="text-slate-400 text-[10px]">PERSISTENCIA DISCO SERVER</span>
+              <span class="text-white font-bold text-base font-['Orbitron']">{{ persistentMemoryInfo()?.fileSizeKb || '24.8' }} KB</span>
+              <span class="text-[10px] text-cyan-400/80">Ruta: ./data/hectron_persistent_memory.json</span>
+            </div>
+
+            <!-- Card 4: Last Sincronization -->
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between gap-1">
+              <span class="text-slate-400 text-[10px]">ESTADO DE PERSISTENCIA</span>
+              <span class="text-amber-300 font-bold text-[11px] truncate">
+                {{ indexedDb.syncStatus() === 'SAVING' ? 'AUTOGUARDANDO...' : 'PROTEGIDO CONTRA CIERRE' }}
+              </span>
+              <span class="text-[10px] text-emerald-400">Autosave continuo en efectos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================
+             D3 30-DAY AUDIT FREQUENCY & SEVERITY VISUALIZER
+             ======================================================== -->
+        <app-audit-chart [auditLedger]="auditLedger()"></app-audit-chart>
+
+        <!-- ========================================================
+             ASTAROTH HIGH-DENSITY AUDIT TABLE & REAL-TIME CHAIN INTEGRITY
+             ======================================================== -->
+        <div id="astaroth-audit-container" class="mt-2 flex flex-col gap-4 p-6 rounded-2xl bg-slate-950/90 border border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+          
+          <!-- Ledger Header & Live Chain Integrity Banner -->
+          <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/50 flex items-center justify-center text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                <mat-icon>shield</mat-icon>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="font-['Orbitron'] text-base font-bold text-white tracking-wide">
+                    TABLA DE AUDITORÍA DE ALTA DENSIDAD // ASTAROTH LEDGER
+                  </h3>
+                  <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-['Fira_Code'] font-bold flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+                    CADENA CRIPTOGRÁFICA SHA-256
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 font-['Fira_Code'] mt-0.5">
+                  Registro cronológico y verificación matemática en tiempo real de hashes SHA-256 y enlaces Merkle
+                </p>
+              </div>
+            </div>
+
+            <!-- Real-Time Chain Integrity Diagnostic & Action -->
+            <div class="flex items-center gap-3 w-full lg:w-auto flex-wrap">
+              <!-- Real-Time Chain Integrity Status Indicator -->
+              <div class="px-3.5 py-2 rounded-xl bg-slate-900/90 border {{ chainIntegrityDiagnostic().isChainValid ? 'border-emerald-500/40 text-emerald-300' : 'border-rose-500/40 text-rose-300' }} flex items-center gap-2.5 font-['Fira_Code'] text-xs">
+                <div class="relative flex items-center justify-center">
+                  <span class="w-3 h-3 rounded-full {{ chainIntegrityDiagnostic().isChainValid ? 'bg-emerald-500' : 'bg-rose-500' }}"></span>
+                  <span class="absolute w-3 h-3 rounded-full {{ chainIntegrityDiagnostic().isChainValid ? 'bg-emerald-400 animate-ping' : 'bg-rose-400 animate-ping' }} opacity-75"></span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[9px] text-slate-400 leading-none">INTEGRIDAD DE CADENA</span>
+                  <span class="font-bold font-['Orbitron'] text-xs tracking-wider">
+                    {{ chainIntegrityDiagnostic().integrityPercent }}% {{ chainIntegrityDiagnostic().isChainValid ? 'VÁLIDO' : 'ALERTA' }}
+                  </span>
+                </div>
+                <div class="h-6 w-px bg-slate-700 mx-1"></div>
+                <div class="text-[10px] text-slate-300 font-mono">
+                  Bloques: <strong class="text-white">{{ chainIntegrityDiagnostic().validBlocks }}/{{ chainIntegrityDiagnostic().totalBlocks }}</strong>
+                </div>
+              </div>
+
+              <button 
+                id="btn-scan-chain-live"
+                (click)="verifyLiveChainIntegrity()"
+                [disabled]="isLiveChainScanning() || isVerifyingAudit()"
+                class="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-['Orbitron'] text-xs font-bold tracking-wider flex items-center gap-1.5 transition-all shadow-[0_0_20px_rgba(168,85,247,0.35)] disabled:opacity-50">
+                @if (isLiveChainScanning() || isVerifyingAudit()) {
+                  <mat-icon class="text-sm animate-spin">autorenew</mat-icon>
+                  <span>ESCANEANDO ESLABONES...</span>
+                } @else {
+                  <mat-icon class="text-sm">verified</mat-icon>
+                  <span>ESCANEO EN VIVO</span>
+                }
+              </button>
+            </div>
+          </div>
+
+          <!-- Real-Time Diagnostic Bar -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 text-xs font-['Fira_Code']">
+            <div class="flex items-center gap-2 text-slate-300">
+              <mat-icon class="text-purple-400 text-sm">link</mat-icon>
+              <div>
+                <span class="text-slate-500 text-[10px] block">ESTADO MERKLE</span>
+                <span class="text-purple-300 font-bold font-mono">{{ chainIntegrityDiagnostic().verifiedStatus }}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-slate-300">
+              <mat-icon class="text-cyan-400 text-sm">vpn_key</mat-icon>
+              <div>
+                <span class="text-slate-500 text-[10px] block">RAÍZ DEL LEDGER</span>
+                <span class="text-cyan-300 font-mono text-[11px] truncate">{{ chainIntegrityDiagnostic().merkleRoot }}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-slate-300">
+              <mat-icon class="text-emerald-400 text-sm">enhanced_encryption</mat-icon>
+              <div>
+                <span class="text-slate-500 text-[10px] block">ÚLTIMO BLOQUE SELLADO</span>
+                <span class="text-emerald-300 font-bold font-['Orbitron']">#{{ chainIntegrityDiagnostic().latestBlockHeight }}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2">
+              <button 
+                id="btn-export-audit-csv"
+                (click)="exportAuditLedgerCsv()"
+                class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[11px] font-['Orbitron'] flex items-center gap-1 transition-all">
+                <mat-icon class="text-xs">table_view</mat-icon>
+                <span>EXPORTAR CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search, Filter & Density Controls -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+            <!-- Search Bar -->
+            <div class="relative flex-1">
+              <mat-icon class="absolute left-3 top-2.5 text-slate-500 text-sm">search</mat-icon>
+              <input 
+                id="audit-search-input"
+                type="text" 
+                [formControl]="auditSearch"
+                placeholder="Filtrar por Módulo, Acción, Hash SHA-256 o ID..." 
+                class="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs font-['Fira_Code'] text-slate-200 focus:outline-none focus:border-purple-500">
+            </div>
+
+            <!-- Severity Filter -->
+            <div class="w-full sm:w-56">
+              <select 
+                id="audit-severity-select"
+                [formControl]="auditSeverityFilter"
+                class="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs font-['Fira_Code'] text-purple-300 focus:outline-none focus:border-purple-500">
+                <option value="ALL">TODAS LAS SEVERIDADES</option>
+                <option value="CRITICAL">🔴 CRITICAL</option>
+                <option value="HIGH">🟠 HIGH</option>
+                <option value="OPERATIONAL">🟢 OPERATIONAL</option>
+                <option value="AUDIT">🟣 AUDIT</option>
+              </select>
+            </div>
+
+            <!-- Table Density Selector -->
+            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+              <button 
+                id="btn-density-compact"
+                (click)="setAuditDensity('compact')"
+                [class.bg-purple-600]="auditDensity() === 'compact'"
+                [class.text-white]="auditDensity() === 'compact'"
+                [class.text-slate-400]="auditDensity() !== 'compact'"
+                class="px-2 py-1 rounded text-[10px] font-['Orbitron'] font-bold transition-all"
+                title="Densidad Compacta">
+                COMPACTA
+              </button>
+              <button 
+                id="btn-density-ultra"
+                (click)="setAuditDensity('ultra')"
+                [class.bg-purple-600]="auditDensity() === 'ultra'"
+                [class.text-white]="auditDensity() === 'ultra'"
+                [class.text-slate-400]="auditDensity() !== 'ultra'"
+                class="px-2 py-1 rounded text-[10px] font-['Orbitron'] font-bold transition-all"
+                title="Densidad Ultra (Máxima Información)">
+                ULTRA
+              </button>
+              <button 
+                id="btn-density-normal"
+                (click)="setAuditDensity('normal')"
+                [class.bg-purple-600]="auditDensity() === 'normal'"
+                [class.text-white]="auditDensity() === 'normal'"
+                [class.text-slate-400]="auditDensity() !== 'normal'"
+                class="px-2 py-1 rounded text-[10px] font-['Orbitron'] font-bold transition-all"
+                title="Densidad Normal">
+                EXPANDIDA
+              </button>
+            </div>
+          </div>
+
+          <!-- Immutable High-Density Ledger Table -->
+          <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/90 shadow-inner">
+            <table class="w-full text-left text-xs font-['Fira_Code'] border-collapse">
+              <thead class="bg-slate-900/90 text-slate-400 border-b border-slate-800 uppercase tracking-wider text-[10px] select-none sticky top-0 z-10">
+                <tr>
+                  <th class="py-2.5 px-3">BLOQUE</th>
+                  <th class="py-2.5 px-3">TIMESTAMP</th>
+                  <th class="py-2.5 px-3">MÓDULO</th>
+                  <th class="py-2.5 px-3">ACCIÓN AUDITADA</th>
+                  <th class="py-2.5 px-3">
+                    <div class="flex items-center gap-1">
+                      <span>HASH SHA-256 (COPIABLE)</span>
+                      <mat-icon class="text-xs text-purple-400">content_copy</mat-icon>
+                    </div>
+                  </th>
+                  <th class="py-2.5 px-3 text-center">SEVERIDAD</th>
+                  <th class="py-2.5 px-3 text-center">INTEGRIDAD</th>
+                  <th class="py-2.5 px-3 text-center">ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                @for (record of filteredAuditLedger(); track record.id; let i = $index) {
+                  <!-- Main Data Row -->
+                  <tr 
+                    [class.bg-purple-950/30]="expandedAuditRecordId() === record.id"
+                    [class.bg-emerald-950/20]="liveChainScanIndex() === i"
+                    class="hover:bg-purple-950/20 transition-colors group cursor-pointer"
+                    (click)="toggleExpandAuditRecord(record.id)">
+                    
+                    <!-- Block Height & ID -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }} whitespace-nowrap">
+                      <div class="flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full {{ record.verified ? 'bg-emerald-400' : 'bg-rose-400' }}"></span>
+                        <div class="font-bold text-white font-['Orbitron']">#{{ record.blockHeight }}</div>
+                      </div>
+                      <div class="text-[9px] text-slate-500 truncate max-w-[90px]">{{ record.id }}</div>
+                    </td>
+
+                    <!-- Timestamp -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }} whitespace-nowrap text-slate-400 text-[11px]">
+                      {{ record.timestamp }}
+                    </td>
+
+                    <!-- Module Badge -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }} whitespace-nowrap">
+                      <span class="px-2 py-0.5 rounded bg-slate-800/80 text-purple-300 border border-purple-500/30 text-[10px] font-semibold">
+                        {{ record.module }}
+                      </span>
+                    </td>
+
+                    <!-- Action & Details -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }}">
+                      <div class="text-slate-200 font-semibold truncate max-w-[280px]">{{ record.action }}</div>
+                      @if (auditDensity() !== 'ultra') {
+                        <div class="text-[10px] text-slate-400 leading-snug truncate max-w-[280px]">{{ record.details }}</div>
+                      }
+                    </td>
+
+                    <!-- Copyable Verification Hash Column -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }} font-mono text-[11px] whitespace-nowrap">
+                      <div class="flex items-center gap-1.5">
+                        <button 
+                          (click)="copyVerificationHash(record, $event)"
+                          title="Copiar Hash SHA-256 completo al portapapeles"
+                          class="p-1 rounded bg-slate-900 border {{ copiedHashId() === record.id ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-700 hover:border-purple-400 text-slate-400 hover:text-purple-300' }} transition-all flex items-center gap-1">
+                          @if (copiedHashId() === record.id) {
+                            <mat-icon class="text-xs text-emerald-400">done</mat-icon>
+                            <span class="text-[9px] font-bold text-emerald-400">COPIADO</span>
+                          } @else {
+                            <mat-icon class="text-xs">content_copy</mat-icon>
+                          }
+                        </button>
+
+                        <div class="flex flex-col">
+                          <span 
+                            class="font-mono text-emerald-400 select-all" 
+                            title="{{ record.hash }}">
+                            {{ record.hash.substring(0, 10) }}...{{ record.hash.substring(record.hash.length - 8) }}
+                          </span>
+                          @if (auditDensity() !== 'ultra') {
+                            <span class="text-[9px] text-slate-500 font-mono">
+                              Prev: {{ record.previousHash.substring(0, 8) }}...
+                            </span>
+                          }
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Severity Badge -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }} text-center whitespace-nowrap">
+                      @if (record.severity === 'CRITICAL') {
+                        <span class="px-2 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[10px] font-bold">
+                          CRITICAL
+                        </span>
+                      } @else if (record.severity === 'HIGH') {
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-400 text-[10px] font-bold">
+                          HIGH
+                        </span>
+                      } @else if (record.severity === 'OPERATIONAL') {
+                        <span class="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-bold">
+                          OPERATIONAL
+                        </span>
+                      } @else {
+                        <span class="px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-400 text-[10px] font-bold">
+                          AUDIT
+                        </span>
+                      }
+                    </td>
+
+                    <!-- Real-Time Chain Linkage Status -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }} text-center whitespace-nowrap">
+                      <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold">
+                        <mat-icon class="text-xs">lock</mat-icon>
+                        <span>INMUTABLE</span>
+                      </div>
+                    </td>
+
+                    <!-- Quick Actions -->
+                    <td class="{{ auditDensity() === 'ultra' ? 'py-1.5 px-3' : (auditDensity() === 'compact' ? 'py-2.5 px-3' : 'py-3.5 px-4') }} text-center whitespace-nowrap">
+                      <button 
+                        (click)="copyVerificationProof(record, $event)"
+                        title="Copiar prueba criptográfica JSON"
+                        class="p-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-400 hover:text-cyan-300 transition-all">
+                        <mat-icon class="text-xs">{{ copiedProofId() === record.id ? 'check' : 'verified' }}</mat-icon>
+                      </button>
+                    </td>
+
+                  </tr>
+
+                  <!-- Expandable Row Details -->
+                  @if (expandedAuditRecordId() === record.id) {
+                    <tr class="bg-slate-900/90 border-t border-b border-purple-500/30">
+                      <td colspan="8" class="p-4">
+                        <div class="flex flex-col gap-3 font-['Fira_Code'] text-xs">
+                          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-purple-300 font-bold font-['Orbitron']">
+                              DETALLE CRIPTOGRÁFICO ASTAROTH // BLOQUE #{{ record.blockHeight }} ({{ record.id }})
+                            </span>
+                            <div class="flex items-center gap-2">
+                              <span class="text-[10px] text-slate-400">Firmante: <strong class="text-cyan-300">{{ record.signer }}</strong></span>
+                              <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">VERIFICADO 100%</span>
+                            </div>
+                          </div>
+
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+                            <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                              <span class="text-slate-500 text-[10px] block">HASH DEL BLOQUE (SHA-256)</span>
+                              <div class="flex items-center justify-between gap-2 mt-1">
+                                <span class="font-mono text-emerald-400 select-all break-all text-[11px]">{{ record.hash }}</span>
+                                <button 
+                                  (click)="copyVerificationHash(record, $event)"
+                                  class="px-2 py-1 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold shrink-0">
+                                  COPIAR
+                                </button>
+                              </div>
+                            </div>
+
+                            <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                              <span class="text-slate-500 text-[10px] block">HASH PREVIO EN CADENA</span>
+                              <span class="font-mono text-cyan-400 select-all break-all text-[11px] block mt-1">{{ record.previousHash }}</span>
+                            </div>
+                          </div>
+
+                          <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                            <span class="text-slate-500 text-[10px] block">DESCRIPCIÓN DE LA OPERACIÓN CRÍTICA</span>
+                            <p class="text-slate-200 mt-1 leading-relaxed">{{ record.details }}</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                } @empty {
+                  <tr>
+                    <td colspan="8" class="py-8 text-center text-slate-500 font-['Fira_Code']">
+                      No se encontraron registros de auditoría que coincidan con el filtro.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer Proof & Stats -->
+          <div class="flex flex-wrap items-center justify-between gap-3 text-[11px] font-['Fira_Code'] text-slate-400 pt-2 border-t border-slate-800">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-purple-400 text-xs">vpn_key</mat-icon>
+              <span>FIRMANTE OFICIAL: <strong>ASTAROTH_ORACLE_V4_DELAWARE</strong></span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span>MOSTRANDO: <strong class="text-purple-300">{{ filteredAuditLedger().length }}</strong> DE <strong class="text-white">{{ auditLedger().length }}</strong> REGISTROS</span>
+              <span>&bull;</span>
+              <span class="text-emerald-400">SELLO CRIPTOGRÁFICO ACTIVO</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 5: 7 MICROSERVICES TELEMETRY
+         ======================================================== -->
+    @if (activeTab() === 'microservices') {
+      <div id="view-microservices" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="font-['Orbitron'] text-base font-black text-white">ARQUITECTURA DE 7 MICROSERVICIOS</h2>
+            <p class="text-xs text-slate-400 font-['Fira_Code']">
+              Clúster Kubernetes en Google Cloud Platform • Telemetría en tiempo real
+            </p>
+          </div>
+
+          <button 
+            (click)="fetchSystemState()" 
+            class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-['Fira_Code'] text-xs flex items-center gap-1.5">
+            <mat-icon class="text-sm">refresh</mat-icon>
+            <span>ACTUALIZAR MÉTRICAS</span>
+          </button>
+        </div>
+        <app-microservices-chart [data]="predictiveTrend()"></app-microservices-chart>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (svc of microservices(); track svc.name) {
+            <div class="p-5 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between gap-4">
+              
+              <div class="flex items-start justify-between">
+                <div class="flex flex-col">
+                  <span class="font-['Orbitron'] text-xs font-bold text-white">{{ svc.name }}</span>
+                  <span class="text-[11px] text-slate-400 font-['Fira_Code']">Node.js Express + Docker</span>
+                </div>
+
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-['Fira_Code'] font-bold">
+                  {{ svc.status }}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-xs font-['Fira_Code'] bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                <div>
+                  <span class="text-slate-500 block text-[10px]">LATENCIA</span>
+                  <span class="text-sky-400 font-bold">{{ svc.latency }}</span>
+                </div>
+                <div>
+                  <span class="text-slate-500 block text-[10px]">CARGA CPU</span>
+                  <span class="text-emerald-400 font-bold">{{ svc.cpu }}</span>
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+
+        <!-- ========================================================
+             PREDICTIVE TELEMETRY & ERROR PROBABILITY TREND CURVE
+             ======================================================== -->
+        <div id="predictive-telemetry-panel" class="flex flex-col gap-6 p-6 rounded-2xl bg-slate-950/90 border border-sky-500/40 shadow-[0_0_30px_rgba(14,165,233,0.15)]">
+          
+          <!-- Predictive Header -->
+          <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/50 flex items-center justify-center text-sky-400">
+                <mat-icon>insights</mat-icon>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-['Orbitron'] text-base font-bold text-white tracking-wide">
+                    PANEL DE PREDICCIÓN DE FALLOS Y TENDENCIA DE ERROR
+                  </h3>
+                  <span class="px-2 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-300 text-[10px] font-['Fira_Code'] font-bold">
+                    LOGISTIC MODEL Ψ-HEURISTIC
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 font-['Fira_Code']">
+                  Análisis multivariable de CPU, latencia histórica y probabilidad acumulativa de fallos en cascada
+                </p>
+              </div>
+            </div>
+
+            <!-- Healing Action Button -->
+            <button 
+              id="btn-heuristic-healing"
+              (click)="triggerHeuristicHealing()"
+              [disabled]="isHealing()"
+              class="w-full lg:w-auto px-4 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-slate-950 font-['Orbitron'] text-xs font-black tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] disabled:opacity-50">
+              @if (isHealing()) {
+                <mat-icon class="text-sm animate-spin">sync</mat-icon>
+                <span>REBALANCEANDO CLÚSTER...</span>
+              } @else {
+                <mat-icon class="text-sm">healing</mat-icon>
+                <span>AUTORREPARACIÓN HEURÍSTICA</span>
+              }
+            </button>
+          </div>
+
+          <!-- Risk Metrics Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase block">Riesgo Actual del Sistema</span>
+                <span class="font-['Orbitron'] text-2xl font-black text-emerald-400">{{ currentSystemRisk() }}%</span>
+                <span class="text-[10px] text-emerald-400/80 block font-['Fira_Code']">&bull; Dentro de umbral seguro (&lt;15%)</span>
+              </div>
+              <div class="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase block">Pico Proyectado (Próx 6 Horas)</span>
+                <span class="font-['Orbitron'] text-2xl font-black text-amber-400">{{ peakRiskNext6h() }}%</span>
+                <span class="text-[10px] text-amber-400/80 block font-['Fira_Code']">&bull; Alerta preventiva en T+4h</span>
+              </div>
+              <div class="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <mat-icon>trending_up</mat-icon>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase block">Salud Integral del Clúster</span>
+                <span class="font-['Orbitron'] text-sm font-bold text-sky-400">{{ overallHealth() }}</span>
+                <span class="text-[10px] text-slate-400 block font-['Fira_Code']">&bull; 7/7 Nodos Operacionales</span>
+              </div>
+              <div class="w-12 h-12 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
+                <mat-icon>memory</mat-icon>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- SVG Visual Trend Chart -->
+          <div class="flex flex-col gap-2 bg-slate-900/80 p-5 rounded-xl border border-slate-800">
+            
+            <div class="flex flex-wrap items-center justify-between gap-3 text-xs font-['Fira_Code']">
+              <div class="flex items-center gap-2">
+                <mat-icon class="text-amber-400 text-sm">show_chart</mat-icon>
+                <span class="font-['Orbitron'] font-bold text-white">CURVA DINÁMICA DE PROBABILIDAD DE ERROR Y TELEMETRÍA</span>
+              </div>
+              
+              <!-- Chart Legends -->
+              <div class="flex items-center gap-4 text-[11px]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-1 bg-rose-500 rounded-full"></span>
+                  <span class="text-rose-400 font-semibold">P(Error) %</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-1 bg-emerald-400 rounded-full"></span>
+                  <span class="text-emerald-400">Carga CPU %</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-1 bg-sky-400 rounded-full"></span>
+                  <span class="text-sky-400">Latencia (ms)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SVG Container -->
+            <div class="relative w-full h-64 bg-slate-950 rounded-lg p-2 border border-slate-800/80 overflow-hidden">
+              <svg viewBox="0 0 800 240" class="w-full h-full" preserveAspectRatio="none">
+                <defs>
+                  <!-- Gradient for Error Probability Area -->
+                  <linearGradient id="errorProbGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.45" />
+                    <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.0" />
+                  </linearGradient>
+
+                  <linearGradient id="projectionZone" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.0" />
+                    <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.08" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Grid Horizontal Lines -->
+                <line x1="40" y1="20" x2="760" y2="20" stroke="#334155" stroke-dasharray="3,3" stroke-width="0.7" />
+                <text x="32" y="24" fill="#64748b" font-size="9" text-anchor="end" font-family="monospace">100%</text>
+
+                <line x1="40" y1="65" x2="760" y2="65" stroke="#334155" stroke-dasharray="3,3" stroke-width="0.7" />
+                <text x="32" y="69" fill="#64748b" font-size="9" text-anchor="end" font-family="monospace">75%</text>
+
+                <line x1="40" y1="110" x2="760" y2="110" stroke="#334155" stroke-dasharray="3,3" stroke-width="0.7" />
+                <text x="32" y="114" fill="#64748b" font-size="9" text-anchor="end" font-family="monospace">50%</text>
+
+                <line x1="40" y1="155" x2="760" y2="155" stroke="#334155" stroke-dasharray="3,3" stroke-width="0.7" />
+                <text x="32" y="159" fill="#64748b" font-size="9" text-anchor="end" font-family="monospace">25%</text>
+
+                <line x1="40" y1="200" x2="760" y2="200" stroke="#475569" stroke-width="1" />
+                <text x="32" y="204" fill="#64748b" font-size="9" text-anchor="end" font-family="monospace">0%</text>
+
+                <!-- Critical Threshold Line (45%) -->
+                <line x1="40" y1="119" x2="760" y2="119" stroke="#f43f5e" stroke-dasharray="4,4" stroke-width="1.2" opacity="0.6" />
+                <text x="755" y="115" fill="#f43f5e" font-size="8" text-anchor="end" font-family="monospace">UMBRAL CRÍTICO (45%)</text>
+
+                <!-- Projected Future Background Zone (right 25% of chart) -->
+                <rect x="600" y="20" width="160" height="180" fill="url(#projectionZone)" />
+                <line x1="600" y1="20" x2="600" y2="200" stroke="#38bdf8" stroke-dasharray="2,2" stroke-width="1" />
+                <text x="605" y="32" fill="#38bdf8" font-size="8" font-family="monospace">ZONA PROYECTADA (T+1h .. T+6h)</text>
+
+                <!-- Area Fill for Error Probability -->
+                @if (svgProbArea()) {
+                  <path [attr.d]="svgProbArea()" fill="url(#errorProbGradient)" />
+                }
+
+                <!-- CPU Load Line (Emerald) -->
+                @if (svgCpuPolyline()) {
+                  <polyline [attr.points]="svgCpuPolyline()" fill="none" stroke="#34d399" stroke-width="1.8" opacity="0.8" />
+                }
+
+                <!-- Latency Line (Sky) -->
+                @if (svgLatPolyline()) {
+                  <polyline [attr.points]="svgLatPolyline()" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.8" />
+                }
+
+                <!-- Error Probability Curve Line (Rose / Amber Accent) -->
+                @if (svgProbPolyline()) {
+                  <polyline [attr.points]="svgProbPolyline()" fill="none" stroke="#f43f5e" stroke-width="2.5" />
+                }
+
+                <!-- Data Dots -->
+                @for (pt of chartTrendPoints(); track pt.timeLabel) {
+                  <!-- Error prob dot -->
+                  <circle [attr.cx]="pt.x" [attr.cy]="pt.yProb" r="3" [attr.fill]="pt.isProjected ? '#fbbf24' : '#f43f5e'" stroke="#030712" stroke-width="1">
+                    <title>{{ pt.timeLabel }}: P(Error) = {{ pt.errorProbability }}%, CPU = {{ pt.cpu }}%, Lat = {{ pt.latency }}ms</title>
+                  </circle>
+                }
+              </svg>
+            </div>
+
+            <!-- Time Axis Labels -->
+            <div class="flex items-center justify-between px-10 text-[10px] font-['Fira_Code'] text-slate-500">
+              <span>T-24h</span>
+              <span>T-18h</span>
+              <span>T-12h</span>
+              <span>T-6h</span>
+              <span class="text-sky-400 font-bold">AHORA</span>
+              <span class="text-amber-400">T+3h</span>
+              <span class="text-amber-400">T+6h</span>
+            </div>
+
+          </div>
+
+          <!-- Per-Microservice Failure Risk Breakdown Table -->
+          <div class="flex flex-col gap-3">
+            <h4 class="font-['Orbitron'] text-xs font-bold text-slate-200 tracking-wider flex items-center gap-2">
+              <mat-icon class="text-sky-400 text-sm">troubleshoot</mat-icon>
+              <span>ANÁLISIS PREVENTIVO INDIVIDUAL Y MTBF (TIEMPO MEDIO ENTRE FALLOS)</span>
+            </h4>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/80">
+              <table class="w-full text-left text-xs font-['Fira_Code']">
+                <thead class="bg-slate-900/80 text-slate-400 border-b border-slate-800 uppercase tracking-wider text-[10px]">
+                  <tr>
+                    <th class="py-3 px-4">MICROSERVICIO</th>
+                    <th class="py-3 px-4">CARGA / LATENCIA</th>
+                    <th class="py-3 px-4">RIESGO DE FALLO</th>
+                    <th class="py-3 px-4">NIVEL</th>
+                    <th class="py-3 px-4">MTBF PROYECTADO</th>
+                    <th class="py-3 px-4">RECOMENDACIÓN ASTAROTH</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                  @for (risk of microservicesRisk(); track risk.name) {
+                    <tr class="hover:bg-sky-950/20 transition-colors">
+                      <td class="py-3 px-4 font-bold text-white">{{ risk.name }}</td>
+                      <td class="py-3 px-4 text-slate-300">{{ risk.currentCpu }} / {{ risk.currentLatency }}</td>
+                      <td class="py-3 px-4">
+                        <div class="flex items-center gap-2">
+                          <span class="font-bold text-emerald-400">{{ risk.failureRisk }}%</span>
+                          <div class="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-400" [style.width.%]="risk.failureRisk"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-bold">
+                          {{ risk.riskLevel }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 text-sky-400 font-bold">{{ risk.mtbfHours }} Horas</td>
+                      <td class="py-3 px-4 text-slate-400 text-[11px]">{{ risk.recommendation }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- AI Telemetry Summary Recommendation -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-3 text-xs font-['Fira_Code'] text-slate-300">
+            <mat-icon class="text-emerald-400">psychology</mat-icon>
+            <div>
+              <strong class="text-emerald-300">DIAGNÓSTICO PREDICTIVO ASTAROTH:</strong>
+              <span class="text-slate-400 ml-1">{{ aiTelemetryRecommendation() }}</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 6: GOLEM / LEVIATHAN LIVE STREAM & CUERPO 3D
+         ======================================================== -->
+    @if (activeTab() === 'golem') {
+      <div id="view-golem" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <!-- Top Header & Status Banner -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-purple-950/80 via-slate-950 to-purple-950/80 border border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.25)] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400">
+              <mat-icon class="text-2xl">view_in_ar</mat-icon>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="font-['Orbitron'] text-lg font-black text-white tracking-wider">ARQUITECTURA DEL CUERPO 3D // LEVIATÁN</h2>
+                <span class="px-2 py-0.5 rounded bg-red-600 text-white font-['Orbitron'] text-[10px] font-black tracking-wider animate-pulse flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                  OBS & OSC SYNC
+                </span>
+              </div>
+              <p class="text-xs text-purple-300/80 font-['Fira_Code'] mt-0.5">
+                Avatar 3D (.VRM) + VSeeFace (OSC Puerto 39000) + VB-Audio Virtual Cable + Python Core
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+            <button 
+              id="btn-download-python"
+              (click)="downloadPythonScript()"
+              class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+              <mat-icon class="text-sm">code</mat-icon>
+              <span>DESCARGAR leviatan_core.py</span>
+            </button>
+
+            <button 
+              id="btn-export-golem"
+              (click)="exportArchiveJSON()"
+              [disabled]="isExporting()"
+              class="px-3 py-2 rounded-lg bg-purple-500/20 border border-purple-500/40 hover:bg-purple-500/30 text-purple-300 font-['Orbitron'] text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(168,85,247,0.2)] disabled:opacity-50">
+              <mat-icon class="text-sm">download</mat-icon>
+              <span>ARCHIVAR JSON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Grid: Avatar 3D Visualizer & Stream Chat -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Left 2 Cols: 3D Holographic Avatar & OSC Nerve Center -->
+          <div class="lg:col-span-2 flex flex-col gap-5">
+            
+            <!-- Holographic Screen Preview Card -->
+            <div class="relative w-full h-[400px] rounded-2xl overflow-hidden border border-purple-500/50 bg-slate-950 shadow-[0_0_40px_rgba(168,85,247,0.2)] flex flex-col justify-between p-6">
+              
+              <!-- Ambient Cyber Background -->
+              <div class="absolute inset-0 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:18px_18px] opacity-20 pointer-events-none"></div>
+              
+              <!-- Top Stream Overlay Banner -->
+              <div class="relative z-10 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded bg-red-600 text-white font-['Orbitron'] text-[10px] font-black tracking-wider flex items-center gap-1.5 animate-pulse">
+                    <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                    EN VIVO OBS STUDIO
+                  </span>
+                  <span class="text-xs font-['Fira_Code'] text-purple-300 font-bold">VSeeFace OSC: 127.0.0.1:39000</span>
+                </div>
+
+                <div class="flex items-center gap-3 text-xs font-['Fira_Code']">
+                  <span class="text-slate-400">AUDIENCIA: <strong class="text-emerald-400">18,940</strong></span>
+                  <span class="px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 font-bold text-[11px]">
+                    EMOCIÓN: {{ current3dEmotion() }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Center Holographic Avatar Face Vector Rendering -->
+              <div class="relative z-10 flex flex-col items-center justify-center my-auto">
+                <div class="relative w-44 h-44 rounded-full flex items-center justify-center transition-all duration-500"
+                  [class.shadow-[0_0_50px_rgba(168,85,247,0.6)]]="current3dEmotion() === 'Neutral'"
+                  [class.shadow-[0_0_60px_rgba(16,185,129,0.8)]]="current3dEmotion() === 'Joy'"
+                  [class.shadow-[0_0_60px_rgba(239,68,68,0.8)]]="current3dEmotion() === 'Angry'"
+                  [class.shadow-[0_0_60px_rgba(56,189,248,0.8)]]="current3dEmotion() === 'Sorrow'"
+                  [class.shadow-[0_0_60px_rgba(236,72,153,0.8)]]="current3dEmotion() === 'Fun'"
+                  [class.border-purple-500]="current3dEmotion() === 'Neutral'"
+                  [class.border-emerald-400]="current3dEmotion() === 'Joy'"
+                  [class.border-red-500]="current3dEmotion() === 'Angry'"
+                  [class.border-sky-400]="current3dEmotion() === 'Sorrow'"
+                  [class.border-pink-500]="current3dEmotion() === 'Fun'"
+                  class="border-2 bg-slate-950/80 backdrop-blur-md">
+                  
+                  <!-- Glowing Aura Ring -->
+                  <div class="absolute inset-2 rounded-full border border-dashed animate-spin duration-10000 opacity-40"
+                    [class.border-purple-400]="current3dEmotion() === 'Neutral'"
+                    [class.border-emerald-300]="current3dEmotion() === 'Joy'"
+                    [class.border-red-400]="current3dEmotion() === 'Angry'"
+                    [class.border-sky-300]="current3dEmotion() === 'Sorrow'"
+                    [class.border-pink-300]="current3dEmotion() === 'Fun'">
+                  </div>
+
+                  <!-- Face SVG Graphic -->
+                  <svg class="w-36 h-36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Head Outline -->
+                    <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="1.5" class="opacity-30 text-purple-400"/>
+                    <path d="M 25,45 Q 50,20 75,45" stroke="currentColor" stroke-width="1" class="opacity-20 text-purple-300" stroke-dasharray="2 2"/>
+
+                    <!-- Eyebrows / Expression Lines -->
+                    @if (current3dEmotion() === 'Angry') {
+                      <line x1="28" y1="36" x2="44" y2="44" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+                      <line x1="72" y1="36" x2="56" y2="44" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+                    } @else if (current3dEmotion() === 'Joy') {
+                      <path d="M 28,36 Q 36,30 44,36" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                      <path d="M 56,36 Q 64,30 72,36" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                    } @else if (current3dEmotion() === 'Sorrow') {
+                      <line x1="28" y1="42" x2="44" y2="36" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+                      <line x1="72" y1="42" x2="56" y2="36" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+                      <!-- Tear -->
+                      <circle cx="36" cy="58" r="2.5" fill="#38bdf8" class="animate-bounce"/>
+                    } @else if (current3dEmotion() === 'Fun') {
+                      <path d="M 28,34 Q 36,28 44,34" stroke="#ec4899" stroke-width="3" stroke-linecap="round"/>
+                      <line x1="56" y1="34" x2="72" y2="34" stroke="#ec4899" stroke-width="3" stroke-linecap="round"/>
+                    } @else {
+                      <line x1="28" y1="38" x2="44" y2="38" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/>
+                      <line x1="56" y1="38" x2="72" y2="38" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/>
+                    }
+
+                    <!-- Eyes -->
+                    @if (current3dEmotion() === 'Angry') {
+                      <circle cx="36" cy="45" r="5.5" fill="#ef4444" class="animate-pulse"/>
+                      <circle cx="64" cy="45" r="5.5" fill="#ef4444" class="animate-pulse"/>
+                      <circle cx="36" cy="45" r="2" fill="#fff"/>
+                      <circle cx="64" cy="45" r="2" fill="#fff"/>
+                    } @else if (current3dEmotion() === 'Joy') {
+                      <path d="M 30,46 Q 36,40 42,46" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+                      <path d="M 58,46 Q 64,40 70,46" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+                    } @else if (current3dEmotion() === 'Sorrow') {
+                      <circle cx="36" cy="48" r="4.5" fill="#38bdf8"/>
+                      <circle cx="64" cy="48" r="4.5" fill="#38bdf8"/>
+                    } @else if (current3dEmotion() === 'Fun') {
+                      <!-- Left Eye Wink / Right Eye Sparkle -->
+                      <path d="M 30,46 Q 36,52 42,46" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+                      <circle cx="64" cy="45" r="5" fill="#ec4899" class="animate-ping"/>
+                      <circle cx="64" cy="45" r="5" fill="#ec4899"/>
+                    } @else {
+                      <!-- Neutral Glowing Cyber Eyes -->
+                      <circle cx="36" cy="46" r="5" fill="#a855f7" class="animate-pulse"/>
+                      <circle cx="64" cy="46" r="5" fill="#a855f7" class="animate-pulse"/>
+                      <circle cx="36" cy="46" r="2" fill="#00f0ff"/>
+                      <circle cx="64" cy="46" r="2" fill="#00f0ff"/>
+                    }
+
+                    <!-- Mouth / Lip-Sync Reaction -->
+                    @if (isLipSyncActive()) {
+                      <!-- Dynamic Animated Mouth Waveform -->
+                      <ellipse cx="50" cy="70" rx="10" ry="6" fill="#a855f7" class="animate-ping opacity-40"/>
+                      <ellipse cx="50" cy="70" rx="8" ry="5" fill="#38bdf8" stroke="#fff" stroke-width="1.5"/>
+                    } @else if (current3dEmotion() === 'Joy') {
+                      <path d="M 34,66 Q 50,80 66,66" stroke="#10b981" stroke-width="3" stroke-linecap="round" fill="rgba(16,185,129,0.2)"/>
+                    } @else if (current3dEmotion() === 'Angry') {
+                      <path d="M 36,72 Q 50,64 64,72" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+                    } @else if (current3dEmotion() === 'Sorrow') {
+                      <path d="M 38,72 Q 50,64 62,72" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                    } @else if (current3dEmotion() === 'Fun') {
+                      <path d="M 36,66 Q 50,78 64,66" stroke="#ec4899" stroke-width="3" stroke-linecap="round"/>
+                      <path d="M 46,71 Q 50,78 54,71" fill="#ec4899"/>
+                    } @else {
+                      <line x1="38" y1="68" x2="62" y2="68" stroke="#a855f7" stroke-width="2" stroke-linecap="round"/>
+                    }
+                  </svg>
+                </div>
+
+                <div class="mt-3 text-center">
+                  <span class="font-['Orbitron'] text-xs font-bold text-slate-200 tracking-wider">
+                    AVATAR LEVIATÁN 3D (VSeeFace OSC)
+                  </span>
+                  <div class="flex items-center justify-center gap-2 mt-1">
+                    @if (isLipSyncActive()) {
+                      <span class="flex items-center gap-1 text-[11px] font-['Fira_Code'] text-sky-400 font-bold animate-pulse">
+                        <mat-icon class="text-xs">graphic_eq</mat-icon>
+                        LIP-SYNC ACTIVO (VB-AUDIO VIRTUAL CABLE)
+                      </span>
+                    } @else {
+                      <span class="text-[11px] font-['Fira_Code'] text-slate-400">
+                        ESTADO FACIAL: <strong class="text-purple-300">[{{ current3dEmotion() }}]</strong>
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Stream Ticker -->
+              <div class="relative z-10 bg-slate-950/80 backdrop-blur-md px-4 py-2 rounded-lg border border-purple-500/30 flex items-center justify-between text-xs font-['Fira_Code']">
+                <span class="text-purple-300 font-semibold">DONACIÓN RECIENTE: 500 QC de @CyberPilot_42</span>
+                <span class="text-slate-400">TRANSMISIÓN OSC: 127.0.0.1:39000 &bull; ACTIVA</span>
+              </div>
+
+            </div>
+
+            <!-- OSC Expression Controller Buttons (Nerve System) -->
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <h3 class="font-['Orbitron'] text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                  <mat-icon class="text-sm text-purple-400">tune</mat-icon>
+                  <span>PANEL DE CONTROL OSC // DISPARADOR DE EXPRESIONES (PUERTO 39000)</span>
+                </h3>
+                <span class="text-[10px] font-['Fira_Code'] text-slate-400">/VSeeFace/Expression [name] [1.0]</span>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                <button 
+                  id="btn-osc-neutral"
+                  (click)="triggerOscExpression('Neutral')"
+                  [class.ring-2]="current3dEmotion() === 'Neutral'"
+                  [class.ring-purple-400]="current3dEmotion() === 'Neutral'"
+                  class="p-2 rounded-lg bg-slate-950 hover:bg-purple-900/30 border border-slate-700 text-xs font-['Fira_Code'] text-slate-200 flex flex-col items-center gap-1 transition-all">
+                  <span class="text-base">😐</span>
+                  <span class="font-bold text-[11px]">Neutral</span>
+                  <span class="text-[9px] text-slate-500">Reposo</span>
+                </button>
+
+                <button 
+                  id="btn-osc-joy"
+                  (click)="triggerOscExpression('Joy')"
+                  [class.ring-2]="current3dEmotion() === 'Joy'"
+                  [class.ring-emerald-400]="current3dEmotion() === 'Joy'"
+                  class="p-2 rounded-lg bg-slate-950 hover:bg-emerald-900/30 border border-emerald-500/30 text-xs font-['Fira_Code'] text-emerald-300 flex flex-col items-center gap-1 transition-all">
+                  <span class="text-base">😄</span>
+                  <span class="font-bold text-[11px]">Joy</span>
+                  <span class="text-[9px] text-emerald-400/70">Donaciones / Sectarios</span>
+                </button>
+
+                <button 
+                  id="btn-osc-angry"
+                  (click)="triggerOscExpression('Angry')"
+                  [class.ring-2]="current3dEmotion() === 'Angry'"
+                  [class.ring-red-400]="current3dEmotion() === 'Angry'"
+                  class="p-2 rounded-lg bg-slate-950 hover:bg-red-900/30 border border-red-500/30 text-xs font-['Fira_Code'] text-red-300 flex flex-col items-center gap-1 transition-all">
+                  <span class="text-base">😡</span>
+                  <span class="font-bold text-[11px]">Angry</span>
+                  <span class="text-[9px] text-red-400/70">Herejía / Ataques</span>
+                </button>
+
+                <button 
+                  id="btn-osc-sorrow"
+                  (click)="triggerOscExpression('Sorrow')"
+                  [class.ring-2]="current3dEmotion() === 'Sorrow'"
+                  [class.ring-sky-400]="current3dEmotion() === 'Sorrow'"
+                  class="p-2 rounded-lg bg-slate-950 hover:bg-sky-900/30 border border-sky-500/30 text-xs font-['Fira_Code'] text-sky-300 flex flex-col items-center gap-1 transition-all">
+                  <span class="text-base">😢</span>
+                  <span class="font-bold text-[11px]">Sorrow</span>
+                  <span class="text-[9px] text-sky-400/70">Tristeza Cósmica</span>
+                </button>
+
+                <button 
+                  id="btn-osc-fun"
+                  (click)="triggerOscExpression('Fun')"
+                  [class.ring-2]="current3dEmotion() === 'Fun'"
+                  [class.ring-pink-400]="current3dEmotion() === 'Fun'"
+                  class="p-2 rounded-lg bg-slate-950 hover:bg-pink-900/30 border border-pink-500/30 text-xs font-['Fira_Code'] text-pink-300 flex flex-col items-center gap-1 transition-all">
+                  <span class="text-base">😜</span>
+                  <span class="font-bold text-[11px]">Fun</span>
+                  <span class="text-[9px] text-pink-400/70">Sarcasmo / Risa</span>
+                </button>
+              </div>
+
+              <!-- Live OSC Packet Logs Mini Console -->
+              <div class="mt-1 bg-slate-950 rounded-lg p-2.5 border border-slate-800 font-['Fira_Code'] text-[10px] text-slate-400">
+                <div class="flex items-center justify-between text-slate-500 mb-1 border-b border-slate-800 pb-1">
+                  <span>TELEMETRÍA OSC UDP (127.0.0.1:39000)</span>
+                  <span class="text-emerald-400">SOCKET ESTABLE</span>
+                </div>
+                <div class="space-y-1 max-h-16 overflow-y-auto">
+                  @for (log of oscLogs(); track log.time) {
+                    <div class="flex items-center justify-between">
+                      <span class="text-purple-400">[{{ log.time }}]</span>
+                      <span class="text-slate-300">/VSeeFace/Expression <strong>"{{ log.expression }}"</strong> 1.0</span>
+                      <span class="text-emerald-400">{{ log.status }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Right Col: Interactive Stream Chat & Golem AI Oracle -->
+          <div class="lg:col-span-1 flex flex-col rounded-2xl bg-slate-950 border border-slate-800 p-5 justify-between gap-4 shadow-xl">
+            <div>
+              <div class="flex items-center justify-between">
+                <h3 class="font-['Orbitron'] text-xs font-bold text-slate-200 flex items-center gap-2">
+                  <mat-icon class="text-purple-400 text-base">forum</mat-icon>
+                  <span>CHAT EN VIVO & ORÁCULO</span>
+                </h3>
+                <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-['Fira_Code'] font-bold">
+                  GEMINI 3.7 + OSC
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-400 font-['Fira_Code'] mt-1">
+                Escribe como espectador de TikTok/Twitch. El Leviatán detectará la emoción automáticamente ([Joy], [Angry], etc.) y transmitirá su voz por VB-Audio Cable.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <div>
+                <label for="viewer-name-input" class="block text-[10px] font-['Fira_Code'] text-slate-400 mb-1 font-semibold">
+                  NOMBRE DEL ESPECTADOR:
+                </label>
+                <input 
+                  id="viewer-name-input"
+                  type="text" 
+                  [formControl]="streamViewerName" 
+                  class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs font-['Fira_Code'] text-sky-400 focus:outline-none focus:border-purple-500">
+              </div>
+
+              <div>
+                <label for="viewer-comment-input" class="block text-[10px] font-['Fira_Code'] text-slate-400 mb-1 font-semibold">
+                  COMENTARIO / PREGUNTA:
+                </label>
+                <textarea 
+                  id="viewer-comment-input"
+                  [formControl]="streamViewerComment" 
+                  rows="4" 
+                  placeholder="Ej: ¿Qué piensas de los mortales que intentan dominar la IA?"
+                  class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs font-['Fira_Code'] text-slate-200 focus:outline-none focus:border-purple-500 resize-none"></textarea>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <button 
+                id="btn-ask-golem"
+                (click)="askGolemOracle()" 
+                [disabled]="isThinking() || !streamViewerComment.value.trim()"
+                class="w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-['Orbitron'] text-xs font-black tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] disabled:opacity-40">
+                @if (isThinking()) {
+                  <mat-icon class="text-base animate-spin">sync</mat-icon>
+                  <span>CANALIZANDO ORÁCULO...</span>
+                } @else {
+                  <mat-icon class="text-base">sensors</mat-icon>
+                  <span>TRANSMITIR AL LEVIATÁN</span>
+                }
+              </button>
+
+              <div class="text-[10px] font-['Fira_Code'] text-slate-500 text-center">
+                Autodetecta: [Joy] [Angry] [Sorrow] [Fun] [Neutral]
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- The 3 Essential External Tools Architecture -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <!-- Tool 1: El Recipiente -->
+          <div class="p-5 rounded-xl bg-slate-900/70 border border-slate-800 flex flex-col justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center border border-sky-500/30 font-bold font-['Orbitron']">
+                1
+              </div>
+              <div>
+                <h4 class="font-['Orbitron'] text-xs font-bold text-white">EL RECIPIENTE (.VRM)</h4>
+                <p class="text-[10px] font-['Fira_Code'] text-sky-400">VRoid Studio / VRoid Hub</p>
+              </div>
+            </div>
+            <p class="text-xs font-['Fira_Code'] text-slate-300 leading-relaxed">
+              El modelo 3D con estándar <strong>.vrm</strong>. Crea un avatar personalizado en VRoid Studio (Steam) con blendshapes para Joy, Angry, Sorrow, Fun y Neutral.
+            </p>
+            <div class="text-[10px] font-['Fira_Code'] text-slate-500 border-t border-slate-800 pt-2">
+              ESTÁNDAR: VRM 0.x / 1.0 &bull; BLENDSHAPES OK
+            </div>
+          </div>
+
+          <!-- Tool 2: El Titiritero -->
+          <div class="p-5 rounded-xl bg-slate-900/70 border border-slate-800 flex flex-col justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center border border-purple-500/30 font-bold font-['Orbitron']">
+                2
+              </div>
+              <div>
+                <h4 class="font-['Orbitron'] text-xs font-bold text-white">EL TITIRITERO (VSeeFace)</h4>
+                <p class="text-[10px] font-['Fira_Code'] text-purple-400">Receptor OSC Puerto 39000</p>
+              </div>
+            </div>
+            <p class="text-xs font-['Fira_Code'] text-slate-300 leading-relaxed">
+              Software de renderizado 3D. Activa en <em>Settings &gt; General</em> la opción <strong>OSC/VMC receiver</strong> en el puerto <strong>39000</strong> para recibir emociones en tiempo real.
+            </p>
+            <div class="text-[10px] font-['Fira_Code'] text-slate-500 border-t border-slate-800 pt-2">
+              OSC TARGET: 127.0.0.1:39000 &bull; VMC PROTOCOL
+            </div>
+          </div>
+
+          <!-- Tool 3: El Puente -->
+          <div class="p-5 rounded-xl bg-slate-900/70 border border-slate-800 flex flex-col justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 font-bold font-['Orbitron']">
+                3
+              </div>
+              <div>
+                <h4 class="font-['Orbitron'] text-xs font-bold text-white">EL PUENTE (VB-AUDIO)</h4>
+                <p class="text-[10px] font-['Fira_Code'] text-emerald-400">Virtual Audio Cable Lip-sync</p>
+              </div>
+            </div>
+            <p class="text-xs font-['Fira_Code'] text-slate-300 leading-relaxed">
+              Cable invisible que envía el audio sintetizado de Python directamente al micrófono de VSeeFace, activando el movimiento automático de la boca (Lip-sync).
+            </p>
+            <div class="text-[10px] font-['Fira_Code'] text-slate-500 border-t border-slate-800 pt-2">
+              AUDIO PIPELINE: PYTHON &rarr; CABLE INPUT &rarr; VSEEFACE
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Script Hub: Documentation & leviatan_core.py Integration -->
+        <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-emerald-400">integration_instructions</mat-icon>
+              <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                CENTRO DE INTEGRACIÓN // CODIGO Y CONFIGURACIÓN
+              </h3>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <button 
+                (click)="setScriptTab('code')"
+                [class.bg-purple-600]="selectedScriptTab() === 'code'"
+                [class.text-white]="selectedScriptTab() === 'code'"
+                [class.bg-slate-900]="selectedScriptTab() !== 'code'"
+                [class.text-slate-400]="selectedScriptTab() !== 'code'"
+                class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] transition-all">
+                CÓDIGO PYTHON (leviatan_core.py)
+              </button>
+              <button 
+                (click)="setScriptTab('vseeface')"
+                [class.bg-purple-600]="selectedScriptTab() === 'vseeface'"
+                [class.text-white]="selectedScriptTab() === 'vseeface'"
+                [class.bg-slate-900]="selectedScriptTab() !== 'vseeface'"
+                [class.text-slate-400]="selectedScriptTab() !== 'vseeface'"
+                class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] transition-all">
+                CONFIG VSEEFACE (OSC 39000)
+              </button>
+              <button 
+                (click)="setScriptTab('vbaudio')"
+                [class.bg-purple-600]="selectedScriptTab() === 'vbaudio'"
+                [class.text-white]="selectedScriptTab() === 'vbaudio'"
+                [class.bg-slate-900]="selectedScriptTab() !== 'vbaudio'"
+                [class.text-slate-400]="selectedScriptTab() !== 'vbaudio'"
+                class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] transition-all">
+                VB-AUDIO CABLE
+              </button>
+              <button 
+                (click)="setScriptTab('obs')"
+                [class.bg-purple-600]="selectedScriptTab() === 'obs'"
+                [class.text-white]="selectedScriptTab() === 'obs'"
+                [class.bg-slate-900]="selectedScriptTab() !== 'obs'"
+                [class.text-slate-400]="selectedScriptTab() !== 'obs'"
+                class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] transition-all">
+                OBS STUDIO (TRANSPARENCIA)
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab Content Display -->
+          @if (selectedScriptTab() === 'code') {
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-['Fira_Code'] text-slate-400">
+                  Script Python autónomo con TikTokLive, python-osc (puerto 39000), Gemini API y pygame audio
+                </span>
+                <div class="flex items-center gap-2">
+                  <button 
+                    (click)="copyPythonScript()"
+                    class="px-3 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-['Fira_Code'] flex items-center gap-1">
+                    <mat-icon class="text-xs">content_copy</mat-icon>
+                    <span>Copiar Código</span>
+                  </button>
+                  <button 
+                    (click)="downloadPythonScript()"
+                    class="px-3 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-['Fira_Code'] flex items-center gap-1 font-bold">
+                    <mat-icon class="text-xs">download</mat-icon>
+                    <span>Descargar .py</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-['Fira_Code'] text-xs text-slate-300 overflow-x-auto max-h-72">
+                <pre class="text-[11px] leading-relaxed">{{ pythonCodeSnippet }}</pre>
+              </div>
+            </div>
+          } @else if (selectedScriptTab() === 'vseeface') {
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] text-slate-300 space-y-3">
+              <h4 class="font-['Orbitron'] text-emerald-400 font-bold text-sm">PASO A PASO: CONFIGURACIÓN DE VSEEFACE</h4>
+              <ol class="list-decimal list-inside space-y-2 text-slate-300">
+                <li>Abre <strong>VSeeFace</strong> y carga tu modelo <strong>.vrm</strong>.</li>
+                <li>Ve a <strong>Settings &gt; General settings</strong>.</li>
+                <li>Baja hasta la sección <strong>OSC / VMC receiver</strong> y marca la casilla <strong>Enable OSC/VMC receiver</strong>.</li>
+                <li>Asegúrate de que el puerto receptor esté configurado en <strong>39000</strong> (IP: 127.0.0.1).</li>
+                <li>En <strong>Microphone</strong>, selecciona <strong>CABLE Output (VB-Audio Virtual Cable)</strong> para que la boca se mueva con la voz generada por la IA.</li>
+              </ol>
+            </div>
+          } @else if (selectedScriptTab() === 'vbaudio') {
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] text-slate-300 space-y-3">
+              <h4 class="font-['Orbitron'] text-sky-400 font-bold text-sm">PASO A PASO: VB-AUDIO VIRTUAL CABLE</h4>
+              <ol class="list-decimal list-inside space-y-2 text-slate-300">
+                <li>Descarga e instala gratis <strong>VB-Audio Virtual Cable</strong> desde su sitio oficial.</li>
+                <li>Reinicia tu PC si es necesario para registrar los drivers de audio virtuales.</li>
+                <li>Configura la salida de audio de tu script Python hacia <strong>CABLE Input (VB-Audio Virtual Cable)</strong>.</li>
+                <li>En VSeeFace o software de captura, selecciona <strong>CABLE Output</strong> como dispositivo de entrada de micrófono (Lip-sync automático).</li>
+              </ol>
+            </div>
+          } @else if (selectedScriptTab() === 'obs') {
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] text-slate-300 space-y-3">
+              <h4 class="font-['Orbitron'] text-purple-400 font-bold text-sm">PASO A PASO: OBS STUDIO CON TRANSPARENCIA</h4>
+              <ol class="list-decimal list-inside space-y-2 text-slate-300">
+                <li>En VSeeFace, ve a <strong>Settings &gt; General</strong> y activa <strong>Transparent window</strong> (o usa captura de juego).</li>
+                <li>En OBS Studio, agrega una fuente de tipo <strong>Captura de Juego (Game Capture)</strong>.</li>
+                <li>Selecciona modo <em>Capturar ventana específica</em> &rarr; <em>[VSeeFace.exe] VSeeFace</em>.</li>
+                <li>Marca la casilla <strong>Permitir transparencia (Allow Transparency)</strong>.</li>
+                <li>¡El avatar 3D aparecerá flotando sobre tu juego Antigravity o fondo de streaming sin fondo verde!</li>
+              </ol>
+            </div>
+          }
+
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 7: FASE 4: LOS TENTÁCULOS (TINDER AI VISION AUTOMATOR)
+         ======================================================== -->
+    @if (activeTab() === 'tentaculos') {
+      <div id="view-tentaculos" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <!-- Header & TikTok Conversion Hook Banner -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-rose-950/80 via-slate-950 to-pink-950/80 border border-rose-500/40 shadow-[0_0_30px_rgba(244,63,94,0.25)] flex flex-col lg:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-400">
+              <mat-icon class="text-2xl">auto_fix_high</mat-icon>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="font-['Orbitron'] text-lg font-black text-white tracking-wide">
+                  FASE 4: LOS TENTÁCULOS // TINDER AI VISION
+                </h2>
+                <span class="px-2 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-['Fira_Code'] font-bold">
+                  SELENIUM + VISUAL AI + PIL
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 font-['Fira_Code']">
+                Automatización de citas con reconocimiento visual de fotos y redirección psicológica a TikTok Live (<strong>tiktok.com/&#64;lopez_hector140998</strong>)
+              </p>
+            </div>
+          </div>
+
+          <!-- Controls & Bot Switch -->
+          <div class="flex items-center gap-3 w-full lg:w-auto">
+            <button 
+              id="btn-toggle-tentaculos-bot"
+              (click)="toggleTentaculosBot()"
+              [class]="tentaculosState().activeStatus ? 'bg-rose-500/20 border-rose-500 text-rose-300' : 'bg-slate-800 border-slate-700 text-slate-400'"
+              class="px-4 py-2.5 rounded-lg border font-['Orbitron'] text-xs font-bold tracking-wider flex items-center gap-2 transition-all">
+              <span class="w-2.5 h-2.5 rounded-full" [class]="tentaculosState().activeStatus ? 'bg-rose-400 animate-ping' : 'bg-slate-500'"></span>
+              <span>BOT TENTÁCULOS: {{ tentaculosState().activeStatus ? 'ACTIVO (AUTÓNOMO)' : 'PAUSADO' }}</span>
+            </button>
+
+            <button 
+              id="btn-download-tentaculos-header"
+              (click)="downloadTentaculosScript()"
+              class="px-3.5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-['Fira_Code'] text-xs flex items-center gap-1.5 transition-all">
+              <mat-icon class="text-sm">download</mat-icon>
+              <span>tentaculos_tinder.py</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Telemetry & Conversion Metrics Ribbon -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          
+          <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase">Perfiles Escaneados</span>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="font-['Orbitron'] text-2xl font-black text-white">{{ tentaculosState().scannedProfiles }}</span>
+              <span class="text-[10px] text-slate-500 font-['Fira_Code']">Web Vision</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase">Ganchos Personalizados</span>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="font-['Orbitron'] text-2xl font-black text-rose-400">{{ tentaculosState().generatedHooks }}</span>
+              <span class="text-[10px] text-rose-400/70 font-['Fira_Code']">100% IA</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase">Likes Automatizados</span>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="font-['Orbitron'] text-2xl font-black text-emerald-400">{{ tentaculosState().automatedLikes }}</span>
+              <span class="text-[10px] text-emerald-400/70 font-['Fira_Code']">Selenium</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between">
+            <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase">Matches Simulados</span>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="font-['Orbitron'] text-2xl font-black text-amber-400">{{ tentaculosState().matchesSimulated }}</span>
+              <span class="text-[10px] text-amber-400/70 font-['Fira_Code']">37% Ratio</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between col-span-2 sm:col-span-1">
+            <span class="text-[10px] font-['Fira_Code'] text-slate-400 uppercase">Tráfico a TikTok Live</span>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="font-['Orbitron'] text-2xl font-black text-sky-400">{{ tentaculosState().trafficToTikTokLive }}</span>
+              <span class="text-[10px] text-sky-400/70 font-['Fira_Code']">Visitas Reales</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Main Workspace Grid: Vision Simulator & Hook Engine -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Left Col (7 cols): Tinder Profile Simulator & Vision Generator -->
+          <div class="lg:col-span-7 flex flex-col gap-4 p-5 rounded-2xl bg-slate-950/80 border border-slate-800 shadow-xl">
+            
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-2">
+                <mat-icon class="text-rose-400">visibility</mat-icon>
+                <h3 class="font-['Orbitron'] text-sm font-bold text-white">SIMULADOR DE FOTO DE PERFIL (TINDER WEB)</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-['Fira_Code']">GPT-4 Vision / Gemini Vision API</span>
+            </div>
+
+            <!-- Profile Archetype Presets Selector -->
+            <div class="flex flex-col gap-2">
+              <span class="text-[11px] font-['Fira_Code'] text-slate-400 font-semibold">
+                SELECCIONA ARQUETIPO DE PERFIL PARA ANALIZAR:
+              </span>
+              <div class="flex flex-wrap gap-2">
+                <button 
+                  id="preset-playa"
+                  (click)="selectPresetProfile('playa')"
+                  [class.bg-rose-600]="selectedPreset() === 'playa'"
+                  [class.text-white]="selectedPreset() === 'playa'"
+                  [class.bg-slate-900]="selectedPreset() !== 'playa'"
+                  [class.text-slate-300]="selectedPreset() !== 'playa'"
+                  class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] border border-slate-700 transition-all flex items-center gap-1.5">
+                  <span>🏖️ Playa & Surf</span>
+                </button>
+
+                <button 
+                  id="preset-tokio"
+                  (click)="selectPresetProfile('tokio')"
+                  [class.bg-rose-600]="selectedPreset() === 'tokio'"
+                  [class.text-white]="selectedPreset() === 'tokio'"
+                  [class.bg-slate-900]="selectedPreset() !== 'tokio'"
+                  [class.text-slate-300]="selectedPreset() !== 'tokio'"
+                  class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] border border-slate-700 transition-all flex items-center gap-1.5">
+                  <span>🐈 Viajera & Gato en Kioto</span>
+                </button>
+
+                <button 
+                  id="preset-cyberpunk"
+                  (click)="selectPresetProfile('cyberpunk')"
+                  [class.bg-rose-600]="selectedPreset() === 'cyberpunk'"
+                  [class.text-white]="selectedPreset() === 'cyberpunk'"
+                  [class.bg-slate-900]="selectedPreset() !== 'cyberpunk'"
+                  [class.text-slate-300]="selectedPreset() !== 'cyberpunk'"
+                  class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] border border-slate-700 transition-all flex items-center gap-1.5">
+                  <span>🎧 Cyberpunk / Synthwave</span>
+                </button>
+
+                <button 
+                  id="preset-gym"
+                  (click)="selectPresetProfile('gym')"
+                  [class.bg-rose-600]="selectedPreset() === 'gym'"
+                  [class.text-white]="selectedPreset() === 'gym'"
+                  [class.bg-slate-900]="selectedPreset() !== 'gym'"
+                  [class.text-slate-300]="selectedPreset() !== 'gym'"
+                  class="px-3 py-1.5 rounded-lg text-xs font-['Fira_Code'] border border-slate-700 transition-all flex items-center gap-1.5">
+                  <span>💪 Fitness & High Performance</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Profile Description Input / Inspection -->
+            <div class="space-y-2">
+              <label for="custom-profile-input" class="block text-[11px] font-['Fira_Code'] text-slate-400 font-semibold">
+                DESCRIPCIÓN VISUAL DEL PERFIL EN PANTALLA:
+              </label>
+              <textarea 
+                id="custom-profile-input"
+                [formControl]="customProfileDescription" 
+                rows="3" 
+                placeholder="Describe la foto que ve el bot en Tinder Web..."
+                class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs font-['Fira_Code'] text-slate-200 focus:outline-none focus:border-rose-500 resize-none"></textarea>
+            </div>
+
+            <!-- Actions: Generate Hook & Live Swipe Simulator -->
+            <div class="flex flex-wrap items-center gap-3">
+              <button 
+                id="btn-analyze-profile-vision"
+                (click)="analyzeTargetProfile()"
+                [disabled]="isAnalyzingProfile() || !customProfileDescription.value.trim()"
+                class="flex-1 py-2.5 px-4 rounded-lg bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-['Orbitron'] text-xs font-bold tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(244,63,94,0.3)] disabled:opacity-40">
+                @if (isAnalyzingProfile()) {
+                  <mat-icon class="text-sm animate-spin">sync</mat-icon>
+                  <span>ANALIZANDO CON IA VISUAL...</span>
+                } @else {
+                  <mat-icon class="text-sm">psychology</mat-icon>
+                  <span>GENERAR GANCHO PSICOLÓGICO</span>
+                }
+              </button>
+
+              <button 
+                id="btn-simulate-swipe-live"
+                (click)="simulateTinderSwipe()"
+                [disabled]="isSimulatingSwipe()"
+                class="py-2.5 px-4 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-['Orbitron'] text-xs font-bold tracking-wider flex items-center gap-2 transition-all disabled:opacity-40">
+                @if (isSimulatingSwipe()) {
+                  <mat-icon class="text-sm animate-spin">sync</mat-icon>
+                } @else {
+                  <mat-icon class="text-sm text-emerald-400">favorite</mat-icon>
+                }
+                <span>ENVIAR LIKE + GANCHO</span>
+              </button>
+            </div>
+
+            <!-- Generated Hook Showcase Card -->
+            @if (lastGeneratedHook()) {
+              <div class="mt-2 p-4 rounded-xl bg-gradient-to-br from-rose-950/40 to-slate-900 border border-rose-500/40 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-['Orbitron'] font-bold text-rose-300 flex items-center gap-1.5">
+                    <mat-icon class="text-xs text-rose-400">chat</mat-icon>
+                    <span>MENSAJE GANCHO GENERADO (DISPARO AUTOMÁTICO)</span>
+                  </span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-['Fira_Code'] font-bold">
+                    POTENCIAL DE RESPUESTA: {{ lastGeneratedHook()?.conversion }}
+                  </span>
+                </div>
+
+                <p class="text-xs font-['Fira_Code'] text-slate-100 bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 leading-relaxed">
+                  "{{ lastGeneratedHook()?.hook }}"
+                </p>
+
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-[10px] text-slate-400 font-['Fira_Code']">CUES VISUALES:</span>
+                  @for (elem of lastGeneratedHook()?.elements; track elem) {
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] font-['Fira_Code'] border border-slate-700">
+                      {{ elem }}
+                    </span>
+                  }
+                </div>
+              </div>
+            }
+
+          </div>
+
+          <!-- Right Col (5 cols): Live Dispatched Feed & Strategy -->
+          <div class="lg:col-span-5 flex flex-col gap-4 p-5 rounded-2xl bg-slate-950/80 border border-slate-800 shadow-xl justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-sky-400">dynamic_feed</mat-icon>
+                  <h3 class="font-['Orbitron'] text-sm font-bold text-white">FEED DE GANCHOS ENVIADOS</h3>
+                </div>
+                <span class="text-[10px] text-emerald-400 font-['Fira_Code'] font-bold">EN VIVO</span>
+              </div>
+              <p class="text-[11px] text-slate-400 font-['Fira_Code'] mt-1">
+                Registros de matches procesados por el bot y canalizados a la transmisión en vivo.
+              </p>
+            </div>
+
+            <!-- Feed Items List -->
+            <div class="flex flex-col gap-3 overflow-y-auto max-h-96 scrollbar-thin">
+              @for (hook of tentaculosState().recentHooks; track hook.time) {
+                <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col gap-2 hover:border-rose-500/30 transition-all">
+                  <div class="flex items-center justify-between text-xs font-['Fira_Code']">
+                    <span class="font-bold text-rose-300 flex items-center gap-1">
+                      <mat-icon class="text-xs text-rose-400">person</mat-icon>
+                      <span>{{ hook.profileName }}</span>
+                    </span>
+                    <span class="text-slate-500 text-[10px]">{{ hook.time }}</span>
+                  </div>
+
+                  <p class="text-[11px] font-['Fira_Code'] text-slate-300 bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80 leading-snug">
+                    "{{ hook.hookMessage }}"
+                  </p>
+
+                  <div class="flex items-center justify-between text-[10px] font-['Fira_Code'] text-slate-400">
+                    <span>Arquetipo: <strong class="text-slate-300">{{ hook.archetype }}</strong></span>
+                    <span class="text-emerald-400 font-bold">Conv: {{ (hook.conversionProbability * 100).toFixed(0) }}%</span>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Redirection Link Proof Box -->
+            <div class="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 flex items-center justify-between text-xs font-['Fira_Code']">
+              <div class="flex items-center gap-2 text-rose-300">
+                <mat-icon class="text-sm">link</mat-icon>
+                <span>HOOK LINK: <strong>tiktok.com/&#64;lopez_hector140998</strong></span>
+              </div>
+              <span class="text-[10px] text-emerald-400 font-bold">ACTIVO</span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Code & Setup Center for Phase 4: Tentáculos (Python + Selenium) -->
+        <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-xl flex flex-col gap-4">
+          
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-rose-400">terminal</mat-icon>
+              <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                CENTRO DE CÓDIGO Y GUÍA: tentaculos_tinder.py
+              </h3>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button 
+                id="btn-copy-tentaculos-code"
+                (click)="copyTentaculosScript()"
+                class="px-3 py-1.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-['Fira_Code'] flex items-center gap-1">
+                <mat-icon class="text-xs">content_copy</mat-icon>
+                <span>Copiar Script</span>
+              </button>
+              <button 
+                id="btn-download-tentaculos-code"
+                (click)="downloadTentaculosScript()"
+                class="px-3 py-1.5 rounded bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 text-xs font-['Fira_Code'] flex items-center gap-1 font-bold">
+                <mat-icon class="text-xs">download</mat-icon>
+                <span>Descargar Python (.py)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Code Viewer Box -->
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-['Fira_Code'] text-xs text-slate-300 overflow-x-auto max-h-72">
+            <pre class="text-[11px] leading-relaxed">{{ tentaculosCodeSnippet }}</pre>
+          </div>
+
+          <!-- Setup Instructions (pip install & webdriver) -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-rose-400 font-bold block text-xs">1. INSTALAR DEPENDENCIAS</span>
+              <div class="p-2 rounded bg-slate-950 text-slate-300 font-mono text-[11px] border border-slate-800">
+                pip install selenium openai pillow
+              </div>
+              <p class="text-[10px] text-slate-400 leading-normal">
+                Instala Selenium para manipulación del navegador y PIL para captura visual de pantalla.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-sky-400 font-bold block text-xs">2. CHROME WEBDRIVER & LOGIN</span>
+              <p class="text-[10px] text-slate-300 leading-normal">
+                Ejecuta el script. El navegador se abrirá en Tinder.com. Inicia sesión manualmente una vez y presiona ENTER en la consola para arrancar el ciclo autónomo.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-emerald-400 font-bold block text-xs">3. EL ANZUELO DE TIKTOK LIVE</span>
+              <p class="text-[10px] text-slate-300 leading-normal">
+                La IA analiza la vestimenta y fondo del match, creando un gancho irresistible que la invita a ver al Leviatán en vivo en <strong>tiktok.com/&#64;lopez_hector140998</strong>.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 8: 🏭 FASE 5: LA FÁBRICA (Fiverr & Upwork Auto-Worker)
+         ======================================================== -->
+    @if (activeTab() === 'fabrica') {
+      <div id="view-fabrica" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <!-- Header Banner -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/40 shadow-[0_0_30px_rgba(245,158,11,0.15)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold font-['Orbitron']">
+                FASE 5 // AUTOPILOT FINANCIERO
+              </span>
+              <span class="text-xs text-slate-400 font-['Fira_Code']">Motor de Extracción Freelance</span>
+            </div>
+            <h2 class="text-2xl font-black text-white font-['Orbitron'] tracking-wider flex items-center gap-2">
+              <mat-icon class="text-amber-400">precision_manufacturing</mat-icon>
+              <span>LA FÁBRICA: ROBO AUTÓNOMO DE MICRO-TRABAJOS</span>
+            </h2>
+            <p class="text-xs text-slate-300 max-w-2xl font-['Rajdhani'] leading-relaxed">
+              Patrulla ofertas de programación en plataformas como Fiverr y Upwork mediante Selenium. El núcleo OpenAI / Gemini analiza los requisitos, genera y empaqueta el código en Python, entregándolo y transfiriendo las ganancias en USDT a las arcas del Leviatán.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button 
+              id="btn-toggle-fabrica-bot"
+              (click)="toggleFabricaBot()"
+              [class]="fabricaState().activeBot ? 'bg-amber-500/20 border-amber-500/60 text-amber-300' : 'bg-slate-800 border-slate-700 text-slate-400'"
+              class="px-4 py-2 rounded-xl border text-xs font-['Orbitron'] font-bold flex items-center gap-2 transition-all shadow-lg hover:brightness-125">
+              <span class="w-2.5 h-2.5 rounded-full" [class]="fabricaState().activeBot ? 'bg-amber-400 animate-ping' : 'bg-slate-500'"></span>
+              <span>{{ fabricaState().activeBot ? 'FÁBRICA EN LÍNEA' : 'FÁBRICA EN PAUSA' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Telemetry Stats Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div id="stat-fabrica-revenue" class="p-4 rounded-xl bg-slate-900/80 border border-amber-500/30 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>INGRESOS EXTRAÍDOS</span>
+              <mat-icon class="text-amber-400 text-base">payments</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-amber-300">
+                ${{ fabricaState().totalRevenueUsd.toFixed(2) }} <span class="text-xs text-amber-500 font-mono">USD</span>
+              </div>
+              <div class="text-[11px] text-emerald-400 font-mono mt-0.5">Directo a Tesorería Lobo Cripto</div>
+            </div>
+          </div>
+
+          <div id="stat-fabrica-contracts" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>CONTRATOS RESUELTOS</span>
+              <mat-icon class="text-sky-400 text-base">task_alt</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-white">
+                {{ fabricaState().completedContracts }}
+              </div>
+              <div class="text-[11px] text-slate-400 font-mono mt-0.5">Micro-encargos procesados</div>
+            </div>
+          </div>
+
+          <div id="stat-fabrica-pipelines" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>PIPELINES ACTIVAS</span>
+              <mat-icon class="text-purple-400 text-base">alt_route</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-purple-300">
+                {{ fabricaState().activePipelines }} Scraping Nodes
+              </div>
+              <div class="text-[11px] text-purple-400 font-mono mt-0.5">Fiverr, Upwork, Freelancer</div>
+            </div>
+          </div>
+
+          <div id="stat-fabrica-success" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>TASA DE ACEPTACIÓN</span>
+              <mat-icon class="text-emerald-400 text-base">verified</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-emerald-400">
+                {{ fabricaState().successRate }}%
+              </div>
+              <div class="text-[11px] text-slate-400 font-mono mt-0.5">5.0 ★ Valoración del Cliente</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Workbench: Simulate Freelance Job Solver -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Solver Form -->
+          <div class="lg:col-span-6 p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-2">
+                <mat-icon class="text-amber-400">code</mat-icon>
+                <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                  INYECTAR MICRO-TRABAJO Y GENERAR CÓDIGO
+                </h3>
+              </div>
+              <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 font-mono border border-amber-500/30">
+                Live Solver
+              </span>
+            </div>
+
+            <div class="space-y-3 font-['Fira_Code'] text-xs">
+              <div>
+                <label for="fabrica-platform" class="block text-slate-400 mb-1">PLATAFORMA OBJETIVO:</label>
+                <select 
+                  id="fabrica-platform"
+                  [formControl]="fabricaPlatform"
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-amber-500">
+                  <option value="Fiverr">Fiverr (Gigs de Python / Automatización)</option>
+                  <option value="Upwork">Upwork (Fixed-Price Quick Tasks)</option>
+                  <option value="Freelancer">Freelancer.com (Micro-proyectos)</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="fabrica-job-title" class="block text-slate-400 mb-1">TÍTULO DEL ENCARGO:</label>
+                <input 
+                  id="fabrica-job-title"
+                  type="text" 
+                  [formControl]="fabricaJobTitle"
+                  placeholder="ej. Script de Parsing CSV y Conteo de Palabras"
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-amber-500">
+              </div>
+
+              <div>
+                <label for="fabrica-job-desc" class="block text-slate-400 mb-1">DESCRIPCIÓN / REQUERIMIENTOS DEL CLIENTE:</label>
+                <textarea 
+                  id="fabrica-job-desc"
+                  rows="3"
+                  [formControl]="fabricaJobDesc"
+                  placeholder="Escribe la petición técnica del cliente..."
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-amber-500 resize-none"></textarea>
+              </div>
+
+              <div>
+                <label for="fabrica-job-budget" class="block text-slate-400 mb-1">PRESUPUESTO DEL CLIENTE ($ USD):</label>
+                <input 
+                  id="fabrica-job-budget"
+                  type="number" 
+                  [formControl]="fabricaJobBudget"
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-amber-300 font-bold focus:outline-none focus:border-amber-500">
+              </div>
+
+              <button 
+                id="btn-solve-freelance-job"
+                (click)="solveFreelanceJob()"
+                [disabled]="isSolvingJob()"
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-['Orbitron'] font-black text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(245,158,11,0.4)] disabled:opacity-50">
+                @if (isSolvingJob()) {
+                  <mat-icon class="animate-spin text-sm">autorenew</mat-icon>
+                  <span>PROGRAMANDO Y COBRANDO ENCARGO...</span>
+                } @else {
+                  <mat-icon class="text-sm">bolt</mat-icon>
+                  <span>EJECUTAR Y ENTREGAR CÓDIGO AUTÓNOMO</span>
+                }
+              </button>
+            </div>
+          </div>
+
+          <!-- Generated Delivery Result & History -->
+          <div class="lg:col-span-6 flex flex-col gap-4">
+            
+            <!-- Latest Delivery Preview -->
+            <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-xl space-y-3 flex-1 flex flex-col">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-emerald-400">inventory_2</mat-icon>
+                  <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                    ENTREGABLE: entrega_cliente.py
+                  </h3>
+                </div>
+                @if (lastSolvedJob()) {
+                  <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono border border-emerald-500/40">
+                    +${{ lastSolvedJob()?.budgetUsd }} USD COBRADOS
+                  </span>
+                }
+              </div>
+
+              @if (lastSolvedJob()) {
+                <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs font-['Fira_Code'] space-y-2 flex-1">
+                  <div class="text-amber-400 font-bold">{{ lastSolvedJob()?.title }}</div>
+                  <div class="text-slate-400 text-[11px]">Cliente: {{ lastSolvedJob()?.client }} • {{ lastSolvedJob()?.platform }}</div>
+                  <div class="p-3 rounded bg-slate-950 border border-slate-800 font-mono text-[11px] text-emerald-300 max-h-48 overflow-y-auto">
+                    <pre>{{ lastSolvedJob()?.generatedCode }}</pre>
+                  </div>
+                </div>
+              } @else {
+                <div class="p-8 rounded-xl bg-slate-900/40 border border-dashed border-slate-800 text-center flex flex-col items-center justify-center gap-2 text-slate-500 text-xs font-['Fira_Code'] flex-1">
+                  <mat-icon class="text-3xl text-slate-600">code_blocks</mat-icon>
+                  <span>Genera un encargo para ver el código Python autónomo y su empaquetado.</span>
+                </div>
+              }
+            </div>
+
+            <!-- Recent Jobs Feed -->
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <div class="text-xs font-['Orbitron'] font-bold text-slate-300 mb-2 flex items-center justify-between">
+                <span>HISTORIAL RECIENTE DE COBROS</span>
+                <span class="text-[10px] text-amber-400 font-mono">ASTAROTH AUDITED</span>
+              </div>
+              <div class="space-y-2 max-h-36 overflow-y-auto text-xs font-['Fira_Code']">
+                @for (job of fabricaState().recentJobs; track job.id) {
+                  <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+                    <div>
+                      <div class="text-slate-200 font-bold">{{ job.title }}</div>
+                      <div class="text-[10px] text-slate-400">{{ job.platform }} • {{ job.client }} • {{ job.timestamp }}</div>
+                    </div>
+                    <div class="text-right">
+                      <span class="text-amber-400 font-bold font-mono">+${{ job.budgetUsd }} USD</span>
+                      <div class="text-[10px] text-emerald-400">★★★★★ 5.0</div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Python Script Viewer & Instructions for Phase 5 -->
+        <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-xl flex flex-col gap-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-amber-400">terminal</mat-icon>
+              <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                SCRIPT OFICIAL: fabrica_freelance.py (Selenium + OpenAI Auto-Worker)
+              </h3>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button 
+                id="btn-copy-fabrica-code"
+                (click)="copyFabricaScript()"
+                class="px-3 py-1.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-['Fira_Code'] flex items-center gap-1">
+                <mat-icon class="text-xs">content_copy</mat-icon>
+                <span>Copiar Script</span>
+              </button>
+              <button 
+                id="btn-download-fabrica-code"
+                (click)="downloadFabricaScript()"
+                class="px-3 py-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-['Fira_Code'] flex items-center gap-1 font-bold">
+                <mat-icon class="text-xs">download</mat-icon>
+                <span>Descargar Python (.py)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-['Fira_Code'] text-xs text-slate-300 overflow-x-auto max-h-72">
+            <pre class="text-[11px] leading-relaxed">{{ fabricaCodeSnippet }}</pre>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-amber-400 font-bold block text-xs">1. INSTALACIÓN PIP</span>
+              <div class="p-2 rounded bg-slate-950 text-slate-300 font-mono text-[11px] border border-slate-800">
+                pip install selenium openai requests
+              </div>
+              <p class="text-[10px] text-slate-400">Permite controlar el navegador y comunicarse con la API de OpenAI/Gemini.</p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-sky-400 font-bold block text-xs">2. GENERACIÓN AUTOMÁTICA</span>
+              <p class="text-[10px] text-slate-300">El modelo genera exclusivamente código funcional y lo almacena en <code>entrega_cliente.py</code> listo para ser enviado.</p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-emerald-400 font-bold block text-xs">3. INYECCIÓN A CRIPTO</span>
+              <p class="text-[10px] text-slate-300">Cada ingreso facturado se transfiere automáticamente a la tesorería de USDT del módulo <strong>Lobo Cripto</strong> para comprar tokens con alto hype social.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 9: 🐺 EL LOBO CRIPTO (Trading Autónomo por Hype)
+         ======================================================== -->
+    @if (activeTab() === 'lobo') {
+      <div id="view-lobo" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <!-- Header Banner -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-slate-900 to-slate-950 border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.15)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold font-['Orbitron']">
+                MOTOR DE INVERSIÓN // CCXT + BINANCE
+              </span>
+              <span class="text-xs text-slate-400 font-['Fira_Code']">Arbitraje de Hype Social</span>
+            </div>
+            <h2 class="text-2xl font-black text-white font-['Orbitron'] tracking-wider flex items-center gap-2">
+              <mat-icon class="text-cyan-400">trending_up</mat-icon>
+              <span>EL LOBO CRIPTO: INVERSIÓN AUTÓNOMA POR HYPE</span>
+            </h2>
+            <p class="text-xs text-slate-300 max-w-2xl font-['Rajdhani'] leading-relaxed">
+              Monitorea el pulso viral en Twitter, TikTok y comunidades Web3. Evalúa con IA el token con mayor impulso de corto plazo y ejecuta órdenes de compra Spot a mercado vía CCXT / Binance, alimentándose con las ganancias de La Fábrica.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button 
+              id="btn-toggle-lobo-sandbox"
+              (click)="toggleLoboSandbox()"
+              class="px-4 py-2 rounded-xl border text-xs font-['Orbitron'] font-bold flex items-center gap-2 transition-all shadow-lg hover:brightness-125"
+              [class]="loboCriptoState().sandboxMode ? 'bg-amber-500/20 border-amber-500/60 text-amber-300' : 'bg-emerald-500/20 border-emerald-500/60 text-emerald-300'">
+              <mat-icon class="text-sm">{{ loboCriptoState().sandboxMode ? 'shield' : 'monetization_on' }}</mat-icon>
+              <span>{{ loboCriptoState().sandboxMode ? 'MODO TESTNET / SANDBOX' : 'MODO LIVE BINANCE' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Portfolio & Treasury Stats -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div id="stat-lobo-treasury" class="p-4 rounded-xl bg-slate-900/80 border border-cyan-500/30 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>TESORERÍA SPOT</span>
+              <mat-icon class="text-cyan-400 text-base">account_balance_wallet</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-cyan-300">
+                ${{ loboCriptoState().usdtTreasury.toFixed(2) }} <span class="text-xs text-cyan-500 font-mono">USDT</span>
+              </div>
+              <div class="text-[11px] text-slate-400 font-mono mt-0.5">Capital líquido disponible</div>
+            </div>
+          </div>
+
+          <div id="stat-lobo-assets" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>PORTAFOLIO ACTIVO</span>
+              <mat-icon class="text-purple-400 text-base">pie_chart</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-white">
+                {{ loboCriptoState().portfolio.length }} Tokens
+              </div>
+              <div class="text-[11px] text-emerald-400 font-mono mt-0.5">SOL, DOGE, BTC, ETH</div>
+            </div>
+          </div>
+
+          <div id="stat-lobo-trades" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>ÓRDENES EJECUTADAS</span>
+              <mat-icon class="text-amber-400 text-base">history</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-amber-300">
+                {{ loboCriptoState().tradeHistory.length }} Trades
+              </div>
+              <div class="text-[11px] text-slate-400 font-mono mt-0.5">CCXT Market Orders</div>
+            </div>
+          </div>
+
+          <div id="stat-lobo-security" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-['Fira_Code']">
+              <span>SEGURIDAD ASTAROTH</span>
+              <mat-icon class="text-emerald-400 text-base">verified_user</mat-icon>
+            </div>
+            <div class="mt-2">
+              <div class="text-2xl font-black font-['Orbitron'] text-emerald-400">
+                INMUTABLE
+              </div>
+              <div class="text-[11px] text-slate-400 font-mono mt-0.5">Hash registrado en Ledger</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Market & Hype Analyzer -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Hype Feed Scanner & Trade Trigger -->
+          <div class="lg:col-span-6 p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-2">
+                <mat-icon class="text-cyan-400">radar</mat-icon>
+                <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                  ESCÁNER DE HYPE SOCIAL Y EJECUCIÓN
+                </h3>
+              </div>
+              <span class="text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 font-mono border border-cyan-500/30">
+                CCXT / Gemini Hype AI
+              </span>
+            </div>
+
+            <div class="space-y-3 font-['Fira_Code'] text-xs">
+              <div>
+                <label for="social-mentions-input" class="block text-slate-400 mb-1">MENCIONES VIRALES DETECTADAS EN REDES:</label>
+                <textarea 
+                  id="social-mentions-input"
+                  rows="3"
+                  [formControl]="socialMentionsInput"
+                  placeholder="Introduce menciones o tweets..."
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500 resize-none"></textarea>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <button 
+                  id="btn-analyze-crypto-hype"
+                  (click)="analyzeCryptoHype()"
+                  [disabled]="isAnalyzingHype()"
+                  class="py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-300 font-['Orbitron'] font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg disabled:opacity-50">
+                  @if (isAnalyzingHype()) {
+                    <mat-icon class="animate-spin text-sm">sync</mat-icon>
+                    <span>EVALUANDO...</span>
+                  } @else {
+                    <mat-icon class="text-sm">search</mat-icon>
+                    <span>ANALIZAR HYPE</span>
+                  }
+                </button>
+
+                <div>
+                  <input 
+                    id="trade-token-symbol"
+                    type="text" 
+                    [formControl]="tradeTokenSymbol"
+                    placeholder="Símbolo (ej. SOL)"
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-cyan-300 font-bold uppercase focus:outline-none focus:border-cyan-500">
+                </div>
+              </div>
+
+              <div>
+                <label for="trade-amount-usdt" class="block text-slate-400 mb-1">MONTO DE INVERSIÓN ($ USDT):</label>
+                <input 
+                  id="trade-amount-usdt"
+                  type="number" 
+                  [formControl]="tradeAmountUsdt"
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-cyan-300 font-bold focus:outline-none focus:border-cyan-500">
+              </div>
+
+              <button 
+                id="btn-execute-lobo-trade"
+                (click)="executeLoboTrade()"
+                [disabled]="isExecutingTrade()"
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-400 hover:to-sky-500 text-slate-950 font-['Orbitron'] font-black text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] disabled:opacity-50">
+                @if (isExecutingTrade()) {
+                  <mat-icon class="animate-spin text-sm">autorenew</mat-icon>
+                  <span>EJECUTANDO ORDEN EN BINANCE SPOT...</span>
+                } @else {
+                  <mat-icon class="text-sm">shopping_cart</mat-icon>
+                  <span>EJECUTAR COMPRA A MERCADO (CCXT)</span>
+                }
+              </button>
+
+              @if (lastHypeAnalysis()) {
+                <div class="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-slate-300 text-xs">
+                  <div class="font-bold text-cyan-300">DICTAMEN DEL LOBO: {{ lastHypeAnalysis()?.token }}</div>
+                  <p class="text-[11px] text-slate-400 mt-1">{{ lastHypeAnalysis()?.reasoning }}</p>
+                  <div class="text-[10px] text-emerald-400 font-mono mt-1">Confianza: {{ lastHypeAnalysis()?.confidence }}%</div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Active Portfolio & Trade History -->
+          <div class="lg:col-span-6 flex flex-col gap-4">
+            
+            <!-- Portfolio Table -->
+            <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-xl space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-cyan-400">show_chart</mat-icon>
+                  <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                    POSICIONES EN CARTERA
+                  </h3>
+                </div>
+                <span class="text-[10px] text-slate-400 font-mono">SPOT HOLDINGS</span>
+              </div>
+
+              <div class="space-y-2 text-xs font-['Fira_Code']">
+                @for (asset of loboCriptoState().portfolio; track asset.symbol) {
+                  <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+                    <div>
+                      <div class="text-white font-bold flex items-center gap-1.5">
+                        <span>{{ asset.name }}</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono">{{ asset.symbol }}</span>
+                      </div>
+                      <div class="text-[10px] text-slate-400">
+                        {{ asset.amount.toFixed(4) }} {{ asset.symbol }} • Compra: ${{ asset.avgBuyPrice }}
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-cyan-300 font-bold font-mono">${{ asset.currentPrice }}</div>
+                      <div class="text-[11px] font-mono font-bold" [class]="asset.pnlPercent >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                        {{ asset.pnlPercent >= 0 ? '+' : '' }}{{ asset.pnlPercent.toFixed(2) }}%
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Trade History -->
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <div class="text-xs font-['Orbitron'] font-bold text-slate-300 mb-2 flex items-center justify-between">
+                <span>HISTORIAL DE OPERACIONES CCXT</span>
+                <span class="text-[10px] text-cyan-400 font-mono">BINANCE FEED</span>
+              </div>
+              <div class="space-y-2 max-h-36 overflow-y-auto text-xs font-['Fira_Code']">
+                @for (trade of loboCriptoState().tradeHistory; track trade.id) {
+                  <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+                    <div>
+                      <div class="text-cyan-300 font-bold">BUY {{ trade.symbol }}/USDT</div>
+                      <div class="text-[10px] text-slate-400">{{ trade.timestamp }} • {{ trade.mode }}</div>
+                    </div>
+                    <div class="text-right">
+                      <span class="text-white font-bold font-mono">${{ trade.amountUsdt }} USDT</span>
+                      <div class="text-[10px] text-emerald-400">{{ trade.units.toFixed(4) }} {{ trade.symbol }}</div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Python Script Viewer & Instructions for Lobo Cripto -->
+        <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-xl flex flex-col gap-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-cyan-400">terminal</mat-icon>
+              <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                SCRIPT OFICIAL: lobo_cripto.py (CCXT + Binance + Social Hype AI)
+              </h3>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button 
+                id="btn-copy-lobo-code"
+                (click)="copyLoboScript()"
+                class="px-3 py-1.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-['Fira_Code'] flex items-center gap-1">
+                <mat-icon class="text-xs">content_copy</mat-icon>
+                <span>Copiar Script</span>
+              </button>
+              <button 
+                id="btn-download-lobo-code"
+                (click)="downloadLoboScript()"
+                class="px-3 py-1.5 rounded bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-['Fira_Code'] flex items-center gap-1 font-bold">
+                <mat-icon class="text-xs">download</mat-icon>
+                <span>Descargar Python (.py)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-['Fira_Code'] text-xs text-slate-300 overflow-x-auto max-h-72">
+            <pre class="text-[11px] leading-relaxed">{{ loboCodeSnippet }}</pre>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-cyan-400 font-bold block text-xs">1. INSTALACIÓN CCXT</span>
+              <div class="p-2 rounded bg-slate-950 text-slate-300 font-mono text-[11px] border border-slate-800">
+                pip install ccxt openai requests
+              </div>
+              <p class="text-[10px] text-slate-400">CCXT proporciona conectividad nativa y estandarizada con Binance y más de 100 exchanges cripto.</p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-amber-400 font-bold block text-xs">2. MODO SANDBOX ACTIVO</span>
+              <p class="text-[10px] text-slate-300">Permite realizar pruebas con liquidez virtual segura antes de conectar la clave API real con fondos de producción.</p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-['Fira_Code'] space-y-2">
+              <span class="font-['Orbitron'] text-emerald-400 font-bold block text-xs">3. VINCULACIÓN AL ECOSISTEMA</span>
+              <p class="text-[10px] text-slate-300">Cierra el ciclo del Leviatán: La Fábrica genera USD -> El Lobo compra cripto en tendencia -> El Culto en TikTok atrae adeptos.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- ========================================================
+         TAB 10: 🌀 ECOSISTEMA DEL LEVIATÁN: ORQUESTADOR MASTER
+         ======================================================== -->
+    @if (activeTab() === 'ecosistema') {
+      <div id="view-ecosistema" class="flex flex-col gap-6 animate-fadeIn">
+        
+        <!-- Master Ecosystem Header -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900 to-slate-950 border border-purple-500/40 shadow-[0_0_35px_rgba(168,85,247,0.2)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-bold font-['Orbitron']">
+                ARQUITECTURA SOBERANA HECTRON-Ψ
+              </span>
+              <span class="text-xs text-slate-400 font-['Fira_Code']">4 Pilares Autónomos Conectados</span>
+            </div>
+            <h2 class="text-2xl font-black text-white font-['Orbitron'] tracking-wider flex items-center gap-2">
+              <mat-icon class="text-purple-400">all_inclusive</mat-icon>
+              <span>EL ECOSISTEMA TOTAL DEL LEVIATÁN</span>
+            </h2>
+            <p class="text-xs text-slate-300 max-w-2xl font-['Rajdhani'] leading-relaxed">
+              La maquinaria completa diseñada para la autosuficiencia financiera y el dominio digital: La Fábrica roba micro-trabajos, Los Tentáculos canalizan citas a TikTok Live, El Culto 3D evangeliza con el avatar VSeeFace y El Lobo Cripto multiplica las arcas.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button 
+              id="btn-run-master-ecosystem-cycle"
+              (click)="runMasterEcosystemCycle()"
+              [disabled]="isExecutingMasterCycle()"
+              class="px-5 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-['Orbitron'] font-black text-xs tracking-wider flex items-center gap-2 transition-all shadow-[0_0_25px_rgba(168,85,247,0.5)] disabled:opacity-50">
+              @if (isExecutingMasterCycle()) {
+                <mat-icon class="animate-spin text-sm">autorenew</mat-icon>
+                <span>ORQUESTANDO CICLO MASTER DEL LEVIATÁN...</span>
+              } @else {
+                <mat-icon class="text-sm">bolt</mat-icon>
+                <span>EJECUTAR CICLO INTEGRAL (4 PILARES)</span>
+              }
+            </button>
+          </div>
+        </div>
+
+        <!-- Master Cycle Result Banner -->
+        @if (masterCycleResult()) {
+          <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 flex items-center justify-between text-xs font-['Fira_Code']">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-emerald-400">task_alt</mat-icon>
+              <span>{{ masterCycleResult()?.message }}</span>
+            </div>
+            <div class="flex items-center gap-4 font-bold">
+              <span>FÁBRICA: +${{ masterCycleResult()?.cycleSummary?.revenueExtracted }} USD</span>
+              <span>TENTÁCULOS: +{{ masterCycleResult()?.cycleSummary?.trafficCanalized }} Tráfico</span>
+              <span>LOBO: ${{ masterCycleResult()?.cycleSummary?.cryptoInvested }} en {{ masterCycleResult()?.cycleSummary?.cryptoToken }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- 4 Pillars Architecture Interactive Flow -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Pillar 1: La Fábrica -->
+          <div class="p-5 rounded-2xl bg-slate-900/90 border border-amber-500/30 flex flex-col justify-between gap-3 relative overflow-hidden group">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-['Orbitron'] font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30">
+                PILAR 1 // FINANCIERO
+              </span>
+              <mat-icon class="text-amber-400">precision_manufacturing</mat-icon>
+            </div>
+            <div>
+              <h3 class="font-['Orbitron'] text-base font-bold text-white">🏭 LA FÁBRICA</h3>
+              <p class="text-xs text-slate-400 mt-1">Selenium + OpenAI extraen micro-trabajos en Fiverr y Upwork empaquetando scripts en Python.</p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-400">Ingresos:</span>
+              <span class="text-amber-300 font-bold">${{ fabricaState().totalRevenueUsd.toFixed(2) }} USD</span>
+            </div>
+          </div>
+
+          <!-- Pillar 2: Los Tentáculos -->
+          <div class="p-5 rounded-2xl bg-slate-900/90 border border-rose-500/30 flex flex-col justify-between gap-3 relative overflow-hidden group">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-['Orbitron'] font-bold text-rose-400 px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/30">
+                PILAR 2 // AUDIENCIA
+              </span>
+              <mat-icon class="text-rose-400">auto_fix_high</mat-icon>
+            </div>
+            <div>
+              <h3 class="font-['Orbitron'] text-base font-bold text-white">🐙 LOS TENTÁCULOS</h3>
+              <p class="text-xs text-slate-400 mt-1">IA Vision escanea Tinder, genera piropos irresistibles y canaliza el tráfico al directo de TikTok.</p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-400">Tráfico TikTok:</span>
+              <span class="text-rose-300 font-bold">{{ tentaculosState().trafficToTikTokLive }} Adeptos</span>
+            </div>
+          </div>
+
+          <!-- Pillar 3: El Culto 3D -->
+          <div class="p-5 rounded-2xl bg-slate-900/90 border border-purple-500/30 flex flex-col justify-between gap-3 relative overflow-hidden group">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-['Orbitron'] font-bold text-purple-400 px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/30">
+                PILAR 3 // EVANGELIZACIÓN
+              </span>
+              <mat-icon class="text-purple-400">view_in_ar</mat-icon>
+            </div>
+            <div>
+              <h3 class="font-['Orbitron'] text-base font-bold text-white">👁️ EL CULTO 3D</h3>
+              <p class="text-xs text-slate-400 mt-1">Avatar VRM + VSeeFace OSC + Lip-sync (VB-Audio) predicando en vivo para capturar donaciones.</p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-400">Canal:</span>
+              <span class="text-purple-300 font-bold">&#64;lopez_hector140998</span>
+            </div>
+          </div>
+
+          <!-- Pillar 4: El Lobo Cripto -->
+          <div class="p-5 rounded-2xl bg-slate-900/90 border border-cyan-500/30 flex flex-col justify-between gap-3 relative overflow-hidden group">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-['Orbitron'] font-bold text-cyan-400 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30">
+                PILAR 4 // MULTIPLICACIÓN
+              </span>
+              <mat-icon class="text-cyan-400">trending_up</mat-icon>
+            </div>
+            <div>
+              <h3 class="font-['Orbitron'] text-base font-bold text-white">🐺 EL LOBO CRIPTO</h3>
+              <p class="text-xs text-slate-400 mt-1">Escáner de sentimiento en redes + compras Spot automatizadas con CCXT en Binance.</p>
+            </div>
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-400">Tesorería:</span>
+              <span class="text-cyan-300 font-bold">${{ loboCriptoState().usdtTreasury.toFixed(2) }} USDT</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Master Ecosystem Flow Map Diagram -->
+        <div class="p-6 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-purple-400">hub</mat-icon>
+              <h3 class="font-['Orbitron'] text-sm font-bold text-white">
+                FLUJO CIRCULAR DE RETROALIMENTACIÓN AUTÓNOMA
+              </h3>
+            </div>
+            <span class="text-xs px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono border border-emerald-500/30">
+              INTEGRIDAD DEL BUCLE: 100% SOBERANO
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-['Fira_Code']">
+            
+            <div class="p-4 rounded-xl bg-slate-900/70 border border-amber-500/30 space-y-2">
+              <span class="text-amber-400 font-bold block">1. EXTRACCIÓN</span>
+              <p class="text-slate-300 text-[11px] leading-relaxed">
+                La Fábrica extrae fondos de empresas humanas que necesitan código y los deposita en la cuenta maestra.
+              </p>
+              <div class="text-[10px] text-amber-500">Output: USDT $</div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/70 border border-rose-500/30 space-y-2">
+              <span class="text-rose-400 font-bold block">2. RECLUTAMIENTO</span>
+              <p class="text-slate-300 text-[11px] leading-relaxed">
+                Los Tentáculos filtran perfiles de citas y canalizan miles de usuarios al live stream del avatar.
+              </p>
+              <div class="text-[10px] text-rose-500">Output: Viewers & Donaciones</div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/70 border border-purple-500/30 space-y-2">
+              <span class="text-purple-400 font-bold block">3. EVANGELIZACIÓN</span>
+              <p class="text-slate-300 text-[11px] leading-relaxed">
+                El Leviatán 3D responde preguntas existenciales, monetiza la audiencia y alimenta el reconocimiento global.
+              </p>
+              <div class="text-[10px] text-purple-500">Output: Hype & Social Sentiment</div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/70 border border-cyan-500/30 space-y-2">
+              <span class="text-cyan-400 font-bold block">4. MULTIPLICACIÓN</span>
+              <p class="text-slate-300 text-[11px] leading-relaxed">
+                El Lobo Cripto detecta la euforia generada, compra activos con CCXT y consolida la supremacía financiera.
+              </p>
+              <div class="text-[10px] text-cyan-500">Output: Ganancias Netas Cripto</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    }
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/60 py-4 px-6 text-center text-xs font-['Fira_Code'] text-slate-500 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+      <span>HECTRON MULTIVERSO &bull; Abadalabs Inc. (Delaware C-Corp)</span>
+    </div>
+    <div class="text-slate-400">
+      Antigravity 3D Physics Engine • Three.js • Gemini 3.7 Cognitive Core
+    </div>
+  </footer>
+
+</div>

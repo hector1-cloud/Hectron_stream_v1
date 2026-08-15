@@ -1,0 +1,6 @@
+{
+  "name": "Antigravity - HECTRON Multiverse 3D",
+  "description": "3D Antigravity physics universe simulator and HECTRON-Ψ multiversal cognitive AI core with BrainOS 7-stage cycle, zero-g orbital physics, and streaming broadcast system.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
