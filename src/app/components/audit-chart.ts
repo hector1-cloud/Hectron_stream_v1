@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   ElementRef,
@@ -520,12 +521,12 @@ export class AuditChart implements OnInit {
     // X scale
     const x = d3
       .scaleBand()
-      .domain(data.map((d) => d.dayLabel))
+      .domain(data.map((d: AuditTimelinePoint) => d.dayLabel))
       .range([0, innerWidth])
       .padding(0.25);
 
     // Y scale
-    const maxVal = d3.max(data, (d) => d.total) || 6;
+    const maxVal = d3.max(data, (d: AuditTimelinePoint) => d.total) || 6;
     const y = d3
       .scaleLinear()
       .domain([0, Math.max(maxVal + 1, 5)])
@@ -561,7 +562,7 @@ export class AuditChart implements OnInit {
       const stackedData = stack(data);
 
       // Render Stacked Bars
-      stackedData.forEach((layer) => {
+      stackedData.forEach((layer: any) => {
         const key = layer.key;
         const color = colorMap[key] || '#94a3b8';
 
@@ -570,15 +571,15 @@ export class AuditChart implements OnInit {
           .enter()
           .append('rect')
           .attr('class', `bar-${key}`)
-          .attr('x', (d) => x(d.data.dayLabel) || 0)
-          .attr('y', (d) => y(d[1]))
-          .attr('height', (d) => Math.max(0, y(d[0]) - y(d[1])))
+          .attr('x', (d: any) => x(d.data.dayLabel) || 0)
+          .attr('y', (d: any) => y(d[1]))
+          .attr('height', (d: any) => Math.max(0, y(d[0]) - y(d[1])))
           .attr('width', x.bandwidth())
           .attr('fill', color)
           .attr('rx', 2)
           .attr('opacity', 0.88)
           .style('cursor', 'pointer')
-          .on('mouseenter', (_event, d) => {
+          .on('mouseenter', (_event: any, d: any) => {
             this.setHoveredDay(d.data);
           })
           .on('mouseleave', () => {
@@ -592,28 +593,28 @@ export class AuditChart implements OnInit {
         .enter()
         .append('circle')
         .attr('class', 'total-dot')
-        .attr('cx', (d) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
-        .attr('cy', (d) => y(d.total))
+        .attr('cx', (d: AuditTimelinePoint) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
+        .attr('cy', (d: AuditTimelinePoint) => y(d.total))
         .attr('r', 3)
         .attr('fill', '#ffffff')
         .attr('stroke', '#a855f7')
         .attr('stroke-width', 1.5)
         .style('cursor', 'pointer')
-        .on('mouseenter', (_event, d) => this.setHoveredDay(d));
+        .on('mouseenter', (_event: any, d: AuditTimelinePoint) => this.setHoveredDay(d));
     } else {
       // Continuous Area & Spline Mode
       const area = d3
         .area<AuditTimelinePoint>()
-        .x((d) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
+        .x((d: AuditTimelinePoint) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
         .y0(innerHeight)
-        .y1((d) => y(d.total))
+        .y1((d: AuditTimelinePoint) => y(d.total))
         .curve(d3.curveMonotoneX);
 
       const line = d3
-        .line<AuditTimelinePoint>()
-        .x((d) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
-        .y((d) => y(d.total))
-        .curve(d3.curveMonotoneX);
+         .line<AuditTimelinePoint>()
+         .x((d: AuditTimelinePoint) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
+         .y((d: AuditTimelinePoint) => y(d.total))
+         .curve(d3.curveMonotoneX);
 
       // Define gradient for Area
       const defs = svg.append('defs');
@@ -645,14 +646,14 @@ export class AuditChart implements OnInit {
         .enter()
         .append('circle')
         .attr('class', 'area-dot')
-        .attr('cx', (d) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
-        .attr('cy', (d) => y(d.total))
+        .attr('cx', (d: AuditTimelinePoint) => (x(d.dayLabel) || 0) + x.bandwidth() / 2)
+        .attr('cy', (d: AuditTimelinePoint) => y(d.total))
         .attr('r', 4)
         .attr('fill', '#ffffff')
         .attr('stroke', '#a855f7')
         .attr('stroke-width', 2)
         .style('cursor', 'pointer')
-        .on('mouseenter', (_event, d) => this.setHoveredDay(d));
+        .on('mouseenter', (_event: any, d: AuditTimelinePoint) => this.setHoveredDay(d));
     }
 
     // X Axis
@@ -661,7 +662,7 @@ export class AuditChart implements OnInit {
       .tickValues(
         x
           .domain()
-          .filter((_d, i) =>
+          .filter((_d: string, i: number) =>
             data.length > 20 ? i % 3 === 0 : data.length > 10 ? i % 2 === 0 : true
           )
       );
@@ -707,7 +708,7 @@ export class AuditChart implements OnInit {
 
     const pie = d3
       .pie<{ severity: string; count: number; color: string; label: string }>()
-      .value((d) => d.count)
+      .value((d: any) => d.count)
       .sort(null);
 
     const arc = d3
@@ -723,7 +724,7 @@ export class AuditChart implements OnInit {
       .enter()
       .append('path')
       .attr('d', arc)
-      .attr('fill', (d) => d.data.color)
+      .attr('fill', (d: any) => d.data.color)
       .attr('stroke', '#020617')
       .attr('stroke-width', 1.5)
       .attr('opacity', 0.9)

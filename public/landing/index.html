@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HECTRON Studio — Streamers con IA para TikTok Live sin programar</title>
+    <meta name="description" content="Crea tu streamer con inteligencia artificial para TikTok Live en 5 minutos. IA que habla, recuerda usuarios, reacciona a regalos y cambia de escena sola. Sin programar.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        mono: ['"Fira Code"', 'monospace'],
+                    },
+                    colors: {
+                        space: {
+                            950: '#050510',
+                            900: '#0a0a1e',
+                            800: '#12122d',
+                            700: '#1c1c3f',
+                        },
+                        neon: {
+                            green: '#00ff88',
+                            cyan: '#00ddff',
+                            purple: '#a855f7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modern star background and neon glowing elements */
+        body {
+            background-color: #050510;
+            overflow-x: hidden;
+        }
+        
+        .stars-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .glow-green {
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.15);
+        }
+        .glow-purple {
+            box-shadow: 0 0 50px rgba(168, 85, 247, 0.15);
+        }
+        
+        /* Grid backgrounds */
+        .cyber-grid {
+            background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 30%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-100 relative cyber-grid">
+    <div class="stars-container"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-50 w-full bg-space-950/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
+            <a href="/" class="flex items-center gap-2.5">
+                <span class="text-2xl">🦑</span>
+                <span class="font-orbitron font-black text-lg tracking-wider text-white">HECTRON <span class="text-neon-green">STUDIO</span></span>
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-6 text-sm font-semibold tracking-wide text-slate-300">
+                <a href="#features" class="hover:text-neon-green transition-colors">Características</a>
+                <a href="#how-it-works" class="hover:text-neon-green transition-colors">Cómo Funciona</a>
+                <a href="#roi-calculator" class="hover:text-neon-green transition-colors text-neon-green/90 flex items-center gap-1">
+                    <span>📊</span> ROI Calculator
+                </a>
+                <a href="#setup-checklist" class="hover:text-neon-green transition-colors text-neon-cyan/90 flex items-center gap-1">
+                    <span>✅</span> Setup Checklist
+                </a>
+                <a href="#pricing" class="hover:text-neon-green transition-colors">Precios</a>
+                <a href="#testimonials" class="hover:text-neon-green transition-colors">Testimonios</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="/studio/" class="px-5 py-2.5 rounded-lg bg-neon-green text-space-950 font-orbitron font-bold text-xs tracking-wider hover:bg-white transition-all shadow-[0_0_20px_rgba(0,255,136,0.3)] hover:shadow-white/20">
+                    EMPEZAR GRATIS
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[85vh] flex items-center justify-center pt-20 pb-16 px-6 overflow-hidden">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-neon-purple/10 blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-[300px] h-[300px] rounded-full bg-neon-green/5 blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center gap-6">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-neon-green font-mono">
+                <span>🚀</span> La primera plataforma de streamers con IA para TikTok
+            </div>
+            
+            <!-- Title -->
+            <h1 class="font-orbitron text-4xl sm:text-6xl font-black text-white tracking-tight leading-none max-w-3xl">
+                Crea tu Streamer con IA <span class="text-gradient">sin escribir una línea de código</span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="text-base sm:text-lg text-slate-400 max-w-2xl leading-relaxed">
+                Dale vida a tu streamer interactivo 3D. Un agente cognitivo que habla con voz natural, recuerda a los espectadores, reacciona a los regalos y juega en vivo las 24 horas del día.
+            </p>
+            
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full justify-center">
+                <a href="/studio/" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-neon-green text-space-950 font-orbitron font-extrabold text-sm tracking-widest hover:bg-white transition-all shadow-[0_0_30px_rgba(0,255,136,0.4)]">
+                    CONFIGURAR MI STREAMER NOW
+                </a>
+                <a href="#how-it-works" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 font-orbitron font-semibold text-sm tracking-wider transition-colors">
+                    VER CÓMO FUNCIONA
+                </a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mt-12 pt-8 border-t border-white/5 text-center">
+                <div class="p-3">
+                    <p class="font-orbitron text-2xl sm:text-3xl font-black text-white">5 Min</p>
+                    <p class="text-xs text-slate-500 font-mono mt-0.5">CONFIGURACIÓN</p>
+                </div>
+                <div class="p-3">
+                    <p class="font-orbitron text-2xl sm:text-3xl font-black text-neon-green">$0 USD</p>
+                    <p class="text-xs text-slate-500 font-mono mt-0.5">INVERSIÓN INICIAL</p>
+                </div>
+                <div class="p-3">
+                    <p class="font-orbitron text-2xl sm:text-3xl font-black text-white">24/7</p>
+                    <p class="text-xs text-slate-500 font-mono mt-0.5">TRANSMISIÓN CONTINUA</p>
+                </div>
+                <div class="p-3">
+                    <p class="font-orbitron text-2xl sm:text-3xl font-black text-white">∞ Espectadores</p>
+                    <p class="text-xs text-slate-500 font-mono mt-0.5">CRECIMIENTO VIRAL</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARACTERÍSTICAS / FEATURES (9 tarjetas) -->
+    <section id="features" class="py-24 px-6 relative max-w-7xl mx-auto">
+        <div class="text-center mb-16 flex flex-col items-center gap-3">
+            <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white tracking-wider">TECNOLOGÍA REVOLUCIONARIA</h2>
+            <div class="w-20 h-1 bg-neon-green rounded"></div>
+            <p class="text-sm text-slate-400 max-w-lg mt-2">Nueve pilares tecnológicos unificados para automatizar y rentabilizar tus directos al máximo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Feature 1 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple text-2xl group-hover:scale-110 transition-transform">🧠</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Cerebro de IA Avanzado</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Impulsado por Gemini 3.7. Analiza el contexto, comprende el sarcasmo, interactúa con alta coherencia intelectual y mantiene el hilo temático del directo sin equivocarse.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-green/10 border border-neon-green/20 flex items-center justify-center text-neon-green text-2xl group-hover:scale-110 transition-transform">🗣️</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Voz Neural Realista</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Conexión con ElevenLabs para entregar modulaciones de voz humanas, emociones de suspenso, alegría o risa, y latencia ultra-baja ideal para interacciones fluidas.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center text-neon-cyan text-2xl group-hover:scale-110 transition-transform">👤</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Avatar Holográfico 3D</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Estándar .VRM completamente animado. Reacciona físicamente a los eventos del chat con parpadeos, expresiones faciales automáticas (Joy, Angry, Sorrow) y Lip-sync perfecto.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple text-2xl group-hover:scale-110 transition-transform">💾</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Memoria a Largo Plazo</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Almacena información clave sobre tus espectadores más fieles. Al volver a ingresar al chat, el streamer los saludará por su nombre y recordará sus interacciones pasadas.</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-green/10 border border-neon-green/20 flex items-center justify-center text-neon-green text-2xl group-hover:scale-110 transition-transform">🎁</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Reacción a Regalos</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Reconoce regalos de TikTok en tiempo real. Configura respuestas exclusivas: un baile, un agradecimiento especial, sonidos personalizados o revelación de secretos del canal.</p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center text-neon-cyan text-2xl group-hover:scale-110 transition-transform">🎮</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Mini-juegos Integrados</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Sistemas de gamificación que retienen a la audiencia: trivias interactivas, batallas contra jefes digitales, ruletas de la suerte o predicciones con recompensas virtuales.</p>
+            </div>
+
+            <!-- Feature 7 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple text-2xl group-hover:scale-110 transition-transform">👁️</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Visión Artificial en Vivo</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Permite al streamer ver capturas del chat, de las cámaras, de la pantalla de juego o analizar perfiles de redes de forma autónoma con tecnología GPT-4 Vision.</p>
+            </div>
+
+            <!-- Feature 8 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-green/10 border border-neon-green/20 flex items-center justify-center text-neon-green text-2xl group-hover:scale-110 transition-transform">🎭</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Cambio de Escenas Dinámico</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">El streamer puede cambiar la escena de OBS Studio o el overlay web de forma inteligente según la intensidad del chat o si se alcanza un hito de donaciones específico.</p>
+            </div>
+
+            <!-- Feature 9 -->
+            <div class="p-6 rounded-2xl bg-space-900/60 border border-white/5 hover:border-neon-green/30 transition-all duration-300 flex flex-col gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center text-neon-cyan text-2xl group-hover:scale-110 transition-transform">📖</div>
+                <h3 class="font-orbitron font-bold text-white text-base">Conocimiento en Tiempo Real</h3>
+                <p class="text-xs text-slate-400 leading-relaxed font-mono">Búsqueda web integrada y acceso a bases de datos dinámicas. Tu streamer puede hablar de noticias del día, cotizaciones de criptomonedas o tendencias virales del momento.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA / HOW IT WORKS (5 pasos) -->
+    <section id="how-it-works" class="py-24 px-6 bg-space-900/40 relative">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-neon-purple/5 blur-[150px] pointer-events-none"></div>
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 flex flex-col items-center gap-3">
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white tracking-wider">CÓMO FUNCIONA EL SISTEMA</h2>
+                <div class="w-20 h-1 bg-neon-green rounded"></div>
+                <p class="text-sm text-slate-400 max-w-lg mt-2">Cinco pasos intuitivos para lanzar tu streamer digital de inmediato.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
+                <!-- Step 1 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-3 relative">
+                    <span class="font-orbitron text-4xl font-black text-neon-green/20 absolute right-4 top-4">01</span>
+                    <div class="w-9 h-9 rounded-lg bg-neon-green/10 text-neon-green flex items-center justify-center border border-neon-green/20 font-bold font-mono text-xs">A</div>
+                    <h3 class="font-orbitron font-bold text-white text-xs mt-2">Configura en el Studio</h3>
+                    <p class="text-[11px] text-slate-400 font-mono leading-relaxed">Elige la personalidad de tu streamer, su tono de voz, sus mini-juegos preferidos y sus disparadores emocionales en nuestro dashboard no-code.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-3 relative">
+                    <span class="font-orbitron text-4xl font-black text-neon-green/20 absolute right-4 top-4">02</span>
+                    <div class="w-9 h-9 rounded-lg bg-neon-green/10 text-neon-green flex items-center justify-center border border-neon-green/20 font-bold font-mono text-xs">B</div>
+                    <h3 class="font-orbitron font-bold text-white text-xs mt-2">Claves de Acceso Gratis</h3>
+                    <p class="text-[11px] text-slate-400 font-mono leading-relaxed">Pega tu clave gratuita de la API de Gemini y de ElevenLabs en la bóveda de credenciales segura para dar de alta los servicios de cognición y voz.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-3 relative">
+                    <span class="font-orbitron text-4xl font-black text-neon-green/20 absolute right-4 top-4">03</span>
+                    <div class="w-9 h-9 rounded-lg bg-neon-green/10 text-neon-green flex items-center justify-center border border-neon-green/20 font-bold font-mono text-xs">C</div>
+                    <h3 class="font-orbitron font-bold text-white text-xs mt-2">Descarga el .env</h3>
+                    <p class="text-[11px] text-slate-400 font-mono leading-relaxed">Genera y descarga el archivo de configuración encriptado `.env` directo desde tu panel de HECTRON Studio, listo para ser ejecutado localmente.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-3 relative">
+                    <span class="font-orbitron text-4xl font-black text-neon-green/20 absolute right-4 top-4">04</span>
+                    <div class="w-9 h-9 rounded-lg bg-neon-green/10 text-neon-green flex items-center justify-center border border-neon-green/20 font-bold font-mono text-xs">D</div>
+                    <h3 class="font-orbitron font-bold text-white text-xs mt-2">Ejecuta el Comando</h3>
+                    <p class="text-[11px] text-slate-400 font-mono leading-relaxed">Ejecuta la consola con un simple comando: `python -m leviatan.main` y observa cómo el sistema inicializa el motor cerebral y la sincronización 3D.</p>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-3 relative">
+                    <span class="font-orbitron text-4xl font-black text-neon-green/20 absolute right-4 top-4">05</span>
+                    <div class="w-9 h-9 rounded-lg bg-neon-green/10 text-neon-green flex items-center justify-center border border-neon-green/20 font-bold font-mono text-xs">E</div>
+                    <h3 class="font-orbitron font-bold text-white text-xs mt-2">Transmite sin Descanso</h3>
+                    <p class="text-[11px] text-slate-400 font-mono leading-relaxed">Importa la URL del overlay animado en PRISM Live Studio, configura tu clave RTMP, e inicia la emisión. Tu streamer operará por sí mismo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING PLANS (3 planes) -->
+    <section id="pricing" class="py-24 px-6 max-w-6xl mx-auto">
+        <div class="text-center mb-16 flex flex-col items-center gap-3">
+            <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white tracking-wider">PLANES DE SUSCRIPCIÓN</h2>
+            <div class="w-20 h-1 bg-neon-green rounded"></div>
+            <p class="text-sm text-slate-400 max-w-lg mt-2">Comienza gratis hoy y escala tus ingresos de transmisión a niveles profesionales.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+            <!-- Plan 1: Gratis -->
+            <div class="p-8 rounded-2xl bg-space-900/50 border border-white/5 flex flex-col justify-between gap-6 relative">
+                <div class="flex flex-col gap-2">
+                    <h3 class="font-orbitron text-lg font-bold text-slate-300">Plan Gratis</h3>
+                    <p class="text-xs text-slate-500 font-mono">Ideal para probar el motor de IA y el Lip-sync</p>
+                    <div class="flex items-baseline gap-1 mt-4">
+                        <span class="font-orbitron text-4xl font-black text-white">$0</span>
+                        <span class="text-xs text-slate-500 font-mono">/ semana</span>
+                    </div>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-400 font-mono border-t border-white/5 pt-6 flex-1">
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> 1 personalidad de streamer estándar
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Integración con Gemini 2.5-Flash
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Sincronización básica de VSeeFace
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600 line-through">
+                        <span>✖</span> Memoria persistente a largo plazo
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600 line-through">
+                        <span>✖</span> Reacciones avanzadas a regalos de TikTok
+                    </li>
+                </ul>
+
+                <a href="/studio/" class="w-full py-3.5 rounded-lg border border-white/10 hover:bg-white/5 text-center font-orbitron font-bold text-xs tracking-wider transition-colors">
+                    EMPEZAR AHORA
+                </a>
+            </div>
+
+            <!-- Plan 2: Pro -->
+            <div class="p-8 rounded-2xl bg-space-900 border-2 border-neon-green flex flex-col justify-between gap-6 relative glow-green">
+                <span class="absolute -top-3 right-8 px-2.5 py-1 rounded bg-neon-green text-space-950 font-orbitron text-[10px] font-black tracking-wider shadow-lg">MÁS POPULAR</span>
+                <div class="flex flex-col gap-2">
+                    <h3 class="font-orbitron text-lg font-bold text-neon-green flex items-center gap-2">
+                        Plan Pro ⚡
+                    </h3>
+                    <p class="text-xs text-slate-300 font-mono">Para streamers profesionales enfocados en ingresos</p>
+                    <div class="flex items-baseline gap-1 mt-4">
+                        <span class="font-orbitron text-4xl font-black text-white">$9</span>
+                        <span class="text-xs text-slate-400 font-mono">/ semana</span>
+                    </div>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-200 font-mono border-t border-white/10 pt-6 flex-1">
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Personalidades personalizables ilimitadas
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Conexión con Gemini 3.7-Flash & ElevenLabs
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Memoria a largo plazo de espectadores
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Reacción en vivo a regalos y batallas
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Soporte prioritario para PRISM Live Setup
+                    </li>
+                </ul>
+
+                <a href="/studio/" class="w-full py-3.5 rounded-lg bg-neon-green text-space-950 text-center font-orbitron font-black text-xs tracking-wider hover:bg-white transition-all shadow-[0_0_20px_rgba(0,255,136,0.3)]">
+                    ADQUIRIR PLAN PRO
+                </a>
+            </div>
+
+            <!-- Plan 3: Emprende -->
+            <div class="p-8 rounded-2xl bg-space-900/50 border border-white/5 flex flex-col justify-between gap-6 relative">
+                <div class="flex flex-col gap-2">
+                    <h3 class="font-orbitron text-lg font-bold text-slate-300">Plan Emprende</h3>
+                    <p class="text-xs text-slate-500 font-mono">Para agencias y redes de canales múltiples</p>
+                    <div class="flex items-baseline gap-1 mt-4">
+                        <span class="font-orbitron text-4xl font-black text-white">$29</span>
+                        <span class="text-xs text-slate-500 font-mono">/ mes</span>
+                    </div>
+                </div>
+
+                <ul class="space-y-3 text-xs text-slate-400 font-mono border-t border-white/5 pt-6 flex-1">
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Todo lo incluido en el Plan Pro
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Licencia para hasta 5 streamers simultáneos
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Integración directa de base de datos SQL
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Soporte técnico de ingeniería 24/7
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-neon-green">✔</span> Actualizaciones premium de por vida
+                    </li>
+                </ul>
+
+                <a href="/studio/" class="w-full py-3.5 rounded-lg border border-white/10 hover:bg-white/5 text-center font-orbitron font-bold text-xs tracking-wider transition-colors">
+                    CONTACTAR AGENCIA
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ========================================================
+         INTERACTIVE ROI CALCULATOR SECTION
+         ======================================================== -->
+    <section id="roi-calculator" class="py-24 px-6 relative max-w-7xl mx-auto">
+        <div class="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-neon-green/5 blur-[140px] pointer-events-none"></div>
+        <div class="absolute bottom-10 left-10 w-[350px] h-[350px] bg-neon-purple/5 blur-[120px] pointer-events-none"></div>
+
+        <div class="text-center mb-14 flex flex-col items-center gap-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-green/10 border border-neon-green/20 text-xs font-mono text-neon-green font-bold">
+                <span>📊</span> ESTIMADOR DE RENTABILIDAD EN VIVO
+            </div>
+            <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white tracking-wider">
+                CALCULADORA DE RETORNO DE INVERSIÓN (ROI)
+            </h2>
+            <div class="w-20 h-1 bg-neon-green rounded"></div>
+            <p class="text-sm text-slate-400 max-w-2xl font-mono mt-1">
+                Ajusta los parámetros de tu audiencia y horas de transmisión para calcular tus ingresos netos mensuales proyectados en TikTok Live con tu streamer autónomo.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT PANEL: CONTROLS & SLIDERS (7 Cols) -->
+            <div class="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-space-900/80 border border-white/10 backdrop-blur-md flex flex-col gap-6 shadow-xl">
+                
+                <!-- Quick Presets -->
+                <div class="flex flex-col gap-2 pb-4 border-b border-white/5">
+                    <span class="text-xs font-mono font-bold text-slate-300">PRESETS DE AUDIENCIA RÁPIDOS:</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button type="button" onclick="setRoiPreset(120, 6, 0.08, 15, 50)" class="roi-preset-btn px-3 py-2 rounded-lg bg-white/5 hover:bg-neon-green/10 border border-white/10 hover:border-neon-green/40 text-[11px] font-mono text-slate-300 hover:text-neon-green transition-all text-center">
+                            🐣 Micro (120 v)
+                        </button>
+                        <button type="button" onclick="setRoiPreset(500, 12, 0.12, 45, 200)" class="roi-preset-btn px-3 py-2 rounded-lg bg-white/5 hover:bg-neon-green/10 border border-white/10 hover:border-neon-green/40 text-[11px] font-mono text-slate-300 hover:text-neon-green transition-all text-center">
+                            🌱 Medio (500 v)
+                        </button>
+                        <button type="button" onclick="setRoiPreset(2000, 24, 0.20, 150, 600)" class="roi-preset-btn px-3 py-2 rounded-lg bg-white/5 hover:bg-neon-green/10 border border-white/10 hover:border-neon-green/40 text-[11px] font-mono text-slate-300 hover:text-neon-green transition-all text-center">
+                            🚀 Pro 24/7 (2k v)
+                        </button>
+                        <button type="button" onclick="setRoiPreset(6500, 24, 0.32, 450, 1800)" class="roi-preset-btn px-3 py-2 rounded-lg bg-white/5 hover:bg-neon-green/10 border border-white/10 hover:border-neon-green/40 text-[11px] font-mono text-slate-300 hover:text-neon-green transition-all text-center">
+                            🔥 Viral (6.5k v)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Slider 1: Viewers -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <label for="roi-viewers" class="text-xs font-mono font-bold text-slate-200 flex items-center gap-2">
+                            <span>👥</span> Espectadores Concurrentes Promedio
+                        </label>
+                        <span id="roi-viewers-val" class="font-orbitron font-bold text-neon-green text-sm">500 espectadores</span>
+                    </div>
+                    <input 
+                        id="roi-viewers" 
+                        type="range" 
+                        min="30" 
+                        max="10000" 
+                        step="10" 
+                        value="500" 
+                        class="w-full accent-neon-green bg-space-950 h-2 rounded-lg cursor-pointer">
+                    <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                        <span>30 (Inicio)</span>
+                        <span>1,000 (Consolidado)</span>
+                        <span>5,000 (Top)</span>
+                        <span>10,000+ (Viral)</span>
+                    </div>
+                </div>
+
+                <!-- Slider 2: Stream Hours/Day -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <label for="roi-hours" class="text-xs font-mono font-bold text-slate-200 flex items-center gap-2">
+                            <span>⏱️</span> Horas de Transmisión Diaria (Autónomo)
+                        </label>
+                        <span id="roi-hours-val" class="font-orbitron font-bold text-neon-cyan text-sm">12 horas / día</span>
+                    </div>
+                    <input 
+                        id="roi-hours" 
+                        type="range" 
+                        min="2" 
+                        max="24" 
+                        step="1" 
+                        value="12" 
+                        class="w-full accent-neon-cyan bg-space-950 h-2 rounded-lg cursor-pointer">
+                    <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                        <span>2h (Casual)</span>
+                        <span>8h (Jornada)</span>
+                        <span>16h (Extendido)</span>
+                        <span class="text-neon-cyan font-bold">24h (100% Sin Parar)</span>
+                    </div>
+                </div>
+
+                <!-- Slider 3: Monetization Efficiency / RPM (Gifts) -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <label for="roi-rpm" class="text-xs font-mono font-bold text-slate-200 flex items-center gap-2">
+                            <span>🎁</span> Eficiencia en Regalos de TikTok (USD / Espectador-Hora)
+                        </label>
+                        <span id="roi-rpm-val" class="font-orbitron font-bold text-neon-purple text-sm">$0.12 USD / v-h</span>
+                    </div>
+                    <input 
+                        id="roi-rpm" 
+                        type="range" 
+                        min="0.02" 
+                        max="0.45" 
+                        step="0.01" 
+                        value="0.12" 
+                        class="w-full accent-neon-purple bg-space-950 h-2 rounded-lg cursor-pointer">
+                    <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                        <span>$0.02 (Bajo/Tímido)</span>
+                        <span>$0.12 (Promedio)</span>
+                        <span>$0.25 (Alto Retención)</span>
+                        <span>$0.45 (Eventos/Batallas)</span>
+                    </div>
+                </div>
+
+                <!-- Secondary Row: Subscriptions & Sponsors -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-white/5">
+                    
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center justify-between">
+                            <label for="roi-subs" class="text-[11px] font-mono font-bold text-slate-300">
+                                🌟 Suscriptores VIP ($2.99)
+                            </label>
+                            <span id="roi-subs-val" class="font-mono text-xs text-neon-green font-bold">45 subs</span>
+                        </div>
+                        <input 
+                            id="roi-subs" 
+                            type="range" 
+                            min="0" 
+                            max="800" 
+                            step="5" 
+                            value="45" 
+                            class="w-full accent-neon-green bg-space-950 h-2 rounded-lg cursor-pointer">
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center justify-between">
+                            <label for="roi-sponsors" class="text-[11px] font-mono font-bold text-slate-300">
+                                🤝 Patrocinios & Afiliados
+                            </label>
+                            <span id="roi-sponsors-val" class="font-mono text-xs text-neon-cyan font-bold">$200 USD</span>
+                        </div>
+                        <input 
+                            id="roi-sponsors" 
+                            type="range" 
+                            min="0" 
+                            max="2500" 
+                            step="50" 
+                            value="200" 
+                            class="w-full accent-neon-cyan bg-space-950 h-2 rounded-lg cursor-pointer">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL: FINANCIAL RESULTS DASHBOARD (5 Cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-5">
+                
+                <!-- Main Earnings Result Card -->
+                <div class="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-space-900 via-space-950 to-space-900 border-2 border-neon-green/60 shadow-[0_0_40px_rgba(0,255,136,0.15)] flex flex-col gap-5 relative overflow-hidden">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-neon-green/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div>
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">GANANCIA MENSUAL PROYECTADA</span>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span id="roi-monthly-total" class="font-orbitron text-4xl sm:text-5xl font-black text-white">$1,854</span>
+                            <span class="text-sm font-mono text-neon-green font-bold">USD / mes</span>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary Metric Grid -->
+                    <div class="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
+                        <div class="p-3 rounded-xl bg-space-950/80 border border-white/5">
+                            <span class="text-[10px] font-mono text-slate-400">INGRESOS ANUALES</span>
+                            <p id="roi-annual-total" class="font-orbitron font-bold text-white text-base mt-0.5">$22,248 USD</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-space-950/80 border border-white/5">
+                            <span class="text-[10px] font-mono text-slate-400">COSTO PLAN PRO</span>
+                            <p class="font-orbitron font-bold text-slate-300 text-base mt-0.5">$36 USD <span class="text-[10px] text-slate-500 font-mono">($9/sem)</span></p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-neon-green/10 border border-neon-green/30 col-span-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] font-mono text-neon-green font-bold">RETORNO NETO (DESPUÉS DEL SOFTWARE)</span>
+                                    <p id="roi-net-profit" class="font-orbitron font-black text-neon-green text-xl mt-0.5">+$1,818 USD / mes</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] font-mono text-slate-400">MULTIPLICADOR ROI</span>
+                                    <p id="roi-multiplier" class="font-orbitron font-black text-white text-base mt-0.5">+5,050%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown Progress Bars -->
+                    <div class="flex flex-col gap-2.5 pt-2">
+                        <span class="text-[11px] font-mono text-slate-300 font-bold">DESGLOSE ESTIMADO DE INGRESOS:</span>
+                        
+                        <div>
+                            <div class="flex justify-between text-[10px] font-mono mb-1">
+                                <span class="text-slate-400">Regalos & Monedas de TikTok Live (Coins)</span>
+                                <span id="roi-breakdown-gifts" class="text-neon-green font-bold">$1,520 USD</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-space-950 rounded-full overflow-hidden">
+                                <div id="roi-bar-gifts" class="h-full bg-neon-green rounded-full" style="width: 82%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[10px] font-mono mb-1">
+                                <span class="text-slate-400">Suscripciones VIP de la Comunidad</span>
+                                <span id="roi-breakdown-subs" class="text-neon-cyan font-bold">$134 USD</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-space-950 rounded-full overflow-hidden">
+                                <div id="roi-bar-subs" class="h-full bg-neon-cyan rounded-full" style="width: 8%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[10px] font-mono mb-1">
+                                <span class="text-slate-400">Patrocinios de Marcas & Afiliados</span>
+                                <span id="roi-breakdown-sponsors" class="text-neon-purple font-bold">$200 USD</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-space-950 rounded-full overflow-hidden">
+                                <div id="roi-bar-sponsors" class="h-full bg-neon-purple rounded-full" style="width: 10%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="/studio/" class="w-full py-3.5 rounded-xl bg-neon-green text-space-950 text-center font-orbitron font-black text-xs tracking-wider hover:bg-white transition-all shadow-[0_0_20px_rgba(0,255,136,0.3)] mt-2">
+                        EMPEZAR A MONETIZAR CON IA AHORA
+                    </a>
+
+                </div>
+
+                <!-- Comparison Card: Human Streamer vs. Autonomous AI -->
+                <div class="p-5 rounded-2xl bg-space-900/60 border border-white/5 flex flex-col gap-3 text-xs font-mono">
+                    <span class="font-orbitron font-bold text-white text-[11px] flex items-center gap-2">
+                        <span>⚡</span> VENTAJA DEL STREAMER AUTÓNOMO HECTRON
+                    </span>
+                    <div class="grid grid-cols-2 gap-2 text-[11px]">
+                        <div class="p-2.5 rounded-lg bg-space-950 border border-rose-500/20 text-slate-400">
+                            <strong class="text-rose-400 block mb-1">Streamer Humano:</strong>
+                            • Máx 4 horas / día<br>
+                            • Fatiga física y vocal<br>
+                            • $0 ingresos dormido<br>
+                            • Pérdida de constancia
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-space-950 border border-neon-green/30 text-slate-300">
+                            <strong class="text-neon-green block mb-1">HECTRON IA 24/7:</strong>
+                            • 24 horas ininterrumpidas<br>
+                            • Energía infinita y carisma<br>
+                            • Audiencia global día y noche<br>
+                            • Retención algorítmica TikTok
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ========================================================
+         INTERACTIVE SETUP CHECKLIST FEATURE
+         ======================================================== -->
+    <section id="setup-checklist" class="py-24 px-6 bg-space-900/40 relative">
+        <div class="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-neon-cyan/5 blur-[160px] pointer-events-none"></div>
+
+        <div class="max-w-5xl mx-auto flex flex-col gap-10 relative z-10">
+            
+            <!-- Checklist Header -->
+            <div class="text-center flex flex-col items-center gap-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/20 text-xs font-mono text-neon-cyan font-bold">
+                    <span>🛠️</span> GUÍA DE PREPARACIÓN DE ENTORNO
+                </div>
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white tracking-wider">
+                    CHECKLIST INTERACTIVO DE INSTALACIÓN
+                </h2>
+                <div class="w-20 h-1 bg-neon-cyan rounded"></div>
+                <p class="text-sm text-slate-400 max-w-xl font-mono mt-1">
+                    Sigue esta lista paso a paso para configurar tu entorno local (Python, OBS, VB-Audio, VSeeFace y credenciales de IA). Tu progreso se guarda automáticamente.
+                </p>
+            </div>
+
+            <!-- Progress Tracker Banner -->
+            <div class="p-6 rounded-2xl bg-space-950 border border-white/10 shadow-xl flex flex-col md:flex-row items-center justify-between gap-5">
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan text-2xl font-bold font-orbitron">
+                        <span id="checklist-step-count">0</span>/6
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-orbitron font-bold text-white text-sm">PROGRESO DEL ENTORNO</span>
+                            <span id="checklist-percent-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white/5 border border-white/10 text-slate-400">
+                                0% COMPLETADO
+                            </span>
+                        </div>
+                        <p id="checklist-status-msg" class="text-xs text-slate-400 font-mono mt-0.5">
+                            Completa los pasos para tener tu streamer listo para emitir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Controls & Progress Bar -->
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                    <div class="w-full sm:w-48 h-2.5 bg-space-900 rounded-full overflow-hidden border border-white/5">
+                        <div id="checklist-progress-bar" class="h-full bg-gradient-to-r from-neon-cyan to-neon-green rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button 
+                            type="button" 
+                            onclick="checkAllChecklist(true)" 
+                            class="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-white/5 hover:bg-neon-cyan/10 border border-white/10 hover:border-neon-cyan/30 text-[11px] font-mono text-slate-300 hover:text-neon-cyan transition-all">
+                            Marcar Todos
+                        </button>
+                        <button 
+                            type="button" 
+                            onclick="checkAllChecklist(false)" 
+                            class="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-white/5 hover:bg-rose-500/10 border border-white/10 hover:border-rose-500/30 text-[11px] font-mono text-slate-300 hover:text-rose-400 transition-all">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6 Interactive Step Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <!-- STEP 1: Python 3.10+ & Git -->
+                <div id="card-step-1" class="checklist-card p-6 rounded-2xl bg-space-900/70 border border-white/10 flex flex-col justify-between gap-4 transition-all duration-300 hover:border-neon-cyan/40">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3">
+                            <input 
+                                id="chk-step-1" 
+                                type="checkbox" 
+                                onchange="toggleChecklistStep(1)" 
+                                class="mt-1 w-5 h-5 rounded border-slate-700 bg-space-950 text-neon-cyan accent-neon-cyan cursor-pointer">
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-orbitron font-bold text-white text-sm">1. Python 3.10+ & Git</span>
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-neon-purple/10 text-neon-purple border border-neon-purple/20">
+                                        REQUISITO BASE
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 font-mono mt-1 leading-relaxed">
+                                    Instala Python 3.10 o superior (marcando "Add Python to PATH") y descarga el repositorio oficial.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-2 font-mono text-xs">
+                        <div class="flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Comando de terminal:</span>
+                            <button onclick="copyToClipboard('git clone https://github.com/Hectron-lands/HectronAutonomo.git && cd HectronAutonomo && pip install -r requirements.txt', this)" class="text-neon-cyan hover:underline flex items-center gap-1 text-[10px]">
+                                <span>📋</span> Copiar comando
+                            </button>
+                        </div>
+                        <code class="text-neon-green text-[11px] break-all select-all">
+                            pip install -r requirements.txt
+                        </code>
+                    </div>
+                </div>
+
+                <!-- STEP 2: OBS Studio / PRISM Live -->
+                <div id="card-step-2" class="checklist-card p-6 rounded-2xl bg-space-900/70 border border-white/10 flex flex-col justify-between gap-4 transition-all duration-300 hover:border-neon-cyan/40">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3">
+                            <input 
+                                id="chk-step-2" 
+                                type="checkbox" 
+                                onchange="toggleChecklistStep(2)" 
+                                class="mt-1 w-5 h-5 rounded border-slate-700 bg-space-950 text-neon-cyan accent-neon-cyan cursor-pointer">
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-orbitron font-bold text-white text-sm">2. OBS Studio / PRISM Live</span>
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20">
+                                        VIDEO 9:16 VERTICAL
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 font-mono mt-1 leading-relaxed">
+                                    Configura el lienzo a 1080x1920 para TikTok Live y añade una fuente de navegador (Browser Source) conectada al overlay web.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-2 font-mono text-xs">
+                        <div class="flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Ajuste recomendado:</span>
+                            <span class="text-slate-300 font-bold">1080 x 1920 (60 FPS)</span>
+                        </div>
+                        <div class="text-[11px] text-slate-300">
+                            • Habilita OBS WebSocket Server en el puerto <strong class="text-neon-cyan">4455</strong> para cambio de escenas inteligente por IA.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: VB-Audio Virtual Cable -->
+                <div id="card-step-3" class="checklist-card p-6 rounded-2xl bg-space-900/70 border border-white/10 flex flex-col justify-between gap-4 transition-all duration-300 hover:border-neon-cyan/40">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3">
+                            <input 
+                                id="chk-step-3" 
+                                type="checkbox" 
+                                onchange="toggleChecklistStep(3)" 
+                                class="mt-1 w-5 h-5 rounded border-slate-700 bg-space-950 text-neon-cyan accent-neon-cyan cursor-pointer">
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-orbitron font-bold text-white text-sm">3. VB-Audio Virtual Cable</span>
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-neon-green/10 text-neon-green border border-neon-green/20">
+                                        AUDIO & LIP-SYNC
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 font-mono mt-1 leading-relaxed">
+                                    Instala el driver gratuito de cable virtual para canalizar la voz sintetizada de la IA sin capturar ruidos externos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-2 font-mono text-xs">
+                        <div class="flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Enrutamiento de audio:</span>
+                            <a href="https://vb-audio.com/Cable/" target="_blank" rel="noopener noreferrer" class="text-neon-green hover:underline text-[10px]">
+                                Descargar Driver ↗
+                            </a>
+                        </div>
+                        <div class="text-[11px] text-slate-300">
+                            • Salida TTS de la IA ➔ <span class="text-neon-green font-bold">CABLE Input</span><br>
+                            • Entrada Mic en OBS y VSeeFace ➔ <span class="text-neon-cyan font-bold">CABLE Output</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: VSeeFace & Avatar 3D VRM -->
+                <div id="card-step-4" class="checklist-card p-6 rounded-2xl bg-space-900/70 border border-white/10 flex flex-col justify-between gap-4 transition-all duration-300 hover:border-neon-cyan/40">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3">
+                            <input 
+                                id="chk-step-4" 
+                                type="checkbox" 
+                                onchange="toggleChecklistStep(4)" 
+                                class="mt-1 w-5 h-5 rounded border-slate-700 bg-space-950 text-neon-cyan accent-neon-cyan cursor-pointer">
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-orbitron font-bold text-white text-sm">4. VSeeFace / Avatar 3D (.VRM)</span>
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-neon-purple/10 text-neon-purple border border-neon-purple/20">
+                                        SINCRONIZACIÓN 3D
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 font-mono mt-1 leading-relaxed">
+                                    Carga tu modelo 3D y activa la sincronización labial (Lip-sync) por micrófono escuchando el cable virtual.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-2 font-mono text-xs">
+                        <div class="flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Modo sin webcam:</span>
+                            <span class="text-neon-purple font-bold">Lip-Sync por Audio</span>
+                        </div>
+                        <div class="text-[11px] text-slate-300">
+                            • El avatar moverá la boca y parpadeará solo cuando la IA hable, sin necesidad de cámara web física.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: Claves de API & Archivo .env -->
+                <div id="card-step-5" class="checklist-card p-6 rounded-2xl bg-space-900/70 border border-white/10 flex flex-col justify-between gap-4 transition-all duration-300 hover:border-neon-cyan/40">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3">
+                            <input 
+                                id="chk-step-5" 
+                                type="checkbox" 
+                                onchange="toggleChecklistStep(5)" 
+                                class="mt-1 w-5 h-5 rounded border-slate-700 bg-space-950 text-neon-cyan accent-neon-cyan cursor-pointer">
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-orbitron font-bold text-white text-sm">5. Claves de API & Archivo .env</span>
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-neon-green/10 text-neon-green border border-neon-green/20">
+                                        CEREBRO & VOZ
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 font-mono mt-1 leading-relaxed">
+                                    Obtén tu API Key gratuita de Gemini (Google AI Studio) y ElevenLabs para activar la inteligencia y la voz natural.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-2 font-mono text-xs">
+                        <div class="flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Estructura de credenciales:</span>
+                            <a href="/studio/" class="text-neon-green hover:underline text-[10px]">
+                                Generar en Studio ↗
+                            </a>
+                        </div>
+                        <code class="text-slate-300 text-[11px]">
+                            GEMINI_API_KEY=AIzaSy...<br>
+                            ELEVENLABS_API_KEY=sk_...
+                        </code>
+                    </div>
+                </div>
+
+                <!-- STEP 6: Lanzamiento & Prueba en Vivo -->
+                <div id="card-step-6" class="checklist-card p-6 rounded-2xl bg-space-900/70 border border-white/10 flex flex-col justify-between gap-4 transition-all duration-300 hover:border-neon-cyan/40">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3">
+                            <input 
+                                id="chk-step-6" 
+                                type="checkbox" 
+                                onchange="toggleChecklistStep(6)" 
+                                class="mt-1 w-5 h-5 rounded border-slate-700 bg-space-950 text-neon-cyan accent-neon-cyan cursor-pointer">
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-orbitron font-bold text-white text-sm">6. Lanzamiento & Prueba en Vivo</span>
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20">
+                                        EN VIVO
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 font-mono mt-1 leading-relaxed">
+                                    Inicia el motor con un solo comando y realiza una prueba enviando un regalo simulado o mensaje en el chat.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-space-950 border border-white/5 flex flex-col gap-2 font-mono text-xs">
+                        <div class="flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Comando de ejecución:</span>
+                            <button onclick="copyToClipboard('python -m leviatan.main', this)" class="text-neon-cyan hover:underline flex items-center gap-1 text-[10px]">
+                                <span>📋</span> Copiar
+                            </button>
+                        </div>
+                        <code class="text-neon-cyan text-[11px]">
+                            python -m leviatan.main
+                        </code>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom CTA Checklist -->
+            <div class="p-6 rounded-2xl bg-gradient-to-r from-neon-cyan/10 via-space-900 to-neon-green/10 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div>
+                    <h4 class="font-orbitron font-bold text-white text-base">¿Listo para conectar tu canal?</h4>
+                    <p class="text-xs text-slate-400 font-mono mt-0.5">Accede al panel de control de HECTRON Studio para personalizar las respuestas de tu IA.</p>
+                </div>
+                <a href="/studio/" class="px-6 py-3 rounded-xl bg-neon-cyan text-space-950 font-orbitron font-black text-xs tracking-wider hover:bg-white transition-all shadow-[0_0_20px_rgba(0,221,255,0.3)] shrink-0">
+                    ABRIR STUDIO DASHBOARD
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS (4) -->
+    <section id="testimonials" class="py-24 px-6 bg-space-900/20 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 flex flex-col items-center gap-3">
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white tracking-wider">LO QUE DICEN LOS STREAMERS</h2>
+                <div class="w-20 h-1 bg-neon-green rounded"></div>
+                <p class="text-sm text-slate-400 max-w-lg mt-2">Casos reales de creadores de contenido que transformaron su modelo de negocio.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col justify-between gap-4">
+                    <div class="flex flex-col gap-2">
+                        <div class="text-yellow-400 text-xs">⭐⭐⭐⭐⭐</div>
+                        <p class="text-xs text-slate-300 font-mono italic leading-relaxed">"Creé una tarotista holográfica 3D que responde preguntas basadas en cartas reales. Transmite 24 horas seguidas y las donaciones son increíbles."</p>
+                    </div>
+                    <div>
+                        <p class="font-orbitron font-bold text-white text-xs">Luna_Tarot</p>
+                        <p class="text-[10px] text-slate-500 font-mono mt-0.5">Streamer de Videncia / TikTok</p>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col justify-between gap-4">
+                    <div class="flex flex-col gap-2">
+                        <div class="text-yellow-400 text-xs">⭐⭐⭐⭐⭐</div>
+                        <p class="text-xs text-slate-300 font-mono italic leading-relaxed">"Tengo un bot interactivo de batallas de rap con IA. Los usuarios escriben rimas, la IA les responde al ritmo de la música y reacciona de inmediato."</p>
+                    </div>
+                    <div>
+                        <p class="font-orbitron font-bold text-white text-xs">MC_Digital</p>
+                        <p class="text-[10px] text-slate-500 font-mono mt-0.5">Creador de Contenido IRL</p>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col justify-between gap-4">
+                    <div class="flex flex-col gap-2">
+                        <div class="text-yellow-400 text-xs">⭐⭐⭐⭐⭐</div>
+                        <p class="text-xs text-slate-300 font-mono italic leading-relaxed">"El setup del Lip-sync con VB-Audio y VSeeFace es súper simple. Es el VTuber autónomo más realista que he programado o probado jamás."</p>
+                    </div>
+                    <div>
+                        <p class="font-orbitron font-bold text-white text-xs">Aiko_VT</p>
+                        <p class="text-[10px] text-slate-500 font-mono mt-0.5">VTuber e Influencer Virtual</p>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 -->
+                <div class="p-5 rounded-xl bg-space-950 border border-white/5 flex flex-col justify-between gap-4">
+                    <div class="flex flex-col gap-2">
+                        <div class="text-yellow-400 text-xs">⭐⭐⭐⭐⭐</div>
+                        <p class="text-xs text-slate-300 font-mono italic leading-relaxed">"Trivias de videojuegos con recompensas en vivo. El streamer maneja el chat de forma automática mientras yo me enfoco en otros proyectos."</p>
+                    </div>
+                    <div>
+                        <p class="font-orbitron font-bold text-white text-xs">Gamer_X_Autonomo</p>
+                        <p class="text-[10px] text-slate-500 font-mono mt-0.5">Gamer y Emprendedor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="py-24 px-6 text-center relative overflow-hidden max-w-5xl mx-auto">
+        <div class="absolute inset-0 bg-neon-green/5 blur-[120px] pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col items-center gap-6">
+            <h2 class="font-orbitron text-4xl sm:text-5xl font-black text-white tracking-wider max-w-2xl leading-none">Tu Streamer de IA te Espera</h2>
+            <p class="text-slate-400 text-sm max-w-lg font-mono">Conéctate hoy mismo a HECTRON Studio, configura la inteligencia y voz de tu personaje, y comienza a rentabilizar tu canal de TikTok Live.</p>
+            <a href="/studio/" class="px-8 py-4 rounded-xl bg-neon-green text-space-950 font-orbitron font-extrabold text-sm tracking-widest hover:bg-white transition-all shadow-[0_0_25px_rgba(0,255,136,0.4)]">
+                EMPEZAR A CONFIGURAR GRATIS
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-white/5 bg-space-950 text-slate-500 text-xs font-mono">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">🦑</span>
+                <span class="font-orbitron font-bold text-white tracking-wide text-[13px]">HECTRON STUDIO</span>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <a href="/studio/" class="hover:text-neon-green transition-colors">Studio Dashboard</a>
+                <a href="#how-it-works" class="hover:text-neon-green transition-colors">Integración PRISM</a>
+                <a href="https://github.com/Hectron-lands/HectronAutonomo" target="_blank" rel="noopener noreferrer" class="hover:text-neon-green transition-colors">GitHub Repository</a>
+            </div>
+
+            <div>
+                &copy; 2026 HECTRON Studio / Abadalabs Inc. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE ENGINE JAVASCRIPT -->
+    <script>
+        // ========================================================
+        // 1. ROI CALCULATOR LOGIC
+        // ========================================================
+        const viewersInput = document.getElementById('roi-viewers');
+        const hoursInput = document.getElementById('roi-hours');
+        const rpmInput = document.getElementById('roi-rpm');
+        const subsInput = document.getElementById('roi-subs');
+        const sponsorsInput = document.getElementById('roi-sponsors');
+
+        const viewersVal = document.getElementById('roi-viewers-val');
+        const hoursVal = document.getElementById('roi-hours-val');
+        const rpmVal = document.getElementById('roi-rpm-val');
+        const subsVal = document.getElementById('roi-subs-val');
+        const sponsorsVal = document.getElementById('roi-sponsors-val');
+
+        const monthlyTotalEl = document.getElementById('roi-monthly-total');
+        const annualTotalEl = document.getElementById('roi-annual-total');
+        const netProfitEl = document.getElementById('roi-net-profit');
+        const multiplierEl = document.getElementById('roi-multiplier');
+
+        const breakdownGiftsEl = document.getElementById('roi-breakdown-gifts');
+        const breakdownSubsEl = document.getElementById('roi-breakdown-subs');
+        const breakdownSponsorsEl = document.getElementById('roi-breakdown-sponsors');
+
+        const barGifts = document.getElementById('roi-bar-gifts');
+        const barSubs = document.getElementById('roi-bar-subs');
+        const barSponsors = document.getElementById('roi-bar-sponsors');
+
+        const currencyFmt = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0
+        });
+
+        function updateRoiCalculation() {
+            if (!viewersInput) return;
+
+            const viewers = parseInt(viewersInput.value, 10) || 0;
+            const hours = parseInt(hoursInput.value, 10) || 0;
+            const rpm = parseFloat(rpmInput.value) || 0;
+            const subs = parseInt(subsInput.value, 10) || 0;
+            const sponsors = parseInt(sponsorsInput.value, 10) || 0;
+
+            // Labels update
+            viewersVal.textContent = viewers.toLocaleString() + ' espectadores';
+            hoursVal.textContent = hours + ' horas / día';
+            rpmVal.textContent = '$' + rpm.toFixed(2) + ' USD / v-h';
+            subsVal.textContent = subs + ' subs';
+            sponsorsVal.textContent = '$' + sponsors.toLocaleString() + ' USD';
+
+            // Calculations
+            const monthlyHours = hours * 30;
+            const totalViewerHours = viewers * monthlyHours;
+            const giftsMonthly = totalViewerHours * (rpm / 30); // distributed daily rate
+            const subsMonthly = subs * 2.99;
+            const sponsorsMonthly = sponsors;
+
+            const monthlyGross = Math.round(giftsMonthly + subsMonthly + sponsorsMonthly);
+            const annualGross = monthlyGross * 12;
+            const proCostMonthly = 36;
+            const netProfit = Math.max(0, monthlyGross - proCostMonthly);
+            const roiPercent = Math.round(((monthlyGross - proCostMonthly) / proCostMonthly) * 100);
+
+            // Set main metric numbers
+            monthlyTotalEl.textContent = '$' + monthlyGross.toLocaleString();
+            annualTotalEl.textContent = '$' + annualGross.toLocaleString() + ' USD';
+            netProfitEl.textContent = '+$' + netProfit.toLocaleString() + ' USD / mes';
+            multiplierEl.textContent = '+' + (roiPercent > 0 ? roiPercent.toLocaleString() : 0) + '%';
+
+            // Breakdown numbers
+            breakdownGiftsEl.textContent = '$' + Math.round(giftsMonthly).toLocaleString() + ' USD';
+            breakdownSubsEl.textContent = '$' + Math.round(subsMonthly).toLocaleString() + ' USD';
+            breakdownSponsorsEl.textContent = '$' + Math.round(sponsorsMonthly).toLocaleString() + ' USD';
+
+            // Breakdown progress bar percentages
+            const total = Math.max(1, monthlyGross);
+            const pGifts = Math.min(100, Math.max(5, (giftsMonthly / total) * 100));
+            const pSubs = Math.min(100, Math.max(3, (subsMonthly / total) * 100));
+            const pSponsors = Math.min(100, Math.max(3, (sponsorsMonthly / total) * 100));
+
+            barGifts.style.width = pGifts + '%';
+            barSubs.style.width = pSubs + '%';
+            barSponsors.style.width = pSponsors + '%';
+        }
+
+        function setRoiPreset(v, h, rpm, s, sp) {
+            if (!viewersInput) return;
+            viewersInput.value = v;
+            hoursInput.value = h;
+            rpmInput.value = rpm;
+            subsInput.value = s;
+            sponsorsInput.value = sp;
+            updateRoiCalculation();
+        }
+
+        [viewersInput, hoursInput, rpmInput, subsInput, sponsorsInput].forEach(el => {
+            if (el) el.addEventListener('input', updateRoiCalculation);
+        });
+
+        // Initialize ROI calculation
+        updateRoiCalculation();
+
+        // ========================================================
+        // 2. SETUP CHECKLIST LOGIC (WITH LOCALSTORAGE)
+        // ========================================================
+        const TOTAL_STEPS = 6;
+        const STORAGE_KEY = 'hectron_setup_checklist_v1';
+
+        function loadChecklistState() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                for (let i = 1; i <= TOTAL_STEPS; i++) {
+                    const chk = document.getElementById('chk-step-' + i);
+                    if (chk) {
+                        chk.checked = !!saved['step_' + i];
+                        styleChecklistCard(i, chk.checked);
+                    }
+                }
+                updateChecklistProgress();
+            } catch (e) {
+                console.warn('Could not read checklist localStorage', e);
+            }
+        }
+
+        function saveChecklistState() {
+            try {
+                const state = {};
+                for (let i = 1; i <= TOTAL_STEPS; i++) {
+                    const chk = document.getElementById('chk-step-' + i);
+                    if (chk) {
+                        state['step_' + i] = chk.checked;
+                    }
+                }
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.warn('Could not save checklist localStorage', e);
+            }
+        }
+
+        function styleChecklistCard(stepNum, isChecked) {
+            const card = document.getElementById('card-step-' + stepNum);
+            if (!card) return;
+            if (isChecked) {
+                card.classList.add('border-neon-cyan', 'bg-neon-cyan/5');
+                card.classList.remove('border-white/10');
+            } else {
+                card.classList.remove('border-neon-cyan', 'bg-neon-cyan/5');
+                card.classList.add('border-white/10');
+            }
+        }
+
+        function toggleChecklistStep(stepNum) {
+            const chk = document.getElementById('chk-step-' + stepNum);
+            if (chk) {
+                styleChecklistCard(stepNum, chk.checked);
+                saveChecklistState();
+                updateChecklistProgress();
+            }
+        }
+
+        function checkAllChecklist(markAll) {
+            for (let i = 1; i <= TOTAL_STEPS; i++) {
+                const chk = document.getElementById('chk-step-' + i);
+                if (chk) {
+                    chk.checked = markAll;
+                    styleChecklistCard(i, markAll);
+                }
+            }
+            saveChecklistState();
+            updateChecklistProgress();
+        }
+
+        function updateChecklistProgress() {
+            let completed = 0;
+            for (let i = 1; i <= TOTAL_STEPS; i++) {
+                const chk = document.getElementById('chk-step-' + i);
+                if (chk && chk.checked) {
+                    completed++;
+                }
+            }
+
+            const percent = Math.round((completed / TOTAL_STEPS) * 100);
+            
+            const countEl = document.getElementById('checklist-step-count');
+            const percentBadge = document.getElementById('checklist-percent-badge');
+            const progressBar = document.getElementById('checklist-progress-bar');
+            const statusMsg = document.getElementById('checklist-status-msg');
+
+            if (countEl) countEl.textContent = completed;
+            if (progressBar) progressBar.style.width = percent + '%';
+            if (percentBadge) {
+                percentBadge.textContent = percent + '% COMPLETADO';
+                if (percent === 100) {
+                    percentBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-neon-green/20 text-neon-green border border-neon-green/40';
+                } else if (percent > 0) {
+                    percentBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40';
+                } else {
+                    percentBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white/5 border border-white/10 text-slate-400';
+                }
+            }
+            if (statusMsg) {
+                if (percent === 100) {
+                    statusMsg.textContent = '🎉 ¡Excelente! Todo tu entorno está listo para transmitir en TikTok Live.';
+                    statusMsg.className = 'text-xs text-neon-green font-mono mt-0.5 font-bold';
+                } else if (percent >= 50) {
+                    statusMsg.textContent = '⚡ ¡Más de la mitad completado! Ya casi puedes arrancar tu stream.';
+                    statusMsg.className = 'text-xs text-neon-cyan font-mono mt-0.5';
+                } else {
+                    statusMsg.textContent = 'Completa los pasos para tener tu streamer listo para emitir.';
+                    statusMsg.className = 'text-xs text-slate-400 font-mono mt-0.5';
+                }
+            }
+        }
+
+        function copyToClipboard(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btnElement.innerHTML;
+                btnElement.innerHTML = '<span>✅</span> ¡Copiado!';
+                btnElement.classList.add('text-neon-green');
+                setTimeout(() => {
+                    btnElement.innerHTML = originalText;
+                    btnElement.classList.remove('text-neon-green');
+                }, 2000);
+            }).catch(err => {
+                console.error('Error copying text:', err);
+            });
+        }
+
+        // Initialize checklist state from localStorage
+        document.addEventListener('DOMContentLoaded', loadChecklistState);
+        loadChecklistState();
+    </script>
+</body>
+</html>

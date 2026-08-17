@@ -338,6 +338,274 @@
       padding: 14px;
       display: none;
     }
+
+    /* Modal Overlay & Panels */
+    .game-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(14px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      pointer-events: auto;
+    }
+    .game-modal-overlay.open {
+      display: flex;
+    }
+    .modal-content {
+      width: 100%;
+      max-width: 900px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 24px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      padding-bottom: 14px;
+    }
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-close {
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #ef4444;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fff;
+    }
+
+    /* Achievement Grid & Cards */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 16px;
+    }
+    .achievement-card {
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .achievement-card.unlocked {
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.08);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+    }
+    .achievement-card.claimed {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(15, 23, 42, 0.8);
+      opacity: 0.85;
+    }
+    .ach-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .ach-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .ach-info h4 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .ach-info p {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+    .ach-rewards {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+    }
+    .reward-tag {
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+    }
+    .reward-tag.cosmetic {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: rgba(168, 85, 247, 0.4);
+      color: #c084fc;
+    }
+    .ach-progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+    .ach-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #38bdf8);
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+    .btn-claim {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      color: #022c22;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      align-self: flex-end;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+      transition: all 0.2s;
+    }
+    .btn-claim:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.7);
+    }
+    .btn-claimed-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      color: #38bdf8;
+      padding: 4px 8px;
+      align-self: flex-end;
+    }
+
+    /* Multiplayer Mode Selector */
+    .mp-mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .mp-mode-card {
+      padding: 16px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .mp-mode-card:hover, .mp-mode-card.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    }
+    .mp-mode-card h4 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .mp-mode-card p {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    /* Cosmetics Hangar Grid */
+    .cosmetics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .skin-card {
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .skin-card.equipped {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+    .skin-preview-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px currentColor;
+    }
+
+    /* Celebration Banner */
+    #achievement-celebration {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      padding: 16px 28px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(6, 78, 59, 0.95));
+      border: 2px solid #34d399;
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.7);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    #achievement-celebration.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -354,6 +622,16 @@
   <!-- Notification Toast -->
   <div id="notification-toast" class="glass-panel" style="border-color: #38bdf8; color: #38bdf8;">
     ANTIGRAVITY PROPULSION ONLINE
+  </div>
+
+  <!-- Achievement Unlock Celebration Banner -->
+  <div id="achievement-celebration">
+    <div style="font-size: 32px;">🏆</div>
+    <div>
+      <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 2px; color: #a7f3d0; font-weight: 700;">¡LOGRO DESBLOQUEADO!</div>
+      <div id="celeb-title" style="font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #fff;">Primer Vuelo Orbital</div>
+      <div id="celeb-reward" style="font-family: 'Fira Code', monospace; font-size: 12px; color: #fef08a;">+500 QC • Orbit-Cyan Trail</div>
+    </div>
   </div>
 
   <!-- Target Scanner Window -->
@@ -397,6 +675,20 @@
           <span class="stat-label">DESTROYED DRONES</span>
           <span class="stat-value cyan" id="val-kills">0</span>
         </div>
+        
+        <!-- Interactive Modals Openers -->
+        <button id="btn-achievements" class="btn-action" style="border-color: rgba(251, 191, 36, 0.5); color: #fbbf24;" onclick="openAchievementsModal()">
+          🏆 LOGROS (<span id="ach-unlocked-count">2</span>/8)
+        </button>
+
+        <button id="btn-hangar" class="btn-action" style="border-color: rgba(168, 85, 247, 0.5); color: #c084fc;" onclick="openCosmeticsModal()">
+          🎨 HANGAR SKINS
+        </button>
+
+        <button id="btn-multiplayer" class="btn-action" style="border-color: rgba(56, 189, 248, 0.5); color: #38bdf8;" onclick="openMultiplayerModal()">
+          🌐 MULTIJUGADOR (<span id="mp-players-count">4</span> PILOTOS)
+        </button>
+
         <button id="btn-audio" class="btn-action" onclick="toggleAudio()">
           🔊 AUDIO FX
         </button>
@@ -467,6 +759,146 @@
           <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Thrust | <kbd>SPACE</kbd> Antigrav Pulse<br>
           <kbd>SHIFT</kbd> Turbo Boost | <kbd>Q</kbd>/<kbd>E</kbd> Roll | <kbd>L-CLICK</kbd> Laser<br>
           <kbd>R-CLICK</kbd> Invert Gravity | <kbd>F</kbd> Mining Beam | <kbd>R</kbd> Scan
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 1: ACHIEVEMENTS & REWARDS SYSTEM
+       ======================================================== -->
+  <div id="modal-achievements" class="game-modal-overlay">
+    <div class="modal-content glass-panel" style="border-color: rgba(251, 191, 36, 0.4);">
+      <div class="modal-header">
+        <div class="modal-title" style="color: #fbbf24;">
+          <span>🏆</span>
+          <span>SISTEMA DE LOGROS & RECOMPENSAS SOBERANAS</span>
+        </div>
+        <button class="btn-close" onclick="closeModal('modal-achievements')">CERRAR [ESC]</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15,23,42,0.6); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(251,191,36,0.2);">
+        <div style="font-family: 'Fira Code', monospace; font-size: 13px;">
+          PROGRESO TOTAL: <strong id="modal-ach-progress-text" style="color: #34d399;">2 / 8 COMPLETADOS (25%)</strong>
+        </div>
+        <div style="display: flex; gap: 12px; font-family: 'Orbitron', sans-serif; font-size: 12px;">
+          <span style="color: #fbbf24;">QC RECLAMABLES: <strong id="modal-ach-claimable-qc">0 QC</strong></span>
+        </div>
+      </div>
+
+      <div class="achievements-grid" id="achievements-container">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: COSMETICS & SKINS HANGAR
+       ======================================================== -->
+  <div id="modal-cosmetics" class="game-modal-overlay">
+    <div class="modal-content glass-panel" style="border-color: rgba(168, 85, 247, 0.4);">
+      <div class="modal-header">
+        <div class="modal-title" style="color: #c084fc;">
+          <span>🎨</span>
+          <span>HANGAR DE SKINS & PERSONALIZACIÓN 3D</span>
+        </div>
+        <button class="btn-close" onclick="closeModal('modal-cosmetics')">CERRAR [ESC]</button>
+      </div>
+
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.5;">
+        Desbloquea skins cosméticas exclusivas completando logros tácticos. Al equipar una skin, el material del fuselaje de tu Interceptor Ψ-01, la estela del reactor taquiónico y los cañones láser se actualizarán en tiempo real en la simulación 3D.
+      </p>
+
+      <div class="cosmetics-grid" id="cosmetics-container">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 3: MULTIPLAYER OPERATIONS HUB
+       ======================================================== -->
+  <div id="modal-multiplayer" class="game-modal-overlay">
+    <div class="modal-content glass-panel" style="border-color: rgba(56, 189, 248, 0.4); max-width: 960px;">
+      <div class="modal-header">
+        <div class="modal-title" style="color: #38bdf8;">
+          <span>🌐</span>
+          <span>CENTRO DE OPERACIONES MULTIJUGADOR // RED CUÁNTICA</span>
+        </div>
+        <button class="btn-close" onclick="closeModal('modal-multiplayer')">CERRAR [ESC]</button>
+      </div>
+
+      <!-- Mode Selection Header -->
+      <div>
+        <div style="font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 700; color: #f8fafc; margin-bottom: 8px;">
+          SELECCIONA MODO DE JUEGO MULTIJUGADOR:
+        </div>
+        <div class="mp-mode-grid">
+          <div id="mode-card-race" class="mp-mode-card active" onclick="selectMultiplayerMode('RACE')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4>🏁 HIPER-CARRERA GRAVITACIONAL</h4>
+              <span style="font-size:10px; color:#fbbf24; font-family:'Fira Code', monospace;">COMPETITIVO</span>
+            </div>
+            <p>Carreras de alta velocidad a través de anillos toroidales cuánticos usando el impulso gravitacional (slingshot) y rebufo taquiónico.</p>
+          </div>
+
+          <div id="mode-card-coop" class="mp-mode-card" onclick="selectMultiplayerMode('COOP_SURVEY')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4>⛏️ EXPEDICIÓN NEBULOSA OMEGA</h4>
+              <span style="font-size:10px; color:#34d399; font-family:'Fira Code', monospace;">COOPERATIVO</span>
+            </div>
+            <p>Incursión de minería profunda en escuadrón. Acopla rayos resonadores en el mismo asteroide de Vibranio para multiplicar el rendimiento x3.</p>
+          </div>
+
+          <div id="mode-card-siege" class="mp-mode-card" onclick="selectMultiplayerMode('TEAM_SIEGE')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4>⚔️ ASEDIO AL NEXO SOBERANO (4v4)</h4>
+              <span style="font-size:10px; color:#ef4444; font-family:'Fira Code', monospace;">EQUIPOS 4v4</span>
+            </div>
+            <p>Batalla táctica entre Escuadrones Alfa y Omega. Captura los 3 balizas de gravedad en la Ciudadela y neutraliza los interceptores rivales.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Lobby & Squadron Roster -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <!-- Left: Room & Matchmaking -->
+        <div style="padding: 16px; border-radius: 8px; background: rgba(15,23,42,0.7); border: 1px solid rgba(56,189,248,0.2); display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-family: 'Orbitron', sans-serif; font-size: 13px; color: #38bdf8; font-weight: 700;">SALAS ACTIVAS EN EL SECTOR</span>
+            <span style="font-size: 11px; font-family: 'Fira Code', monospace; color: #34d399;">● SERVIDOR ONLINE (18ms)</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;" id="mp-rooms-list">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 6px;">
+            <button class="btn-action" style="flex: 1; justify-content: center; background: rgba(56,189,248,0.2); border-color: #38bdf8; color: #f8fafc;" onclick="joinCustomRoom('new')">
+              ➕ CREAR SALA PRIVADA
+            </button>
+            <button class="btn-action" style="flex: 1; justify-content: center; background: rgba(16,185,129,0.2); border-color: #10b981; color: #34d399;" onclick="quickMatch()">
+              ⚡ EMPAREJAMIENTO RÁPIDO
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Current Squadron & Comms -->
+        <div style="padding: 16px; border-radius: 8px; background: rgba(15,23,42,0.7); border: 1px solid rgba(56,189,248,0.2); display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-family: 'Orbitron', sans-serif; font-size: 13px; color: #f8fafc; font-weight: 700;">PILOTOS EN EL ESCUADRÓN</span>
+            <span id="squadron-status-tag" style="font-size: 11px; font-family: 'Fira Code', monospace; color: #fbbf24;">4 / 8 CONECTADOS</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto;" id="squadron-members-list">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Quick Squad Comms Ping -->
+          <div style="display: flex; gap: 6px; margin-top: 4px;">
+            <input id="squad-chat-input" type="text" placeholder="Transmitir a la flota [ENTER]..." style="flex:1; background: rgba(2,6,23,0.8); border: 1px solid rgba(56,189,248,0.3); border-radius: 4px; padding: 6px 10px; color: #fff; font-size: 12px; font-family: 'Fira Code', monospace;">
+            <button class="btn-action" onclick="sendSquadMsg()">ENVIAR</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1356,31 +1788,683 @@
       updateHUD();
       drawRadar();
 
+      // 10. Update Peer Ships (Multiplayer 3D Mesh Animation)
+      updatePeerShips();
+
+      // 11. Real-time Achievement Progression Tracking
+      checkAchievementProgress();
+
       // Render 3D Frame
       renderer.render(scene, camera);
     }
 
     /* ----------------------------------------------------
-       RADAR & UI UPDATES
+       🏆 ACHIEVEMENTS & REWARDS ENGINE
        ---------------------------------------------------- */
-    function updateHUD() {
-      document.getElementById('val-credits').innerText = `${stats.credits.toLocaleString()} QC`;
-      document.getElementById('val-ore').innerText = `${stats.ore.toLocaleString()} T`;
-      document.getElementById('val-kills').innerText = stats.kills;
-      document.getElementById('sovereignty-val').innerText = `NVL ${stats.sovereignty}`;
+    let achievements = [
+      {
+        id: 'first_orbit',
+        title: 'Primer Vuelo Orbital',
+        description: 'Estabiliza los motores de propulsión inercial y mantén el vuelo en gravedad cero.',
+        icon: '🚀',
+        category: 'NAVIGATION',
+        rewardCredits: 500,
+        rewardOre: 50,
+        rewardCosmetic: 'Orbit-Cyan Trail',
+        criteria: 'Volar al menos 10 segundos en gravedad cero sin colisionar',
+        targetProgress: 10,
+        currentProgress: 10,
+        unlocked: true,
+        claimed: false
+      },
+      {
+        id: 'gravity_master',
+        title: 'Maestro de la Gravedad',
+        description: 'Activa la inversión de polaridad cuántica para maniobrar entre campos masivos.',
+        icon: '♾️',
+        category: 'MASTERY',
+        rewardCredits: 1500,
+        rewardOre: 100,
+        rewardCosmetic: 'Obsidian Void Matrix',
+        criteria: 'Ejecutar 25 pulsos o inversiones gravitacionales',
+        targetProgress: 25,
+        currentProgress: 14,
+        unlocked: false,
+        claimed: false
+      },
+      {
+        id: 'nebula_explorer',
+        title: 'Explorador de la Nebulosa',
+        description: 'Adéntrate más de 1,500 metros en el espacio profundo fuera de la Ciudadela.',
+        icon: '🌌',
+        category: 'NAVIGATION',
+        rewardCredits: 2000,
+        rewardOre: 150,
+        rewardCosmetic: 'Nebula Aurora Core',
+        criteria: 'Alcanzar una distancia >= 1,500 m desde la estación orbital',
+        targetProgress: 1500,
+        currentProgress: 890,
+        unlocked: false,
+        claimed: false
+      },
+      {
+        id: 'vibranium_harvester',
+        title: 'Cosechador de Vibranio',
+        description: 'Extrae con éxito más de 300 Toneladas de mineral puro de los asteroides del sector.',
+        icon: '💎',
+        category: 'MINING',
+        rewardCredits: 3000,
+        rewardOre: 500,
+        rewardCosmetic: 'Gold Plated Imperial',
+        criteria: 'Recolectar 300 T de mineral Vibranio mediante el rayo de resonancia',
+        targetProgress: 300,
+        currentProgress: 120,
+        unlocked: false,
+        claimed: false
+      },
+      {
+        id: 'sentinel_destroyer',
+        title: 'Destructor de Centinelas',
+        description: 'Elimina 5 drones de combate autónomos rogue en patrullaje táctico.',
+        icon: '🛡️',
+        category: 'COMBAT',
+        rewardCredits: 4000,
+        rewardOre: 200,
+        rewardCosmetic: 'Crimson Laser Warhead',
+        criteria: 'Destruir 5 drones centinela rogue con láseres de plasma',
+        targetProgress: 5,
+        currentProgress: 0,
+        unlocked: false,
+        claimed: false
+      },
+      {
+        id: 'speed_of_light',
+        title: 'Sobrecarga Taquiónica',
+        description: 'Alcanza una velocidad de vuelo superior a 120 km/s usando el impulso gravitacional.',
+        icon: '⚡',
+        category: 'MASTERY',
+        rewardCredits: 2500,
+        rewardOre: 100,
+        rewardCosmetic: 'Tachyon Warp Trail',
+        criteria: 'Superar 120 km/s en aceleración hiperespacial',
+        targetProgress: 120,
+        currentProgress: 0,
+        unlocked: false,
+        claimed: false
+      },
+      {
+        id: 'sovereign_master',
+        title: 'Soberanía Absoluta',
+        description: 'Acumula más de 10,000 Quantum Credits o alcanza el Nivel 8 de Soberanía Computacional.',
+        icon: '👑',
+        category: 'MASTERY',
+        rewardCredits: 8000,
+        rewardOre: 1000,
+        rewardCosmetic: 'Sovereign Master Crown',
+        criteria: 'Alcanzar 10,000 QC o Nivel de Soberanía 8',
+        targetProgress: 10000,
+        currentProgress: 4850,
+        unlocked: false,
+        claimed: false
+      },
+      {
+        id: 'fleet_vanguard',
+        title: 'Vanguardia de la Flota',
+        description: 'Conéctate a una sesión multijugador o sincroniza telemetría de escuadrón.',
+        icon: '👥',
+        category: 'MULTIPLAYER',
+        rewardCredits: 5000,
+        rewardOre: 300,
+        rewardCosmetic: 'Fleet Admiral Emblem',
+        criteria: 'Unirse a una sala multijugador y sincronizar telemetría de escuadrón',
+        targetProgress: 1,
+        currentProgress: 1,
+        unlocked: true,
+        claimed: false
+      }
+    ];
 
-      document.getElementById('gauge-hull').style.width = `${Math.max(0, stats.hull)}%`;
-      document.getElementById('hull-text').innerText = `${Math.round(Math.max(0, stats.hull))}%`;
+    let flightNoCollisionSeconds = 0;
+    let gravityPulsesCount = 14;
 
-      document.getElementById('gauge-shield').style.width = `${Math.max(0, stats.shield)}%`;
-      document.getElementById('shield-text').innerText = `${Math.round(Math.max(0, stats.shield))}%`;
+    function checkAchievementProgress() {
+      // 1. First Orbit (10s flight)
+      if (stats.speed > 5) {
+        flightNoCollisionSeconds += 0.016;
+        updateAchProgress('first_orbit', Math.floor(flightNoCollisionSeconds));
+      }
 
-      document.getElementById('gauge-antigrav').style.width = `${Math.max(0, stats.antigrav)}%`;
-      document.getElementById('antigrav-text').innerText = `${Math.round(Math.max(0, stats.antigrav))}%`;
+      // 2. Gravity Master
+      updateAchProgress('gravity_master', gravityPulsesCount);
 
-      document.getElementById('val-speed').innerText = stats.speed.toFixed(1);
-      document.getElementById('val-alt').innerText = Math.round(playerShip.position.y);
+      // 3. Nebula Explorer (distance from station)
+      if (spaceStation) {
+        const dist = Math.round(playerShip.position.distanceTo(spaceStation.position));
+        updateAchProgress('nebula_explorer', dist);
+      }
+
+      // 4. Vibranium Harvester
+      updateAchProgress('vibranium_harvester', stats.ore);
+
+      // 5. Sentinel Destroyer
+      updateAchProgress('sentinel_destroyer', stats.kills);
+
+      // 6. Speed of light
+      updateAchProgress('speed_of_light', Math.round(stats.speed));
+
+      // 7. Sovereign Master
+      updateAchProgress('sovereign_master', stats.credits);
     }
+
+    function updateAchProgress(id, currentVal) {
+      const ach = achievements.find(a => a.id === id);
+      if (!ach) return;
+      ach.currentProgress = Math.min(ach.targetProgress, Math.max(ach.currentProgress, currentVal));
+
+      if (ach.currentProgress >= ach.targetProgress && !ach.unlocked) {
+        unlockAchievement(ach);
+      }
+    }
+
+    function unlockAchievement(ach) {
+      ach.unlocked = true;
+      playFanfareSound();
+      showCelebrationBanner(ach);
+      updateTopBarBadges();
+      // Notify parent Angular app if in iframe
+      try {
+        window.parent.postMessage({
+          type: 'ANTIGRAVITY_ACHIEVEMENT_UNLOCKED',
+          achievement: ach
+        }, '*');
+      } catch (e) {}
+    }
+
+    function showCelebrationBanner(ach) {
+      const banner = document.getElementById('achievement-celebration');
+      document.getElementById('celeb-title').innerText = ach.title;
+      document.getElementById('celeb-reward').innerText = `+${ach.rewardCredits.toLocaleString()} QC • +${ach.rewardOre} T Ore • ${ach.rewardCosmetic || ''}`;
+      banner.classList.add('show');
+      setTimeout(() => {
+        banner.classList.remove('show');
+      }, 4500);
+    }
+
+    function claimReward(id) {
+      const ach = achievements.find(a => a.id === id);
+      if (!ach || !ach.unlocked || ach.claimed) return;
+
+      ach.claimed = true;
+      stats.credits += ach.rewardCredits;
+      stats.ore += ach.rewardOre;
+      playClaimSound();
+      showToast(`¡Recompensa Reclamada! +${ach.rewardCredits} QC, +${ach.rewardOre} T Ore`);
+
+      // Unlock cosmetic if available
+      if (ach.rewardCosmetic) {
+        const cosmetic = cosmeticSkins.find(c => c.name === ach.rewardCosmetic);
+        if (cosmetic) cosmetic.unlocked = true;
+      }
+
+      updateTopBarBadges();
+      renderAchievementsList();
+      renderCosmeticsList();
+    }
+
+    function playFanfareSound() {
+      if (!audioEnabled || !audioCtx) return;
+      try {
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.1);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime + i * 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.1 + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + i * 0.1);
+          osc.stop(audioCtx.currentTime + i * 0.1 + 0.35);
+        });
+      } catch (e) {}
+    }
+
+    function playClaimSound() {
+      if (!audioEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {}
+    }
+
+    function updateTopBarBadges() {
+      const unlockedCount = achievements.filter(a => a.unlocked).length;
+      document.getElementById('ach-unlocked-count').innerText = unlockedCount;
+      const claimableCount = achievements.filter(a => a.unlocked && !a.claimed).length;
+      const achBtn = document.getElementById('btn-achievements');
+      if (claimableCount > 0) {
+        achBtn.style.boxShadow = '0 0 15px rgba(251, 191, 36, 0.8)';
+      } else {
+        achBtn.style.boxShadow = 'none';
+      }
+    }
+
+    function renderAchievementsList() {
+      const container = document.getElementById('achievements-container');
+      const unlockedCount = achievements.filter(a => a.unlocked).length;
+      const claimableQC = achievements.filter(a => a.unlocked && !a.claimed).reduce((sum, a) => sum + a.rewardCredits, 0);
+
+      document.getElementById('modal-ach-progress-text').innerText = `${unlockedCount} / ${achievements.length} COMPLETADOS (${Math.round((unlockedCount / achievements.length) * 100)}%)`;
+      document.getElementById('modal-ach-claimable-qc').innerText = `${claimableQC.toLocaleString()} QC`;
+
+      container.innerHTML = achievements.map(ach => {
+        const pct = Math.min(100, Math.round((ach.currentProgress / ach.targetProgress) * 100));
+        let buttonHtml = '';
+        if (ach.claimed) {
+          buttonHtml = `<span class="btn-claimed-badge">✓ RECLAMADO</span>`;
+        } else if (ach.unlocked) {
+          buttonHtml = `<button class="btn-claim" onclick="claimReward('${ach.id}')">RECLAMAR RECOMPENSA</button>`;
+        } else {
+          buttonHtml = `<span style="font-size:11px; font-family:'Fira Code', monospace; color:#64748b; align-self:flex-end;">EN PROGRESO (${pct}%)</span>`;
+        }
+
+        return `
+          <div class="achievement-card ${ach.unlocked ? 'unlocked' : ''} ${ach.claimed ? 'claimed' : ''}">
+            <div class="ach-header">
+              <div class="ach-icon">${ach.icon}</div>
+              <div class="ach-info" style="flex:1;">
+                <h4>${ach.title}</h4>
+                <p>${ach.description}</p>
+              </div>
+            </div>
+
+            <div style="font-size:11px; font-family:'Fira Code', monospace; color:#38bdf8;">
+              CRITERIO: ${ach.criteria}
+            </div>
+
+            <div class="ach-rewards">
+              <span class="reward-tag">+${ach.rewardCredits.toLocaleString()} QC</span>
+              <span class="reward-tag" style="color:#34d399; background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.3);">+${ach.rewardOre} T Ore</span>
+              ${ach.rewardCosmetic ? `<span class="reward-tag cosmetic">🎨 ${ach.rewardCosmetic}</span>` : ''}
+            </div>
+
+            <div class="ach-progress-bar">
+              <div class="ach-progress-fill" style="width: ${pct}%;"></div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; font-family:'Fira Code', monospace; color:#94a3b8;">
+                ${ach.currentProgress.toLocaleString()} / ${ach.targetProgress.toLocaleString()}
+              </span>
+              ${buttonHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ----------------------------------------------------
+       🎨 COSMETICS & SKINS HANGAR ENGINE
+       ---------------------------------------------------- */
+    let cosmeticSkins = [
+      {
+        id: 'orbit_cyan',
+        name: 'Orbit-Cyan Classic',
+        color: '#10b981',
+        hexColor: 0x10b981,
+        unlocked: true,
+        equipped: true,
+        source: 'Equipamiento Base'
+      },
+      {
+        id: 'obsidian_void',
+        name: 'Obsidian Void Matrix',
+        color: '#a855f7',
+        hexColor: 0xa855f7,
+        unlocked: false,
+        equipped: false,
+        source: 'Logro: Maestro de la Gravedad'
+      },
+      {
+        id: 'nebula_aurora',
+        name: 'Nebula Aurora Core',
+        color: '#38bdf8',
+        hexColor: 0x38bdf8,
+        unlocked: false,
+        equipped: false,
+        source: 'Logro: Explorador de la Nebulosa'
+      },
+      {
+        id: 'gold_imperial',
+        name: 'Gold Plated Imperial',
+        color: '#fbbf24',
+        hexColor: 0xfbbf24,
+        unlocked: false,
+        equipped: false,
+        source: 'Logro: Cosechador de Vibranio'
+      },
+      {
+        id: 'crimson_war',
+        name: 'Crimson Laser Warhead',
+        color: '#ef4444',
+        hexColor: 0xef4444,
+        unlocked: false,
+        equipped: false,
+        source: 'Logro: Destructor de Centinelas'
+      },
+      {
+        id: 'sovereign_matrix',
+        name: 'Sovereign Master Crown',
+        color: '#ec4899',
+        hexColor: 0xec4899,
+        unlocked: false,
+        equipped: false,
+        source: 'Logro: Soberanía Absoluta'
+      }
+    ];
+
+    function renderCosmeticsList() {
+      const container = document.getElementById('cosmetics-container');
+      container.innerHTML = cosmeticSkins.map(skin => {
+        let actionButton = '';
+        if (skin.equipped) {
+          actionButton = `<span style="font-family:'Orbitron',sans-serif; font-size:11px; color:#10b981; font-weight:700;">✓ EQUIPADA</span>`;
+        } else if (skin.unlocked) {
+          actionButton = `<button class="btn-action" style="border-color:#38bdf8; color:#38bdf8;" onclick="equipSkin('${skin.id}')">EQUIPAR EN NAVE</button>`;
+        } else {
+          actionButton = `<span style="font-size:11px; font-family:'Fira Code',monospace; color:#64748b;">BLOQUEADA</span>`;
+        }
+
+        return `
+          <div class="skin-card ${skin.equipped ? 'equipped' : ''}">
+            <div class="skin-preview-circle" style="background-color: ${skin.color}; color: ${skin.color};"></div>
+            <div style="font-family:'Orbitron', sans-serif; font-size:13px; font-weight:700; color:#f8fafc;">
+              ${skin.name}
+            </div>
+            <div style="font-size:11px; font-family:'Fira Code', monospace; color:#94a3b8;">
+              ${skin.source}
+            </div>
+            ${actionButton}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function equipSkin(id) {
+      const skin = cosmeticSkins.find(s => s.id === id);
+      if (!skin || !skin.unlocked) return;
+
+      cosmeticSkins.forEach(s => s.equipped = false);
+      skin.equipped = true;
+
+      // Apply to 3D Player Ship Materials
+      if (playerShip && playerShip.userData) {
+        if (playerShip.userData.antigravRing) {
+          playerShip.userData.antigravRing.material.color.setHex(skin.hexColor);
+        }
+        if (playerShip.userData.thruster) {
+          playerShip.userData.thruster.material.color.setHex(skin.hexColor);
+        }
+      }
+
+      showToast(`SKIN EQUIPADA: ${skin.name}`);
+      playClaimSound();
+      renderCosmeticsList();
+    }
+
+    /* ----------------------------------------------------
+       🌐 MULTIPLAYER ENGINE & 3D PEER MESHES
+       ---------------------------------------------------- */
+    let currentMultiplayerMode = 'RACE';
+    let peerShips = [];
+    let multiplayerRooms = [
+      {
+        id: 'room-alpha-race',
+        name: '🏁 HIPER-CARRERA VÓRTICE',
+        mode: 'RACE',
+        playersCount: 4,
+        maxPlayers: 8,
+        ping: 18,
+        sector: 'Sector Grav-Well Alfa-09',
+        host: 'Pilot_Vortex'
+      },
+      {
+        id: 'room-omega-coop',
+        name: '⛏️ EXPEDICIÓN NEBULOSA OMEGA',
+        mode: 'COOP_SURVEY',
+        playersCount: 3,
+        maxPlayers: 6,
+        ping: 24,
+        sector: 'Cinturón de Asteroides Vibranio',
+        host: 'Mining_Chief_Khan'
+      },
+      {
+        id: 'room-nexus-siege',
+        name: '⚔️ ASEDIO AL NEXO SOBERANO',
+        mode: 'TEAM_SIEGE',
+        playersCount: 6,
+        maxPlayers: 8,
+        ping: 21,
+        sector: 'Estación HECTRON Citadel',
+        host: 'Astaroth_Prime'
+      }
+    ];
+
+    let squadronMembers = [
+      { id: 'p1', name: 'Pilot_Vortex', ship: 'Interceptor Ψ-01', skin: 'Obsidian Void', ping: 15, ready: true, score: 1420 },
+      { id: 'p2', name: 'Nova_Zero', ship: 'Tachyon Scout', skin: 'Nebula Aurora', ping: 22, ready: true, score: 1180 },
+      { id: 'p3', name: 'Astro_99', ship: 'Heavy Dread', skin: 'Gold Plated', ping: 28, ready: false, score: 950 },
+      { id: 'p4', name: 'Cyber_Blade', ship: 'Interceptor Ψ-01', skin: 'Orbit-Cyan', ping: 19, ready: true, score: 870 }
+    ];
+
+    function selectMultiplayerMode(mode) {
+      currentMultiplayerMode = mode;
+      document.querySelectorAll('.mp-mode-card').forEach(c => c.classList.remove('active'));
+      if (mode === 'RACE') document.getElementById('mode-card-race').classList.add('active');
+      if (mode === 'COOP_SURVEY') document.getElementById('mode-card-coop').classList.add('active');
+      if (mode === 'TEAM_SIEGE') document.getElementById('mode-card-siege').classList.add('active');
+
+      showToast(`MODO MULTIJUGADOR SELECCIONADO: ${mode}`);
+      renderMultiplayerLobby();
+    }
+
+    function renderMultiplayerLobby() {
+      const roomsContainer = document.getElementById('mp-rooms-list');
+      roomsContainer.innerHTML = multiplayerRooms.map(room => `
+        <div style="padding:10px 14px; border-radius:6px; background:rgba(2,6,23,0.7); border:1px solid rgba(56,189,248,0.2); display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-family:'Orbitron', sans-serif; font-size:12px; font-weight:700; color:#f8fafc;">${room.name}</div>
+            <div style="font-size:11px; font-family:'Fira Code', monospace; color:#94a3b8;">${room.sector} • Host: ${room.host}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:11px; font-family:'Fira Code', monospace; color:#38bdf8;">${room.playersCount}/${room.maxPlayers}</span>
+            <span style="font-size:10px; font-family:'Fira Code', monospace; color:#34d399;">${room.ping}ms</span>
+            <button class="btn-action" style="font-size:10px; padding:4px 8px;" onclick="joinRoom('${room.id}')">UNIRSE</button>
+          </div>
+        </div>
+      `).join('');
+
+      const squadronContainer = document.getElementById('squadron-members-list');
+      squadronContainer.innerHTML = squadronMembers.map(pilot => `
+        <div style="padding:6px 10px; border-radius:4px; background:rgba(2,6,23,0.6); display:flex; justify-content:space-between; align-items:center; font-size:11px; font-family:'Fira Code', monospace;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="color:#10b981;">●</span>
+            <span style="color:#f8fafc; font-weight:700;">${pilot.name}</span>
+            <span style="color:#64748b;">(${pilot.ship})</span>
+          </div>
+          <div style="display:flex; gap:10px; color:#38bdf8;">
+            <span>${pilot.skin}</span>
+            <span style="color:#fbbf24;">${pilot.score} PTS</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function joinRoom(roomId) {
+      const room = multiplayerRooms.find(r => r.id === roomId);
+      if (room) {
+        showToast(`CONECTADO A LA SALA: ${room.name}`);
+        playClaimSound();
+        create3DPeerShips();
+      }
+    }
+
+    function joinCustomRoom(id) {
+      const newName = `SALA PERSONAL // ESCUADRÓN SOBERANO`;
+      multiplayerRooms.unshift({
+        id: `room-${Date.now()}`,
+        name: newName,
+        mode: currentMultiplayerMode,
+        playersCount: 1,
+        maxPlayers: 8,
+        ping: 14,
+        sector: 'Sector Grav-Well Alfa-09',
+        host: 'TÚ (Piloto Soberano)'
+      });
+      showToast(`SALA CREADA EXITOSAMENTE`);
+      renderMultiplayerLobby();
+      create3DPeerShips();
+    }
+
+    function quickMatch() {
+      showToast("BUSCANDO SALA ÓPTIMA EN LA RED CUÁNTICA...");
+      setTimeout(() => {
+        showToast("¡EMPAREJAMIENTO COMPLETADO! CONECTADO A ESCUADRÓN ALFA (16ms)");
+        create3DPeerShips();
+      }, 800);
+    }
+
+    function sendSquadMsg() {
+      const input = document.getElementById('squad-chat-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      squadronMembers.unshift({
+        id: `msg-${Date.now()}`,
+        name: 'TÚ',
+        ship: `Transmisión: "${val}"`,
+        skin: 'Comms',
+        ping: 12,
+        ready: true,
+        score: 0
+      });
+      input.value = '';
+      renderMultiplayerLobby();
+      showToast(`COMUNICADO EMITIDO: "${val}"`);
+    }
+
+    /* Create 3D Peer Ships in Three.js Scene */
+    function create3DPeerShips() {
+      // Remove old peers if any
+      peerShips.forEach(p => scene.remove(p));
+      peerShips = [];
+
+      const peerColors = [0xa855f7, 0x38bdf8, 0xfbbf24];
+      const peerNames = ['Pilot_Vortex', 'Nova_Zero', 'Astro_99'];
+
+      for (let i = 0; i < 3; i++) {
+        const peerGroup = new THREE.Group();
+
+        // Ship geometry
+        const bodyGeo = new THREE.ConeGeometry(2, 6, 5);
+        bodyGeo.rotateX(Math.PI / 2);
+        const bodyMat = new THREE.MeshStandardMaterial({
+          color: 0x1e293b,
+          roughness: 0.3,
+          metalness: 0.8
+        });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        peerGroup.add(body);
+
+        // Wings
+        const wingGeo = new THREE.BoxGeometry(7, 0.2, 3);
+        const wingMat = new THREE.MeshStandardMaterial({
+          color: peerColors[i],
+          emissive: peerColors[i],
+          emissiveIntensity: 0.4
+        });
+        const wings = new THREE.Mesh(wingGeo, wingMat);
+        wings.position.set(0, 0, 1);
+        peerGroup.add(wings);
+
+        // Position around player
+        const angle = (i / 3) * Math.PI * 2;
+        const radius = 35 + i * 15;
+        peerGroup.position.set(
+          playerShip.position.x + Math.cos(angle) * radius,
+          playerShip.position.y + 10 + i * 5,
+          playerShip.position.z + Math.sin(angle) * radius
+        );
+
+        peerGroup.userData = {
+          id: `peer-${i}`,
+          name: peerNames[i],
+          color: peerColors[i],
+          angle: angle,
+          orbitRadius: radius,
+          speed: 0.015 + i * 0.005
+        };
+
+        scene.add(peerGroup);
+        peerShips.push(peerGroup);
+      }
+
+      showToast("3 NAVES DEL ESCUADRÓN SINCRONIZADAS EN EL RADAR 3D");
+    }
+
+    function updatePeerShips() {
+      peerShips.forEach(peer => {
+        peer.userData.angle += peer.userData.speed;
+        const targetX = playerShip.position.x + Math.cos(peer.userData.angle) * peer.userData.orbitRadius;
+        const targetZ = playerShip.position.z + Math.sin(peer.userData.angle) * peer.userData.orbitRadius;
+        const targetY = playerShip.position.y + Math.sin(Date.now() * 0.002 + peer.userData.angle) * 8;
+
+        peer.position.lerp(new THREE.Vector3(targetX, targetY, targetZ), 0.05);
+        peer.lookAt(playerShip.position.clone().add(new THREE.Vector3(0, 0, -50)));
+      });
+    }
+
+    /* ----------------------------------------------------
+       MODAL CONTROLS & EVENT LISTENERS
+       ---------------------------------------------------- */
+    function openAchievementsModal() {
+      initAudio();
+      renderAchievementsList();
+      document.getElementById('modal-achievements').classList.add('open');
+    }
+
+    function openCosmeticsModal() {
+      initAudio();
+      renderCosmeticsList();
+      document.getElementById('modal-cosmetics').classList.add('open');
+    }
+
+    function openMultiplayerModal() {
+      initAudio();
+      renderMultiplayerLobby();
+      document.getElementById('modal-multiplayer').classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // ESC key closes any open modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.game-modal-overlay').forEach(m => m.classList.remove('open'));
+      }
+    });
 
     function drawRadar() {
       const radarCanvas = document.getElementById('radar-canvas');
@@ -1412,6 +2496,18 @@
       ctx.beginPath();
       ctx.arc(cx, cy, 3, 0, Math.PI * 2);
       ctx.fill();
+
+      // Squadron Peers Blips (Cyan/Gold)
+      peerShips.forEach(p => {
+        const dx = (p.position.x - playerShip.position.x) / radarRange * 60;
+        const dz = (p.position.z - playerShip.position.z) / radarRange * 60;
+        if (Math.hypot(dx, dz) < 60) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath();
+          ctx.arc(cx + dx, cy + dz, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
 
       // Enemy Blips (Red)
       ctx.fillStyle = '#ef4444';
@@ -1451,6 +2547,8 @@
     // Start scene on load
     window.addEventListener('DOMContentLoaded', () => {
       initScene();
+      updateTopBarBadges();
+      create3DPeerShips();
     });
   </script>
 </body>

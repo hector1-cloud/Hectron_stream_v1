@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   ElementRef,
@@ -128,14 +129,14 @@ export class MicroservicesChart implements OnInit, AfterViewInit, OnDestroy {
 
     // Parse scales
     const xScale = d3.scalePoint()
-      .domain(data.map(d => d.timeLabel))
+      .domain(data.map((d: PredictiveDataPoint) => d.timeLabel))
       .range([0, innerWidth])
       .padding(0.5);
 
     // Three separate Y scales
-    const maxCpu = d3.max(data, d => d.cpu) || 100;
-    const maxLatency = d3.max(data, d => d.latency) || 500;
-    const maxRisk = d3.max(data, d => d.errorProbability) || 100;
+    const maxCpu = d3.max(data, (d: PredictiveDataPoint) => d.cpu) || 100;
+    const maxLatency = d3.max(data, (d: PredictiveDataPoint) => d.latency) || 500;
+    const maxRisk = d3.max(data, (d: PredictiveDataPoint) => d.errorProbability) || 100;
 
     const yScaleCpu = d3.scaleLinear().domain([0, Math.max(100, maxCpu)]).range([innerHeight, 0]);
     const yScaleLatency = d3.scaleLinear().domain([0, Math.max(500, maxLatency * 1.2)]).range([innerHeight, 0]);
@@ -181,18 +182,18 @@ export class MicroservicesChart implements OnInit, AfterViewInit, OnDestroy {
 
     // Line generators
     const lineCpu = d3.line<PredictiveDataPoint>()
-      .x(d => xScale(d.timeLabel) || 0)
-      .y(d => yScaleCpu(d.cpu))
+      .x((d: PredictiveDataPoint) => xScale(d.timeLabel) || 0)
+      .y((d: PredictiveDataPoint) => yScaleCpu(d.cpu))
       .curve(d3.curveMonotoneX);
 
     const lineLatency = d3.line<PredictiveDataPoint>()
-      .x(d => xScale(d.timeLabel) || 0)
-      .y(d => yScaleLatency(d.latency))
+      .x((d: PredictiveDataPoint) => xScale(d.timeLabel) || 0)
+      .y((d: PredictiveDataPoint) => yScaleLatency(d.latency))
       .curve(d3.curveMonotoneX);
 
     const lineRisk = d3.line<PredictiveDataPoint>()
-      .x(d => xScale(d.timeLabel) || 0)
-      .y(d => yScaleRisk(d.errorProbability))
+      .x((d: PredictiveDataPoint) => xScale(d.timeLabel) || 0)
+      .y((d: PredictiveDataPoint) => yScaleRisk(d.errorProbability))
       .curve(d3.curveMonotoneX);
 
     // Draw Paths
@@ -213,9 +214,9 @@ export class MicroservicesChart implements OnInit, AfterViewInit, OnDestroy {
 
     // Risk Area + Line
     const areaRisk = d3.area<PredictiveDataPoint>()
-      .x(d => xScale(d.timeLabel) || 0)
+      .x((d: PredictiveDataPoint) => xScale(d.timeLabel) || 0)
       .y0(innerHeight)
-      .y1(d => yScaleRisk(d.errorProbability))
+      .y1((d: PredictiveDataPoint) => yScaleRisk(d.errorProbability))
       .curve(d3.curveMonotoneX);
 
     defs.append('linearGradient')
@@ -228,8 +229,8 @@ export class MicroservicesChart implements OnInit, AfterViewInit, OnDestroy {
         { offset: '100%', color: 'rgba(244, 63, 94, 0.0)' }
       ])
       .enter().append('stop')
-      .attr('offset', d => d.offset)
-      .attr('stop-color', d => d.color);
+      .attr('offset', (d: any) => d.offset)
+      .attr('stop-color', (d: any) => d.color);
 
     root.append('path')
       .datum(data)
